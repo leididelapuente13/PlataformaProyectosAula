@@ -1,0 +1,100 @@
+@use '../../../assets/styles/partials/variables';
+@use '../../../assets/styles/mixins/_mixins' as mixin;
+
+body {
+	background-color: whitesmoke;
+}
+
+.main {
+	margin: 2rem auto;
+	width: 90%;
+	max-width: 750px;
+	display: flex;
+}
+
+.container {
+	background: linear-gradient(to right, #021b79, #0575e6);
+	color: #fff;
+	padding-inline: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.8rem;
+	width: 50%;
+
+	@media (max-width: 767px) {
+		display: none;
+	}
+
+	&__title {
+		font-size: 2rem;
+	}
+
+	&__text {
+		font-style: italic;
+	}
+}
+
+.form {
+	background-color: #f8f8ff;
+	padding: 1.5rem;
+	width: 50%;
+	min-height: 85vh;
+	@media (max-width: 767px) {
+		background-color: inherit;
+		width: 100%;
+		padding: 1.5rem;
+	}
+	&__title {
+		font-size: 1.8rem;
+		line-height: 1.7;
+		margin-bottom: 1.3rem;
+	}
+	&__label {
+		display: block;
+	}
+	&__input {
+		display: block;
+		padding: 0.7rem;
+		font-size: 0.9rem;
+		border-radius: 0.5rem;
+		border: 1px solid lightgray;
+		margin-bottom: 1rem;
+		margin-top: 0.5rem;
+		width: 100%;
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	&__link {
+		float: right;
+		margin-bottom: 2rem;
+		font-size: 0.8rem;
+
+		&:hover {
+			color: variables.$secondary-blue;
+		}
+	}
+
+	&__button {
+		display: block;
+		margin: 1.2rem auto;
+		width: 80%;
+		font-size: 1rem;
+        @include mixin.button-styles(#3aaa35, #fff);
+		&:hover {
+			background-color: #58d451;
+		}
+	}
+
+	&__linkBlue {
+		color: variables.$secondary-blue;
+		margin-left: 0.4rem;
+
+		&:hover {
+			color: variables.$medium-blue;
+		}
+	}
+}

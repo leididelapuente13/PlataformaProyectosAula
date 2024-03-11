@@ -1,8 +1,9 @@
+import { LogIn } from "./pages/shared/LogIn/LogIn";
 function App() {
 
 	return (
 		<>
-			<h1>Hello</h1>
+			<LogIn/>
 		</>
 	);
 }
