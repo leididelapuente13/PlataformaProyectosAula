@@ -20,8 +20,8 @@ yarn-error.log
 tests/Feature/CreateUserTest.php
 tests/Feature/ListUserTest.php
 tests/Feature/ValidateHeadersTest.php
-app/Http/Controllers/Controller.php
 app/Http/Controllers/UserController.php
 app/Http/Requests/CreateUserRequest.php
 app/Http/Resources/UserResource.php
+tests
 
