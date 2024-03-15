@@ -35,18 +35,18 @@ class Handler extends ExceptionHandler
         $title = $exception->getMessage();
         $errors = [];
         //Get all of the errors
-        foreach($exception->errors() as $field => $message){
-            $pointer = "/" . str_replace('.' , '/' , $field);
+        foreach ($exception->errors() as $field => $message) {
+            $pointer = "/" . str_replace('.', '/', $field);
             $errors[] = [
                 'title' => $title,
-                    'detail' => $message[0] ,
-                    'source' => [
-                        'pointer' => $pointer
-                    ]
+                'detail' => $message[0],
+                'source' => [
+                    'pointer' => $pointer
+                ]
             ];
         }
 
-        //Create a structure for the error message
+        //Send structure for the error message
         return response()->json([
             'errors' => $errors
         ], 422);
