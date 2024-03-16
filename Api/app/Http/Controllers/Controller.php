@@ -11,14 +11,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function apiUser($codigo)
+    static function apiUser($codigo)
     {
         $response = Http::get("http://localhost/api_uni/api.php?action=get_user&codigo=$codigo");
 
         return $response;
     }
 
-    public function apiUsers(){
+    static function apiUsers(){
         $response = Http::get("http://localhost/api_uni/api.php?action=list_users");
         return $response;
 

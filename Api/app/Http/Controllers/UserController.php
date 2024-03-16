@@ -21,10 +21,7 @@ class UserController extends Controller
 
         //Request  extern api
         $code = $request->input('data.attributes.code');
-        $controller = new Controller();
-        $response = $controller->apiUser($code);
-        $api = $response->json();
-
+        $response = Controller::apiUser($code);
 
         // Code was found in extern api
         if ($response->successful()) {
