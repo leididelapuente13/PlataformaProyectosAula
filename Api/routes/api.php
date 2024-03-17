@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\sessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('user' , [UserController::class, 'create'])->name('api.user.create');
+Route::post('login' , [sessionController::class , 'login'])->name('api.user.login');

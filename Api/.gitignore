@@ -17,14 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-database/migrations/2024_03_09_000000_create_roles_table.php
-database/migrations/2024_03_09_000001_create_users_table.php
-tests/Feature/CreateUserTest.php
 tests/Feature/ListUserTest.php
+tests/Feature/SessionTest.php
 tests/Feature/ValidateHeadersTest.php
-app/Http/Controllers/Controller.php
-app/Http/Controllers/UserController.php
 app/Http/Requests/CreateUserRequest.php
-app/Http/Resources/UserResource.php
-app/Models/Role.php
-app/Models/User.php
+.env.testing
