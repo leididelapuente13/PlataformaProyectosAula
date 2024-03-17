@@ -22,3 +22,4 @@ tests/Feature/SessionTest.php
 tests/Feature/ValidateHeadersTest.php
 app/Http/Requests/CreateUserRequest.php
 .env.testing
+app/Http/Controllers/SessionController.php
