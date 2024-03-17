@@ -52,6 +52,7 @@ body {
 	}
 	&__label {
 		display: block;
+		margin-top: 1rem;
 	}
 	&__input {
 		display: block;
@@ -59,7 +60,6 @@ body {
 		font-size: 0.9rem;
 		border-radius: 0.5rem;
 		border: 1px solid lightgray;
-		margin-bottom: 1rem;
 		margin-top: 0.5rem;
 		width: 100%;
 
@@ -71,7 +71,8 @@ body {
 	&__link {
 		float: right;
 		margin-bottom: 2rem;
-		font-size: 0.8rem;
+		font-size: 0.9rem;
+		margin-top: 1.5rem;
 
 		&:hover {
 			color: variables.$secondary-blue;
