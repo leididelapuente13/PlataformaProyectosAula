@@ -1,39 +1,31 @@
-import {PropTypes} from 'prop-types';
+import { PropTypes } from 'prop-types';
+import iconError from '../../../assets/img/icons/error.svg';
+import styles from './PopUpError.module.scss'
 
-export const PopUpError = ({message}) => {
-  return (
-    <div style={opacityStyles}>
-        <div style={container}>
-            <p>{message}</p>
-            <p>Ha ocurrido un error, intentalo de nuevo</p>
-        </div>
-    </div>
-  )
-}
+import { useState } from 'react';
 
-const opacityStyles = {
-    width: "100%",
-    height: "100vh",
-    position: "absolute",
-    opacity: "0.8",
-    backgroundColor: "grey",
-    display: "flex", 
-    justifyContent: "center"
-    // backgroundColor: "ghostWhite",
-    // borderLeft: "solid 10px red",
-}
+export const PopUpError = ({ message = '404' }) => {
+    
+    const [popUp, setPopUp] = useState(true)
 
-const container = {
-    width: "80%", 
-    maxWidth: "300px",
-    borderRadius: "5px",
-    backgroundColor: "#fff", 
-    fontSize: "0.8rem",
-    opacity: "1", 
-    margin: "auto",
-    padding: "2rem",
-}
+    const handleClosePopUp = () =>{
+        setPopUp(false)
+    }
 
-PopUpError.propTypes= {
-    message: PropTypes.string.isRequired
-}
+	return (
+		<div className={popUp ? styles.coverOpacity : styles.coverHidden}>
+			<div className={styles.card}>
+				<div className={styles.card__circle}>
+					<img src={iconError} alt='Icon Error' className={styles.card__icon} />
+				</div>
+				<p className={styles.card__textBold}>{message}</p>
+				<p className={styles.card__textLight}>Ha ocurrido un error, intentalo de nuevo</p>
+                <button type="button" className={styles.card__button} onClick={handleClosePopUp}>Aceptar</button>
+			</div>
+		</div>
+	);
+};
+
+PopUpError.propTypes = {
+	message: PropTypes.string,
+};

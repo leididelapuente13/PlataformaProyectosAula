@@ -15,7 +15,7 @@ export const LogIn = () => {
 		reset,
 	} = useForm();
 
-	const [login] = useUserLogInMutation();
+	const [login, isError, error] = useUserLogInMutation();
 	const navigate = useNavigate();
 
 	const handleLogIn = async (data) => {
@@ -51,10 +51,11 @@ export const LogIn = () => {
 			console.error('Error: ', error);
 		}
 		reset();
+  
 	};
 	return (
 		<>
-		{/* {error && <PopUpError/>} */}
+		{isError === true && <PopUpError message={error}/>}
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<h2 className={styles.container__title}>¡Bienvenido otra vez!</h2>
@@ -70,22 +71,26 @@ export const LogIn = () => {
 				onSubmit={handleSubmit(handleLogIn)}
 			>
 				<h3 className={styles.form__title}>Inicia Sesion</h3>
-				<label htmlFor='code' className={styles.form__label}>
-					Codigo
+				<label htmlFor='email' className={styles.form__label}>
+					E-mail
 				</label>
 				<input
-					type='text'
-					id='code'
+					type='email'
+					id='email'
 					className={styles.form__input}
-					{...register('userCode', {
+					{...register('email', {
 						required: {
 							value: true,
-							message: 'El codigo es requerido',
+							message: 'El email es requerido',
 						},
+						pattern: {
+							value: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
+							message: 'por favor, ingresar un email valido'
+						}
 					})}
 				/>
-				{errors.userCode && (
-					<ValidationError message={errors.userCode.message} />
+				{errors.email && (
+					<ValidationError message={errors.email.message} />
 				)}
 				<label htmlFor='password' className={styles.form__label}>
 					Contraseña
@@ -98,12 +103,8 @@ export const LogIn = () => {
 						required: {
 							value: true,
 							message: 'La contraseña es requerida',
-						},
-						minLength: {
-							value: 8,
-							message: 'La contraseña debe tener al menos 8 digitos',
-						},
-					})}
+						}
+        	})}
 				/>
 				{errors.password && (
 					<ValidationError message={errors.password.message} />

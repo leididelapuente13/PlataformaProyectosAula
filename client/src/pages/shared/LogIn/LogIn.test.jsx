@@ -14,7 +14,7 @@ describe('Log In Page', () => {
 		expect(loginForm).toBeInTheDocument();
 	});
 	test('Should catch the changes in the inputs', async () => {
-		const codeInput = screen.getByLabelText('Codigo');
+		const codeInput = screen.getByLabelText('E-mail');
 		const passwordInput = screen.getByLabelText('Contraseña');
 
 		expect(codeInput).toBeInTheDocument();
