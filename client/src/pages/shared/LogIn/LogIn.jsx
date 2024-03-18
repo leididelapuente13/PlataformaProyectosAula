@@ -1,10 +1,11 @@
 //Styles
 import styles from './LogIn.module.scss';
 //Dependencies
-// import { Link, useNavigate } from "react-router-dom";
-// import { useLoginUserMutation } from "../../api/apiSlice";
+import { Link, useNavigate } from 'react-router-dom';
+import { useUserLogInMutation } from "../../../api/apiSlice";
 import { useForm } from 'react-hook-form';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
+import { PopUpError } from '../../../components/utils/error/PopUpError';
 
 export const LogIn = () => {
 	const {
@@ -14,40 +15,46 @@ export const LogIn = () => {
 		reset,
 	} = useForm();
 
-	// const [login] = useLoginUserMutation();
-
-	// const navigate = useNavigate();
+	const [login] = useUserLogInMutation();
+	const navigate = useNavigate();
 
 	const handleLogIn = async (data) => {
 		console.log(data);
+		try {
+			const response = await login({ email, password });
+
+			if (response.data.token !== '') {
+				
+				const userRol = response.data.data.rol_id;
+
+				localStorage.setItem(
+					(userInfo = {
+						token: response.data.token,
+						userRol,
+					}),
+				);
+
+				console.log(response);
+
+				if (userRol === 1) {
+					navigate('/indexAdmin');
+				} else if (userRol === 2) {
+					navigate('/indexStudents');
+				} else if (userRol === 3) {
+					navigate('/indexProfessors');
+				}
+			} else {
+				console.error('Error al iniciar sesion', response.data.error);
+			}
+		} catch (error) {
+			console.log('Enviar');
+			console.error('Error: ', error);
+		}
 		reset();
-		// try {
-		// 	const response = await login({ email, password });
-		// 	if (response.data.token) {
-		// 		const userRol = response.data.data.rol_id;
-		// 		dispatch(
-		// 			loginSuccess({
-		// 				user: response.data.data,
-		// 				token: response.data.token,
-		// 			}),
-		// 		);
-		// 		console.log(response);
-		// 		if (userRol === 1) {
-		// 			navigate('/indexAdmin');
-		// 		} else if (userRol === 2) {
-		// 			navigate('/indexStudents');
-		// 		} else if (userRol === 3) {
-		// 			navigate('/indexProfessors');
-		// 		}
-		// 	} else {
-		// 		console.error('Error al iniciar sesion', response.data.error);
-		// 	}
-		// } catch (error) {
-		// 	console.log('Enviar');
-		// 	console.error('Error: ', error);
-		// }
 	};
 	return (
+		<>
+		{/* {error && <PopUpError/>} */}
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<h2 className={styles.container__title}>¡Bienvenido otra vez!</h2>
@@ -109,9 +116,12 @@ export const LogIn = () => {
 				/>
 				<p>
 					¿No tienes cuenta?
-					<a className={styles.form__linkBlue}>Registrate</a>
+					<Link className={styles.form__linkBlue} to='/register'>
+						Registrate
+					</Link>
 				</p>
 			</form>
 		</main>
+		</>
 	);
 };
