@@ -2,10 +2,10 @@
 import styles from './LogIn.module.scss';
 //Dependencies
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserLogInMutation } from "../../../api/apiSlice";
 import { useForm } from 'react-hook-form';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
 import { PopUpError } from '../../../components/utils/error/PopUpError';
+// import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 export const LogIn = () => {
 	const {
@@ -15,47 +15,61 @@ export const LogIn = () => {
 		reset,
 	} = useForm();
 
-	const [login, isError, error] = useUserLogInMutation();
-	const navigate = useNavigate();
+	// const queryClient = useQueryClient();
+
+	// const {data: user, isLoading} = useQuery({
+	// 	queryFn: ()=>fetchUsers(), 
+	// 	queryKey: ["users"]
+	// });
+
+	//se puede usar isError.message y error.message
+	// const {mutateAsync: logInMutation, isError, error, data} = useMutation({
+	// 	mutationFn: handleLogIn,
+	// 	onSuccess: ()=>{
+	// 		queryClient.invalidateQueries("users");
+	// 	}
+	// })
+
+	// const navigate = useNavigate();
 
 	const handleLogIn = async (data) => {
 		console.log(data);
-		try {
-			const response = await login({ email, password });
+		// try {
+		// 	const response = await login({ email, password });
 
-			if (response.data.token !== '') {
+		// 	if (response.data.atributes.token !== '') {
+		// 		const userRol = response.data.atributes.rol_id;
+
+		// 		localStorage.setItem(
+		// 			(userInfo = {
+		// 				token: response.data.atributes.token,
+		// 				userRol,
+		// 			}),
+		// 		);
+
+		// 		console.log(response);
+
+		// 		if (userRol === 1) {
+		// 			navigate('/indexAdmin');
+		// 		} else if (userRol === 2) {
+		// 			navigate('/indexStudents');
+		// 		} else if (userRol === 3) {
+		// 			navigate('/indexProfessors');
+		// 		}
 				
-				const userRol = response.data.data.rol_id;
-
-				localStorage.setItem(
-					(userInfo = {
-						token: response.data.token,
-						userRol,
-					}),
-				);
-
-				console.log(response);
-
-				if (userRol === 1) {
-					navigate('/indexAdmin');
-				} else if (userRol === 2) {
-					navigate('/indexStudents');
-				} else if (userRol === 3) {
-					navigate('/indexProfessors');
-				}
-			} else {
-				console.error('Error al iniciar sesion', response.data.error);
-			}
-		} catch (error) {
-			console.log('Enviar');
-			console.error('Error: ', error);
-		}
+		// 	} else {
+		// 		console.error('Error al iniciar sesion', response.data.error);
+		// 	}
+		// } catch (error) {
+		// 	console.log('Enviar');
+		// 	console.error('Error: ', error.message);
+		// }
 		reset();
   
 	};
 	return (
 		<>
-		{isError === true && <PopUpError message={error}/>}
+		{/* {isError === true && <PopUpError message={error}/>} */}
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<h2 className={styles.container__title}>¡Bienvenido otra vez!</h2>
@@ -72,7 +86,7 @@ export const LogIn = () => {
 			>
 				<h3 className={styles.form__title}>Inicia Sesion</h3>
 				<label htmlFor='email' className={styles.form__label}>
-					E-mail
+					Email
 				</label>
 				<input
 					type='email'
@@ -109,6 +123,7 @@ export const LogIn = () => {
 				{errors.password && (
 					<ValidationError message={errors.password.message} />
 				)}
+				{/* {data.code === 401 && <ValidationError message="Correo o contraseña incorrectos" />} */}
 				<a className={styles.form__link}>¿Olvidaste tu contraseña?</a>
 				<input
 					type='submit'

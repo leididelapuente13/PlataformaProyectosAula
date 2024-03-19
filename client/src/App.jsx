@@ -1,20 +1,22 @@
 //Router
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //Pages
-import { LogIn } from "./pages/shared/LogIn/LogIn";
-import { Register } from "./pages/shared/Register/Register";
+import { LogIn } from './pages/shared/LogIn/LogIn';
+import { Register } from './pages/shared/Register/Register';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 function App() {
-
 	return (
-		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/' element={<LogIn/>}/>
-					<Route path='/register' element={<Register/>}/>
-				</Routes>
-			</BrowserRouter>
-		</>
+		<QueryClientProvider client={queryClient}>
+				<BrowserRouter>
+					<Routes>
+						<Route path='/' element={<LogIn />} />
+						<Route path='/register' element={<Register />} />
+					</Routes>
+				</BrowserRouter>
+		</QueryClientProvider>
 	);
 }
 

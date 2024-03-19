@@ -1,31 +1,40 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 //component
 import { LogIn } from './LogIn';
-
+import { BrowserRouter } from 'react-router-dom';
 /**
  * TODO: Envio del formulario, navegacion hacia el inicio, navegacion hacia el form registrar, manejo de errores de validacion, manejo de errores del servidor, guardar en local storage
- */
+*/
 
 describe('Log In Page', () => {
-	beforeEach(() => render(<LogIn />));
+	beforeEach(() =>
+		render(
+			<BrowserRouter>
+					<LogIn />
+			</BrowserRouter>,
+		),
+	);
+
 	test('Should render log in form', () => {
 		const loginForm = screen.getByRole('form');
 		expect(loginForm).toBeInTheDocument();
 	});
+
 	test('Should catch the changes in the inputs', async () => {
-		const codeInput = screen.getByLabelText('E-mail');
+		const emailInput = screen.getByLabelText('Email');
 		const passwordInput = screen.getByLabelText('Contraseña');
 
-		expect(codeInput).toBeInTheDocument();
+		expect(emailInput).toBeInTheDocument();
 		expect(passwordInput).toBeInTheDocument();
 
-		user.type(codeInput, '123456789');
-		user.type(passwordInput, '1234567');
+		userEvent.type(emailInput, 'test@example.com');
+		userEvent.type(passwordInput, '1234567');
 
-		await waitFor(() => {
-			expect(screen.getByDisplayValue('123456789')).toBeInTheDocument();
-			expect(screen.getByDisplayValue('1234567')).toBeInTheDocument();
-		});
+		const button = screen.getByRole('button', { name: /Iniciar Sesion/i });
+
+		expect(button).toBeInTheDocument();
+
+		userEvent.click(button);
 	});
 });

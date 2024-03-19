@@ -1,5 +1,4 @@
 import { PropTypes } from 'prop-types';
-import iconError from '../../../assets/img/icons/error.svg';
 import styles from './PopUpError.module.scss'
 
 import { useState } from 'react';
@@ -16,7 +15,7 @@ export const PopUpError = ({ message = '404' }) => {
 		<div className={popUp ? styles.coverOpacity : styles.coverHidden}>
 			<div className={styles.card}>
 				<div className={styles.card__circle}>
-					<img src={iconError} alt='Icon Error' className={styles.card__icon} />
+					<img src='../../../assets/img/icons/error.svg' alt='Icon Error' className={styles.card__icon} />
 				</div>
 				<p className={styles.card__textBold}>{message}</p>
 				<p className={styles.card__textLight}>Ha ocurrido un error, intentalo de nuevo</p>
