@@ -1,3 +1,41 @@
-body{
-    marg
+@use '../../../assets/styles/partials/variables';
+@use '../../../assets/styles/mixins/_mixins' as mixin;
+
+.main{
+    background-color: variables.$secondary-white;
+    height: 100vh;
+}
+
+.form{
+    width: 80%;
+    max-width: 370px;
+    display: flex;
+    flex-direction: column;
+    margin: 3.5rem auto;
+    gap: 1rem;
+    padding: 2.5rem 1.5rem;
+    
+    @media (min-width: 700px) {
+        border-radius: 0.4rem;
+        background-color: #fff;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+
+    &__title{
+		font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center
+    }
+
+    &__input{
+        @include mixin.input;
+    }
+
+    &__button{
+        @include mixin.greenFormButton;
+    }
+
+    &__link{
+        @include mixin.blueLink;
+    }
 }
