@@ -1,9 +1,46 @@
-@mixin button-styles($background, $text-color){
-    border: none;
-    padding: 0.8rem;
-    border-radius: 0.2rem;
-    background-color: $background;
-    color: $text-color;
+@use '../partials/variables';
+
+@mixin button-styles($background, $text-color) {
+	border: none;
+	padding: 0.8rem;
+	border-radius: 0.2rem;
+	background-color: $background;
+	color: $text-color;
 	font-weight: bold;
-    font-size: 1rem;
+	font-size: 1rem;
+}
+
+@mixin greenFormButton {
+	display: block;
+	margin: 1.2rem auto;
+	width: 80%;
+	font-size: 1rem;
+	@include button-styles(#3aaa35, #fff);
+	&:hover {
+		background-color: #58d451;
+	}
+}
+
+@mixin blueLink {
+	color: variables.$secondary-blue;
+	&:hover {
+		color: variables.$medium-blue;
+	}
+}
+
+@mixin input {
+	display: block;
+	padding: 0.8rem 0.7rem;
+	font-size: 0.9rem;
+	border-radius: 0.5rem;
+	border: 1px solid #d3d3d3;
+	margin-top: 0.5rem;
+	width: 100%;
+
+	&:focus {
+		outline: none;
+		box-shadow:
+			rgba(17, 17, 26, 0.05) 0px 1px 0px,
+			rgba(17, 17, 26, 0.1) 0px 0px 8px;
+	}
 }

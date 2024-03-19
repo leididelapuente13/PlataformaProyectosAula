@@ -55,17 +55,7 @@ body {
 		margin-top: 1rem;
 	}
 	&__input {
-		display: block;
-		padding: 0.7rem;
-		font-size: 0.9rem;
-		border-radius: 0.5rem;
-		border: 1px solid #d3d3d3;
-		margin-top: 0.5rem;
-		width: 100%;
-
-		&:focus {
-			outline: none;
-		}
+		@include mixin.input;
 	}
 
 	&__link {
@@ -80,22 +70,10 @@ body {
 	}
 
 	&__button {
-		display: block;
-		margin: 1.2rem auto;
-		width: 80%;
-		font-size: 1rem;
-        @include mixin.button-styles(#3aaa35, #fff);
-		&:hover {
-			background-color: #58d451;
-		}
+        @include mixin.greenFormButton;
 	}
 
 	&__linkBlue {
-		color: variables.$secondary-blue;
-		margin-left: 0.4rem;
-
-		&:hover {
-			color: variables.$medium-blue;
-		}
+		@include mixin.blueLink;
 	}
 }
