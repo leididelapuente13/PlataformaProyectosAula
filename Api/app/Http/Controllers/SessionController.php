@@ -48,4 +48,8 @@ class sessionController extends Controller
 
         return UserResource::make($user);
     }
+
+    function logout(Request $request){
+        return response()->json([] , 200);
+    }
 }

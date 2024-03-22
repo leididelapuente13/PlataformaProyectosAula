@@ -66,7 +66,7 @@ class SessionTest extends TestCase
             ]
         ]);
     }
-    
+
     /**
      @test
      */
@@ -150,5 +150,19 @@ class SessionTest extends TestCase
             ]
         );
         $response->assertJsonApiValidationErrors('email');
+    }
+
+
+    /**
+     @test
+     */
+    public function can_to_do_logout(){
+        $this->can_to_do_login();
+
+        $response = $this->getJson(
+            route('api.user.logout')
+        );
+
+        $response->assertStatus(200);
     }
 }
