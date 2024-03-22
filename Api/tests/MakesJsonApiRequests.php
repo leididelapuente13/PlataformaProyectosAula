@@ -3,7 +3,6 @@
 namespace Tests;
 
 use Closure;
-use FFI\Exception;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -22,7 +21,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiValidationErrors(): Closure
     {
-        return function ($attribute) {
+        return function ($attribute , $code = 422) {
             /**
                 @var TestResponse $this
              */
@@ -41,7 +40,7 @@ trait MakesJsonApiRequests
                         ]
                     ]
                 ]);
-                $this->assertStatus(422);
+                $this->assertStatus($code);
             } catch (ExpectationFailedException $e) {
                 Assert::fail("Fail to fin JSON:API INVALIDATION error for key: '{$attribute}' " . $e->getMessage());
             }

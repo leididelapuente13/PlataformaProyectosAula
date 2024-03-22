@@ -26,7 +26,7 @@ class UserFactory extends Factory
     {
 
         //Id random
-        $id =  $this->faker->unique()->numberBetween(1, 120);
+        $id =  $this->faker->unique()->numberBetween(50, 120);
         //Get user with the id from external API
         $user = Controller::apiUserId($id);
 

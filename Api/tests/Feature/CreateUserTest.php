@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class CreateUserTest extends TestCase
@@ -17,8 +16,8 @@ class CreateUserTest extends TestCase
      */
     public function can_create_user_student()
     {
-
-        //$this->withoutExceptionHandling();
+        //Create roles before creating the user
+        Role::factory(3)->create();
         $response = $this->postJson(
             route('api.user.create'),
             [
@@ -31,13 +30,10 @@ class CreateUserTest extends TestCase
                 ]
             ]
         );
-
-
         //The user was created successfully ( 201 )
         $response->assertCreated();
         $user = User::first();
         $token = $response->json('data.attributes.token');
-
         //Check the Json response
         $response->assertJson([
             'data' =>
@@ -60,8 +56,6 @@ class CreateUserTest extends TestCase
             ]
         ]);
     }
-
-
     /**
         @test
      */
@@ -78,8 +72,7 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('code');
     }
@@ -100,8 +93,7 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('password');
     }
@@ -123,8 +115,7 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('password');
     }
@@ -134,7 +125,6 @@ class CreateUserTest extends TestCase
      */
     public function invalid_code_registration()
     {
-
         // Send a request with a invalid code
         $response = $this->postJson(route('api.user.create'), [
             'data' => [
@@ -145,7 +135,6 @@ class CreateUserTest extends TestCase
                 ]
             ]
         ]);
-
 
         // Validate the Json response's structure
         $response->assertStatus(422)

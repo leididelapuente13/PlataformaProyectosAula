@@ -18,8 +18,9 @@ yarn-error.log
 /.idea
 /.vscode
 tests/Feature/ListUserTest.php
-tests/Feature/SessionTest.php
 tests/Feature/ValidateHeadersTest.php
 app/Http/Requests/CreateUserRequest.php
 .env.testing
-app/Http/Controllers/SessionController.php
+app/Http/Controllers/UserController.php
+routes/web.php
+tests/Feature/CreateUserTest.php
