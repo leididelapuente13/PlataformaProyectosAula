@@ -1,0 +1,31 @@
+@use '../../../assets/styles/mixins/mixins' as mixin;
+@use '../../../assets/styles/partials/variables';
+
+.transparentBackground{
+    @include mixin.transparentBackground;
+}
+
+.hiddenBackground{
+    display: none;
+}
+
+.card{
+    @include mixin.popUpCard;
+    &__circle{
+        @include mixin.popUpCircle;
+    }
+
+    &__icon{
+        width: 100%;
+    }
+
+    &__textBold{
+        @include mixin.popUpTitle;
+    }
+    &__textLight{
+        color: #A1A8B0;
+    }
+    &__button{
+        @include mixin.popUpButton(variables.$secondary-blue, #0978e0);
+    }
+}

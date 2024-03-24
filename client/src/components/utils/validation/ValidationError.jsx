@@ -1,16 +1,14 @@
-import {PropTypes} from 'prop-types'
+import { PropTypes } from 'prop-types';
 
-export const ValidationError = ({message}) => {
-  return (
-    <span style={styles}>{message}</span>
-  )
-}
+export const ValidationError = ({ message }) => {
+	return <span style={styles}>{message}</span>;
+};
 
 const styles = {
-    color: 'darkRed',
-    fontSize: '0.8rem', 
-}
+	color: '#BE221F',
+	fontSize: '0.8rem',
+};
 
 ValidationError.propTypes = {
-    message: PropTypes.string.isRequired
-}
+	message: PropTypes.string.isRequired,
+};
