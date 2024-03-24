@@ -3,19 +3,20 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //Pages
 import { LogIn } from './pages/shared/LogIn/LogIn';
 import { Register } from './pages/shared/Register/Register';
-
-import { QueryClient, QueryClientProvider } from 'react-query';
+//React Query client provider
+import { QueryClient, QueryClientProvider} from 'react-query';
 
 const queryClient = new QueryClient();
+
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-				<BrowserRouter>
-					<Routes>
-						<Route path='/' element={<LogIn />} />
-						<Route path='/register' element={<Register />} />
-					</Routes>
-				</BrowserRouter>
+			<BrowserRouter>
+				<Routes>
+					<Route path='/' element={<LogIn />} />
+					<Route path='/register' element={<Register />} />
+				</Routes>
+			</BrowserRouter>
 		</QueryClientProvider>
 	);
 }
