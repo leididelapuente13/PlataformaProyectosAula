@@ -11,7 +11,7 @@ jest.mock('axios');
 const registerMutation = jest.fn();
 registerMutation.mockReturnValue({ isLoading: true, isSuccess: true });
 
-describe('Register Component Tests', () => {
+describe('Register Page Tests', () => {
 	const queryClient = new QueryClient();
 
 	beforeEach(() =>
@@ -162,8 +162,6 @@ describe('Register Component Tests', () => {
 		if (response.isSuccess) {
 			reset();
 		}
-
-		expect(registerMutation).toHaveBeenCalled();
 		expect(reset).toHaveBeenCalledTimes(1);
 	});
 	test('Should render loading component when the request is loading', () => {

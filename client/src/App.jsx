@@ -15,6 +15,10 @@ function App() {
 				<Routes>
 					<Route path='/' element={<LogIn />} />
 					<Route path='/register' element={<Register />} />
+					<Route path='indexAdmin' element={<h1>Admin</h1>} />
+					<Route path='indexStudent' element={<h1>Student</h1>} />
+					<Route path='indexAdmin' element={<h1>Professor</h1>} />
+					<Route path='*' element={<h1>404</h1>} />
 				</Routes>
 			</BrowserRouter>
 		</QueryClientProvider>
