@@ -3,6 +3,7 @@
 
 .main {
 	background-color: variables.$secondary-white;
+	padding-top: 3rem;
 	height: 100vh;
 }
 
@@ -11,7 +12,7 @@
 	max-width: 370px;
 	display: flex;
 	flex-direction: column;
-	margin: 3.5rem auto;
+	margin: auto;
 	padding: 2.5rem 1.5rem;
 	gap: 1rem;
 	@media (min-width: 700px) {
