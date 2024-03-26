@@ -4,8 +4,9 @@ import styles from './LogIn.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
-import { PopUpError } from '../../../components/utils/error/PopUpError';
-// import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import { useMutation } from 'react-query';
+import { loginRequest } from '../../../api/authApi';
 
 export const LogIn = () => {
 	const {
@@ -15,28 +16,22 @@ export const LogIn = () => {
 		reset,
 	} = useForm();
 
-	// const queryClient = useQueryClient();
-
-	// const {data: user, isLoading} = useQuery({
-	// 	queryFn: ()=>fetchUsers(),
-	// 	queryKey: ["users"]
-	// });
-
-	//se puede usar isError.message y error.message
-	// const {mutateAsync: logInMutation, isError, error, data} = useMutation({
-	// 	mutationFn: handleLogIn,
-	// 	onSuccess: ()=>{
-	// 		queryClient.invalidateQueries("users");
-	// 	}
-	// })
+	const loginMutation = useMutation(loginRequest);
 
 	// const navigate = useNavigate();
 
 	const handleLogIn = async (data) => {
-		console.log(data);
+		try {
+			await loginMutation.mutateAsync(data, {
+				onSuccess: () => {
+					reset();
+				},
+			});
+			console.log(loginMutation.data);
+		} catch (error) {
+			console.error(error);
+		}
 		// try {
-		// 	const response = await login({ email, password });
-
 		// 	if (response.data.atributes.token !== '') {
 		// 		const userRol = response.data.atributes.rol_id;
 
@@ -64,11 +59,12 @@ export const LogIn = () => {
 		// 	console.log('Enviar');
 		// 	console.error('Error: ', error.message);
 		// }
-		reset();
 	};
 	return (
 		<>
-			{/* {isError === true && <PopUpError message={error}/>} */}
+			{loginMutation.isError && (
+				<ErrorPopUp message={loginMutation.error.message} />
+			)}
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<h2 className={styles.container__title}>¡Bienvenido otra vez!</h2>
@@ -88,7 +84,7 @@ export const LogIn = () => {
 						Email
 					</label>
 					<input
-						type='email'
+						type='text'
 						id='email'
 						className={styles.form__input}
 						{...register('email', {

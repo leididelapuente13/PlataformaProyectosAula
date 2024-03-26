@@ -1,18 +1,24 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 //component
 import { LogIn } from './LogIn';
+//dependencies
 import { BrowserRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 /**
  * TODO: Envio del formulario, navegacion hacia el inicio, navegacion hacia el form registrar, manejo de errores de validacion, manejo de errores del servidor, guardar en local storage
-*/
+ */
 
 describe('Log In Page', () => {
+	const queryClient = new QueryClient();
 	beforeEach(() =>
 		render(
-			<BrowserRouter>
+			<QueryClientProvider client={queryClient}>
+				<BrowserRouter>
 					<LogIn />
-			</BrowserRouter>,
+				</BrowserRouter>
+			</QueryClientProvider>,
 		),
 	);
 
