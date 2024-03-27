@@ -17,26 +17,36 @@ export const LogIn = () => {
 		reset,
 	} = useForm();
 
-	const loginMutation = useMutation(loginRequest);
-
 	const navigate = useNavigate();
 
+	const loginMutation = useMutation(loginRequest);
+
 	const handleLogIn = async (data) => {
+		const userData = {
+			data: {
+				type: 'user',
+				attributes: {
+					email: data.email,
+					password: data.password,
+				},
+			},
+		};
 		try {
-			await loginMutation.mutateAsync(data, {
-				onSuccess: () => {
+			await loginMutation.mutateAsync(userData, {
+				onSuccess: (mutationResult) => {
 					reset();
-					localStorage.setItem(data);
-					if (data.data.attributes.role_id === 1) {
+					console.log('Datos', mutationResult.data);
+					const role = mutationResult.data.attributes.role_id;
+					console.log(role);
+					if (role === 1) {
 						navigate('/indexAdmin');
-					} else if (data.data.attributes.role_id === 2) {
+					} else if (role === 2) {
 						navigate('/indexStudent');
-					} else if (data.data.attributes.role_id === 3) {
+					} else if (role === 3) {
 						navigate('./indexProfessor');
 					}
 				},
 			});
-			console.log(loginMutation.data);
 		} catch (error) {
 			console.error(error);
 		}
@@ -44,7 +54,7 @@ export const LogIn = () => {
 	return (
 		<>
 			{loginMutation.isError && (
-				<ErrorPopUp message={loginMutation.error.message} role="alert" />
+				<ErrorPopUp message={loginMutation.error.message} role='alert' />
 			)}
 			<main className={styles.main}>
 				<div className={styles.container}>
