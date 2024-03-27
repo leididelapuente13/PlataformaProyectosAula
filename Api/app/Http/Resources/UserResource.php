@@ -27,7 +27,7 @@ class UserResource extends JsonResource
                     'role_id' => $this->resource->role_id,
                     'description' => $this->resource->description,
                     'state' => '1',
-                    'token' => $this->resource->createToken('API TOKEN')->plainTextToken
+                    'token' => $this->resource->createToken('api_token')->plainTextToken
                 ],
                 'links' => [
                     //'self' => route('api.user.show' , $this->resource)

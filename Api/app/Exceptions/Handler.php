@@ -49,6 +49,6 @@ class Handler extends ExceptionHandler
         //Send structure for the error message
         return response()->json([
             'errors' => $errors
-        ], 422);
+        ],$exception->status);
     }
 }

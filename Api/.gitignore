@@ -17,10 +17,10 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-tests/Feature/ListUserTest.php
 tests/Feature/ValidateHeadersTest.php
-app/Http/Requests/CreateUserRequest.php
 .env.testing
-app/Http/Controllers/UserController.php
 routes/web.php
-tests/Feature/CreateUserTest.php
+lang/
+app/Http/Middleware/Authenticate.php
+routes/api.php
+tests/Feature/ListUserTest.php
