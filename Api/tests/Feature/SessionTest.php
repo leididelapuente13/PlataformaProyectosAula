@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class SessionTest extends TestCase
@@ -15,18 +14,16 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        //Create a new user
+        //Create roles
         Role::factory(3)->create();
+        //Create a new user
         $this->user = User::factory(1)->create([
             'state' => '1'
         ])->first();
     }
 
     use RefreshDatabase;
-    /**
-     @test
-     */
-    public function can_to_do_login(): void
+    public function test_can_to_do_login(): void
     {
         //Send a request
         $response = $this->post(
@@ -41,38 +38,13 @@ class SessionTest extends TestCase
                 ]
             ]
         );
-
-        //Check de format of the response and statusCode
-        $response->assertStatus(200);
-        $token = $response->json('data.attributes.token');
-        $response->assertJson([
-            'data' =>
-            [
-                'type' => 'user',
-                'id' => (string) $this->user->getRouteKey(),
-                'attributes' => [
-                    'user_name' => $this->user->user_name,
-                    'code' => $this->user->code,
-                    'email' => $this->user->email,
-                    'role_id' => $this->user->role_id,
-                    'description' => $this->user->description,
-                    'state' => '1',
-                    'token' => $token
-                ],
-                'links' => [
-                    //'self' => route('api.user.show' , $this->user)
-                    'self' => 'null'
-                ]
-            ]
-        ]);
+        // Assert the user resource structure
+        $response->assertJsonApiUserResource($this->user);
     }
 
-    /**
-     @test
-     */
-    public function incorrect_credentials()
+    public function test_incorrect_password()
     {
-        $response = $this->post(
+        $response = $this->postJson(
             route('api.user.login'),
             [
                 'data' => [
@@ -85,18 +57,33 @@ class SessionTest extends TestCase
             ]
         );
         // Using the macro create in MakesJsonRequest to validate
-        $response->assertJsonApiValidationErrors('credentials');
+        $response->assertJsonApiValidationErrors('password' , 401);
     }
 
-    /**
-     @test
-     */
-    public function account_is_suspended()
+    public function account_does_not_exist()
+    {
+        $response = $this->postJson(
+            route('api.user.login'),
+            [
+                'data' => [
+                    'type' => 'user',
+                    'attributes' => [
+                        'email' => 'dudoqueexista@gmail.com',
+                        'password' => 'password'
+                    ]
+                ]
+            ]
+        );
+        // Using the macro create in MakesJsonRequest to validate
+        $response->assertJsonApiValidationErrors('email' , 401);
+    }
+
+    public function test_account_is_suspended()
     {
         $user = User::factory(1)->create([
             'state' => '0'
         ])->first();
-        $response = $this->post(
+        $response = $this->postJson(
             route('api.user.login'),
             [
                 'data' => [
@@ -108,13 +95,10 @@ class SessionTest extends TestCase
                 ]
             ]
         );
-        $response->assertJsonApiValidationErrors('credentials', 403);
+        $response->assertJsonApiValidationErrors('email', 403);
     }
 
-    /**
-     @test
-     */
-    public function password_is_required()
+    public function test_password_is_required()
     {
         // Send a request without password
         $response = $this->postJson(
@@ -132,10 +116,9 @@ class SessionTest extends TestCase
         $response->assertJsonApiValidationErrors('password');
     }
 
-    /**
-     @test
-     */
-    public function email_is_required()
+
+
+    public function test_email_is_required()
     {
         // Send a request without email
         $response = $this->postJson(
@@ -152,17 +135,11 @@ class SessionTest extends TestCase
         $response->assertJsonApiValidationErrors('email');
     }
 
-
-    /**
-     @test
-     */
-    public function can_to_do_logout(){
-        $this->can_to_do_login();
-
-        $response = $this->getJson(
-            route('api.user.logout')
-        );
-
-        $response->assertStatus(200);
+    public function test_can_to_do_logout()
+    {
+        $this->actingAs($this->user);
+        // Request to log out
+        $response = $this->postJson(route('api.user.logout'))->dump();
+        $response->assertStatus(204);
     }
 }
