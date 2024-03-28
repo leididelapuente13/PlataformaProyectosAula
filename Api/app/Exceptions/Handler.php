@@ -31,15 +31,15 @@ class Handler extends ExceptionHandler
 
     protected function invalidJson($request, ValidationException $exception)
     {
-
         $title = $exception->getMessage();
         $errors = [];
         //Get all of the errors
         foreach ($exception->errors() as $field => $message) {
             $pointer = "/" . str_replace('.', '/', $field);
+            $field = str_replace(['.', 'data', 'attributes'], '', $field);
             $errors[] = [
-                'title' => $title,
-                'detail' => $message[0],
+                'title' => 'Error occurred in ' . $field,
+                'detail' =>  $field = str_replace(['.', 'data', 'attributes'], '', $message[0]),
                 'source' => [
                     'pointer' => $pointer
                 ]
@@ -49,6 +49,6 @@ class Handler extends ExceptionHandler
         //Send structure for the error message
         return response()->json([
             'errors' => $errors
-        ], 422);
+        ],$exception->status);
     }
 }

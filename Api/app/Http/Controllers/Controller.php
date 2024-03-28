@@ -13,7 +13,7 @@ class Controller extends BaseController
 
     static function apiUser($codigo)
     {
-        $response = Http::get("http://localhost/api_uni/api.php?action=get_user&codigo=$codigo");
+        $response = Http::get("http://localhost/api_uni/api.php?action=get_userCodigo&codigo=$codigo");
 
         return $response;
     }
@@ -21,9 +21,12 @@ class Controller extends BaseController
     static function apiUsers(){
         $response = Http::get("http://localhost/api_uni/api.php?action=list_users");
         return $response;
-
     }
 
+    static function apiUserId($id){
+        $response = Http::get("http://localhost/api_uni/api.php?action=get_userId&id=$id");
+        return $response;
+    }
 
 
 }

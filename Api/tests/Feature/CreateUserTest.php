@@ -2,23 +2,25 @@
 
 namespace Tests\Feature;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class CreateUserTest extends TestCase
 {
 
-    use RefreshDatabase;
-    /**
-     @test
-     */
-    public function can_create_user_student()
+    protected function setUp(): void
     {
+        parent::setUp();
+        //Create roles
+        Role::factory(3)->create();
+    }
 
-        //$this->withoutExceptionHandling();
+    use RefreshDatabase;
+    public function test_can_create_user_student()
+    {
+        //Create roles before creating the user
         $response = $this->postJson(
             route('api.user.create'),
             [
@@ -31,41 +33,14 @@ class CreateUserTest extends TestCase
                 ]
             ]
         );
-
-
         //The user was created successfully ( 201 )
         $response->assertCreated();
         $user = User::first();
-        $token = $response->json('data.attributes.token');
-
-        //Check the Json response
-        $response->assertJson([
-            'data' =>
-            [
-                'type' => 'user',
-                'id' => (string) $user->getRouteKey(),
-                'attributes' => [
-                    'user_name' => 'Adrain_Rutherford',
-                    'code' => 123456789,
-                    'email' => 'mark.jaskolski@example.net',
-                    'role_id' => 2,
-                    'description' => null,
-                    'state' => '1',
-                    'token' => $token
-                ],
-                'links' => [
-                    //'self' => route('api.user.show' , $user)
-                    'self' => 'null'
-                ]
-            ]
-        ]);
+        // Assert the user resource structure
+        $response->assertJsonApiUserResource($user, 201);
     }
 
-
-    /**
-        @test
-     */
-    public function code_is_required()
+    public function test_code_is_required()
     {
         // Send a request without code
         $response = $this->postJson(
@@ -78,16 +53,12 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('code');
     }
 
-    /**
-     @test
-     */
-    public function password_is_required()
+    public function test_password_is_required()
     {
         // Send a request without password
         $response = $this->postJson(
@@ -100,16 +71,12 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('password');
     }
 
-    /**
-     @test
-     */
-    public function password_min_8()
+    public function test_password_min_8()
     {
         // Send a request with password not valid
         $response = $this->postJson(
@@ -123,18 +90,13 @@ class CreateUserTest extends TestCase
                     ]
                 ]
             ]
-        )->dump();
-
+        );
         // Using the macro create in MakesJsonRequest to validate
         $response->assertJsonApiValidationErrors('password');
     }
 
-    /**
-     @test
-     */
-    public function invalid_code_registration()
+    public function test_invalid_code_registration()
     {
-
         // Send a request with a invalid code
         $response = $this->postJson(route('api.user.create'), [
             'data' => [
@@ -145,21 +107,26 @@ class CreateUserTest extends TestCase
                 ]
             ]
         ]);
+        $response->assertJsonApiValidationErrors('code' , 403);
+    }
 
+    public function test_user_is_already_registered(){
+        $user = User::factory(1)->create([
+            'state' => '1'
+        ])->first();
 
-        // Validate the Json response's structure
-        $response->assertStatus(422)
-            ->assertJsonStructure([
-                'errors' => [
-                    [
-                        'title',
-                        'detail',
+        $response = $this->postJson(
+            route('api.user.create'),
+            [
+                'data' => [
+                    'type' => 'user',
+                    'attributes' => [
+                        'code' =>  $user->code,
+                        'password' => 'password',
                     ]
                 ]
-            ])
-            ->assertJsonFragment([ //verificar el contenido
-                'title' => 'Código de usuario inválido',
-                'detail' => 'El código de usuario proporcionado no es válido.',
-            ]);
+            ]
+        );
+        $response->assertJsonApiValidationErrors('code' , 409);
     }
 }
