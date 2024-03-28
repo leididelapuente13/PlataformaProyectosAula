@@ -1,11 +1,8 @@
 @use '../../../assets/styles/partials/variables';
+@use '../../../assets/styles/mixins/mixins' as mixin;
+
 .coverOpacity {
-	width: 100%;
-	height: 100vh;
-	position: absolute;
-	background-color: rgba(184, 178, 178, 70%);
-	display: flex;
-	justify-content: center;
+    @include mixin.transparentBackground;
 }
 
 .coverHidden{
@@ -13,25 +10,10 @@
 }
 
 .card {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	width: 80%;
-	max-width: 300px;
-	border-radius: 15px;
-	background-color: #fff;
-	font-size: 0.8rem;
-	margin: auto;
-	padding: 2rem;
+	@include mixin.popUpCard;
 
 	&__circle {
-        background-color: #F5F8FF;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        margin-bottom: 1.5rem;
-        padding: 0.5rem;
+        @include mixin.popUpCircle;
 	}
 
 	&__icon {
@@ -39,9 +21,7 @@
 	}
 
     &__textBold{
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 0.4rem;
+       @include mixin.popUpTitle;
     }
 
     &__textLight{
@@ -49,14 +29,6 @@
     }
 
     &__button{
-        margin-top: 1.2rem;
-        width: 45%;
-        padding: 0.6rem;
-        background-color: variables.$secondary-red;
-        color: variables.$primary-white;
-
-        &:hover{
-            background-color: variables.$primary-red;
-        }
+        @include mixin.popUpButton(variables.$secondary-red, variables.$primary-red);
     }
 }

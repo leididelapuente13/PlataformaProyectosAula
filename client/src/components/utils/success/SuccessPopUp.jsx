@@ -1,5 +1,8 @@
+// Styles
 import styles from './SuccessPopUp.module.scss';
+// Images
 import iconSuccess from '../../../assets/img/icons/success.svg';
+// Dependencies
 import { PropTypes } from 'prop-types';
 import { useEffect, useState } from 'react';
 

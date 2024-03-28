@@ -1,6 +1,9 @@
-import { PropTypes } from 'prop-types';
+// Styles
 import styles from './ErrorPopUp.module.scss';
+// Images
 import iconError from '../../../assets/img/icons/error.svg';
+// Dependencies
+import { PropTypes } from 'prop-types';
 import { useEffect, useState } from 'react';
 
 export const ErrorPopUp = ({ message }) => {
@@ -18,8 +21,12 @@ export const ErrorPopUp = ({ message }) => {
 	if (message !== undefined && message.includes) {
 		if (message.includes('403')) {
 			message = 'Su cuenta ha sido suspendida';
-		} else if (message.includes(401)) {
-			message = 'Credenciales Equivocadas';
+		} else if (message.includes('401')) {
+			message = 'Esta cuenta no existe';
+		} else if (message.includes('409')) {
+			message = 'Esta cuenta ya existe';
+		} else {
+			message = 'Intentalo mas tarde';
 		}
 	}
 
@@ -29,10 +36,8 @@ export const ErrorPopUp = ({ message }) => {
 				<div className={styles.card__circle}>
 					<img src={iconError} alt='Icon Error' className={styles.card__icon} />
 				</div>
-				<p className={styles.card__textBold}>{message}</p>
-				<p className={styles.card__textLight}>
-					Ha ocurrido un error, intentalo de nuevo
-				</p>
+				<p className={styles.card__textBold}>Ha ocurrido un error</p>
+				<p className={styles.card__textLight}>{message}</p>
 				<button
 					type='button'
 					className={styles.card__button}

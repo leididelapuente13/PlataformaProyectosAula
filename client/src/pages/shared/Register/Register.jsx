@@ -1,9 +1,13 @@
-import { Link } from 'react-router-dom';
+// Styles
 import styles from './Register.module.scss';
-import { ValidationError } from '../../../components/utils/validation/ValidationError';
+// Dependencies
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { registerRequest } from '../../../api/authApi';
 import { useMutation } from 'react-query';
+// Request
+import { registerRequest } from '../../../api/authApi';
+// Components
+import { ValidationError } from '../../../components/utils/validation/ValidationError';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import { SuccessPopUp } from '../../../components/utils/success/SuccessPopUp';
 import BarLoader from 'react-spinners/BarLoader';
@@ -106,10 +110,11 @@ export const Register = () => {
 						</Link>
 					</p>
 
-					<div data-testid="loader-container">
+					<div data-testid='loader-container' className={styles.form__loader}>
 						<BarLoader
 							color='#0A84F4'
-							height={5}
+							height={7}
+							width={470}
 							loading={registerMutation.isLoading}
 						/>
 					</div>

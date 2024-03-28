@@ -40,4 +40,8 @@
 	&__link {
 		@include mixin.blueLink;
 	}
+
+	&__loader{
+		@include mixin.loaderContainer;
+	}
 }

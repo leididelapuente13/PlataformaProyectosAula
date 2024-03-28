@@ -1,12 +1,15 @@
-//Styles
+// Styles
 import styles from './LogIn.module.scss';
-//Dependencies
+// Dependencies
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import Cookies from 'js-cookie';
+// Request
+import { loginRequest } from '../../../api/authApi';
+// Components
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
-import { useMutation } from 'react-query';
-import { loginRequest } from '../../../api/authApi';
 import BarLoader from 'react-spinners/BarLoader';
 
 export const LogIn = () => {
@@ -31,20 +34,25 @@ export const LogIn = () => {
 				},
 			},
 		};
+
+		const handleUserRedirection = (role) => {
+			if (role === 1) {
+				navigate('/indexAdmin');
+			} else if (role === 2) {
+				navigate('/indexStudent');
+			} else if (role === 3) {
+				navigate('./indexProfessor');
+			}
+		};
+
 		try {
 			await loginMutation.mutateAsync(userData, {
 				onSuccess: (mutationResult) => {
 					reset();
-					console.log('Datos', mutationResult.data);
 					const role = mutationResult.data.attributes.role_id;
-					console.log(role);
-					if (role === 1) {
-						navigate('/indexAdmin');
-					} else if (role === 2) {
-						navigate('/indexStudent');
-					} else if (role === 3) {
-						navigate('./indexProfessor');
-					}
+					//Save the user token and role in cookies
+					Cookies.set('role', role, 'token', mutationResult.data.attributes.token);
+					handleUserRedirection(role);
 				},
 			});
 		} catch (error) {
@@ -53,8 +61,10 @@ export const LogIn = () => {
 	};
 	return (
 		<>
-			{loginMutation.isError && (
+			{loginMutation.isError && !loginMutation.error.message.includes('401') ? (
 				<ErrorPopUp message={loginMutation.error.message} role='alert' />
+			) : (
+				''
 			)}
 			<main className={styles.main}>
 				<div className={styles.container}>
@@ -107,7 +117,13 @@ export const LogIn = () => {
 					{errors.password && (
 						<ValidationError message={errors.password.message} />
 					)}
-					{/* {loginMutation.error.message.includes('401') && <ValidationError message='Correo o contraseña incorrectos' />} */}
+					{loginMutation.error &&
+					loginMutation.error.message &&
+					loginMutation.error.message.includes('401') ? (
+						<ValidationError message='Correo o contraseña incorrectos' />
+					) : (
+						''
+					)}
 					<a className={styles.form__link}>¿Olvidaste tu contraseña?</a>
 					<input
 						type='submit'
@@ -121,10 +137,11 @@ export const LogIn = () => {
 							Registrate
 						</Link>
 					</p>
-					<div data-testid='loader-container'>
+					<div data-testid='loader-container' className={styles.form__loader}>
 						<BarLoader
 							color='#0A84F4'
-							height={5}
+							height={7}
+							width={470}
 							loading={loginMutation.isLoading}
 						/>
 					</div>

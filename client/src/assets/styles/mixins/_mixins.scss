@@ -84,18 +84,26 @@
 	margin-bottom: 0.4rem;
 }
 
-@mixin popUpButton ($background, $backgroundHover) {
+@mixin popUpButton($background, $backgroundHover) {
 	margin-top: 1.2rem;
 	width: 45%;
 	padding: 0.6rem;
 	background-color: $background;
 	color: variables.$primary-white;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-	&:hover {		
+	&:hover {
 		background-color: $backgroundHover;
 		transform: scale(0.98);
 		box-shadow: 0px 2.5px 8px rgba(0, 0, 0, 0.4);
-		transition:  transform 0.3s ease-in, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-		// transition: background-color 0.5s ease-in;
+		transition:
+			transform 0.3s ease-in,
+			background-color 0.3s ease-in-out,
+			box-shadow 0.3s ease-in-out;
 	}
+}
+
+@mixin loaderContainer {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
 }
