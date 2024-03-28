@@ -1,0 +1,87 @@
+@use '../../../assets/styles/partials/variables';
+@use '../../../assets/styles/mixins/_mixins' as mixin;
+
+body {
+	background-color: #f5f5f5;
+}
+
+.main {
+	margin: auto;
+	width: 90%;
+	max-width: 750px;
+	display: flex;
+	padding-top: 2rem;
+}
+
+.removePadding{
+	padding-top: 0;
+}
+
+.container {
+	background: linear-gradient(to right, #021b79, #0575e6);
+	color: #fff;
+	padding-inline: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 0.8rem;
+	width: 50%;
+
+	@media (max-width: 767px) {
+		display: none;
+	}
+
+	&__title {
+		font-size: 2rem;
+	}
+
+	&__text {
+		font-style: italic;
+	}
+}
+
+.form {
+	background-color: #fff;
+	padding: 1.5rem;
+	width: 50%;
+	min-height: 85vh;
+	@media (max-width: 767px) {
+		width: 100%;
+		padding: 1.5rem;
+	}
+	&__title {
+		font-size: 1.8rem;
+		line-height: 1.7;
+		margin-bottom: 1.3rem;
+	}
+	&__label {
+		display: block;
+		margin-top: 1rem;
+	}
+	&__input {
+		@include mixin.input;
+	}
+
+	&__link {
+		float: right;
+		margin-bottom: 2rem;
+		font-size: 0.9rem;
+		margin-top: 1.5rem;
+
+		&:hover {
+			color: variables.$secondary-blue;
+		}
+	}
+
+	&__button {
+        @include mixin.greenFormButton;
+	}
+
+	&__linkBlue {
+		@include mixin.blueLink;
+	}
+
+	&__loader{
+		@include mixin.loaderContainer;
+	}
+}
