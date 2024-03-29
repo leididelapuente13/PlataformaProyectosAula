@@ -30,8 +30,7 @@ class UserResource extends JsonResource
                     'token' => $this->resource->createToken('api_token')->plainTextToken
                 ],
                 'links' => [
-                    //'self' => route('api.user.show' , $this->resource)
-                    'self' => 'null'
+                    'self' => route('api.user.show' , $this->resource->getRouteKey())
                 ]
         ];
     }

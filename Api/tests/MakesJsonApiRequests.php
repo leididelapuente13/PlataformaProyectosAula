@@ -75,8 +75,7 @@ trait MakesJsonApiRequests
                         'token'=> $this->json('data.attributes.token')
                     ],
                     'links' => [
-                        //'self' => route('api.user.show' , $this->user)
-                        'self' => 'null'
+                        'self' => route('api.user.show' , $user->getRouteKey())
                     ]
                 ]
             ]);

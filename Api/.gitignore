@@ -22,5 +22,3 @@ tests/Feature/ValidateHeadersTest.php
 routes/web.php
 lang/
 app/Http/Middleware/Authenticate.php
-routes/api.php
-tests/Feature/ListUserTest.php
