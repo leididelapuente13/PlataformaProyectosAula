@@ -2,9 +2,7 @@
 import styles from '../Nav.module.scss';
 // Icons
 import { FaHouseChimney, FaMagnifyingGlass } from 'react-icons/fa6';
-import { FaBell } from 'react-icons/fa';
 import { IoLogOut } from 'react-icons/io5';
-import { CgProfile } from 'react-icons/cg';
 // Dependencies
 import { Link } from 'react-router-dom';
 import icon from '../../../../assets/img/default/icon.png';
@@ -19,9 +17,6 @@ export const Nav = () => {
 				<img src={icon} alt='user icon' className={styles.nav__img} />
 			</div>
 			<div className={styles.nav__buttonContainer}>
-				<button type='button' role='button' className={styles.nav__button}>
-					<FaBell />
-				</button>
 				<button
 					type='button'
 					role='button'
@@ -45,11 +40,6 @@ export const Nav = () => {
 				<li>
 					<Link to='/buscador' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
-					</Link>
-				</li>
-				<li>
-					<Link to='/perfil' className={styles.nav__link}>
-						<CgProfile /> Mi Pefil
 					</Link>
 				</li>
 				<li>
