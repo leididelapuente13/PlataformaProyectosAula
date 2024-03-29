@@ -8,7 +8,7 @@ import { CgProfile } from 'react-icons/cg';
 // Dependencies
 import { Link } from 'react-router-dom';
 import icon from '../../../../assets/img/default/icon.png';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const Nav = () => {
 	const [nav, setNav] = useState(false);

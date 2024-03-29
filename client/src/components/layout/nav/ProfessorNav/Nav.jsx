@@ -6,7 +6,7 @@ import { IoLogOut } from 'react-icons/io5';
 // Dependencies
 import { Link } from 'react-router-dom';
 import icon from '../../../../assets/img/default/icon.png';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const Nav = () => {
 	const [nav, setNav] = useState(false);
