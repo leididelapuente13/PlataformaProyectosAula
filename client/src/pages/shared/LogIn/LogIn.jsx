@@ -11,7 +11,7 @@ import { loginRequest } from '../../../api/authApi';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import BarLoader from 'react-spinners/BarLoader';
-
+import {Nav} from '../../../components/layout/nav/StudentNav/Nav'
 export const LogIn = () => {
 	const {
 		register,
