@@ -58,4 +58,8 @@ class UserController extends Controller
     function show(User $user) {
         return UserResource::make($user);
     }
+
+    function filterUser(){
+        return response()->json(200);
+    }
 }

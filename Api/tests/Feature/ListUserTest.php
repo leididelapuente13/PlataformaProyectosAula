@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ListUserTest extends TestCase
@@ -26,8 +25,20 @@ class ListUserTest extends TestCase
 
     public function test_show_user()
     {
-        $this->actingAs($this->user);
-        $response = $this->getJson(route('api.user.show', $this->user->getRouteKey()));
+        // Send a request with header 'Authorization'
+        $response = $this->withHeaders(
+            [
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+            ]
+        )->getJson(route('api.user.show', $this->user->getRouteKey()));
         $response->assertJsonApiUserResource($this->user, 200);
+    }
+
+    public function test_admin_can_filter_users()
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken' , ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'parametro'));
+        $response->assertOk();
     }
 }
