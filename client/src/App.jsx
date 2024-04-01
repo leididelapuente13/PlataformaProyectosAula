@@ -17,14 +17,21 @@ function App() {
 					<Route path='/' element={<LogIn />} />
 					<Route path='/register' element={<Register />} />
 					<Route path='indexStudent' element={<h1>Student</h1>} />
-					<Route element={<ProtectedRoute role="1" />}>
-						<Route
-							path='/indexAdmin'
-							element={<h1>Admin</h1>}
-							role='admin'
-						/>
+					<Route element={<ProtectedRoute role='1' />}>
+						<Route path='/indexAdmin' element={<h1>Admin</h1>} />
+						<Route path='/users' element={<h1>Admin</h1>} />
+						<Route path='/reports' element={<h1>Admin</h1>} />
+						<Route path='/anaucements' element={<h1>Admin</h1>} />
 					</Route>
-					<Route path='indexAdmin' element={<h1>Professor</h1>} />
+					<Route element={<ProtectedRoute role='2' />}>
+						<Route path='/indexStudent' element={<h1>Index Student</h1>} />
+						<Route path='/profile' element={<h1>Profile</h1>} />
+					</Route>
+					<Route element={<ProtectedRoute role='3' />}>
+						<Route path='/indexProfessor' element={<h1>Professor</h1>} />
+					</Route>
+					<Route path='filter' element={<h1>Filter</h1>} />
+					<Route path='report' element={<h1>Report</h1>} />
 					<Route path='*' element={<h1>404</h1>} />
 				</Routes>
 			</BrowserRouter>
