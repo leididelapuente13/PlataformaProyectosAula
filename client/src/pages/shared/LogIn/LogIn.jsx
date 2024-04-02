@@ -51,7 +51,8 @@ export const LogIn = () => {
 					reset();
 					const role = mutationResult.data.attributes.role_id;
 					//Save the user token and role in cookies
-					Cookies.set('role', role, 'token', mutationResult.data.attributes.token);
+					Cookies.set('role', role);
+					Cookies.set('token', mutationResult.data.attributes.token);
 					handleUserRedirection(role);
 				},
 			});
