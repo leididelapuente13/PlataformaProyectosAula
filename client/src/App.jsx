@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //Pages
 import { LogIn } from './pages/public/LogIn/LogIn';
 import { Register } from './pages/public/Register/Register';
-import { StudentIndex } from './pages/student/indexstudent/StudentIndex';
 //React Query client provider
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ProtectedRoute } from './routes/ProtectedRoute';
+import { UserManagement } from './pages/admin/Users/UserManagement';
 
 const queryClient = new QueryClient();
 
@@ -20,7 +20,6 @@ function App() {
 					<Route path='indexStudent' element={<h1>Student</h1>} />
 					<Route element={<ProtectedRoute role='1' />}>
 						<Route path='/indexAdmin' element={<h1>Admin</h1>} />
-						<Route path='/users' element={<h1>Admin</h1>} />
 						<Route path='/reports' element={<h1>Admin</h1>} />
 						<Route path='/announcements' element={<h1>Admin</h1>} />
 					</Route>
@@ -36,6 +35,7 @@ function App() {
 					<Route path='report' element={<h1>Report</h1>} />
 					<Route path='/project-details' element={<h1>Profile</h1>} />
 					<Route path='*' element={<h1>404</h1>} />
+					<Route path='/user-management' element={<UserManagement/>} />
 				</Routes>
 			</BrowserRouter>
 		</QueryClientProvider>
