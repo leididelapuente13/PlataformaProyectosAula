@@ -11,7 +11,7 @@ import { loginRequest } from '../../../api/authApi';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import BarLoader from 'react-spinners/BarLoader';
-
+import {Nav} from '../../../components/layout/nav/StudentNav/Nav'
 export const LogIn = () => {
 	const {
 		register,
@@ -37,11 +37,11 @@ export const LogIn = () => {
 
 		const handleUserRedirection = (role) => {
 			if (role === 1) {
-				navigate('/indexAdmin');
+				navigate('/adminIndex');
 			} else if (role === 2) {
-				navigate('/indexStudent');
+				navigate('/studentIndex');
 			} else if (role === 3) {
-				navigate('./indexProfessor');
+				navigate('/professorIndex');
 			}
 		};
 
