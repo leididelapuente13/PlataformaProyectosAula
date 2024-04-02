@@ -27,7 +27,7 @@ export const UsersList = () => {
 				margin: 'auto',
 			}}
 		>
-			<h1 style={{ marginBlock: '3rem 1.7rem', color: '#271231' }}>Usuarios</h1>
+			<h1 style={{ marginBlock: '4rem 1.7rem', color: '#' }}>Usuarios</h1>
 			<UserCard user={user} />
 			<UserCard user={user} />
 			<UserCard user={user} />
