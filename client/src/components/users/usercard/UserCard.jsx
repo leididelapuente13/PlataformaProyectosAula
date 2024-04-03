@@ -4,6 +4,8 @@ import styles from './UserCard.module.scss';
 import icon from '../../../assets/img/default/icon.png';
 // Dependencies
 import { PropTypes } from 'prop-types';
+import { useContext, useEffect } from 'react';
+import { WarningContext } from '../../../context/WarningContext';
 
 export const UserCard = ({ user }) => {
 	const userData = {
@@ -14,6 +16,16 @@ export const UserCard = ({ user }) => {
 		role: user.data.attributes.role_id,
 		state: user.data.attributes.state,
 	};
+
+	const {visible, setVisible} = useContext(WarningContext);
+
+	useEffect(() => {
+	 console.log(visible)
+	}, [visible]);
+
+	const setConfirmation = () =>{
+		setVisible((prevVisible)=>({...prevVisible, deactivateUserWarning: true}));
+	}
 
 	return (
 		<>
@@ -37,7 +49,7 @@ export const UserCard = ({ user }) => {
 					<p className={styles.card__textLight}>{userData.email}</p>
 				</div>
 			</div>
-			<button type='button' className={userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate}>
+			<button type='button' className={userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate} onClick={setConfirmation}>
 				{userData.state === 1 ? 'Desactivar' : 'Activar'}
 			</button>
 			<hr className={styles.card__hr}/>

@@ -4,22 +4,15 @@ import styles from './ConfirmationPopUp.module.scss';
 import iconConfirmation from '../../../assets/img/icons/exclamation.svg';
 // Dependencies
 import { PropTypes } from 'prop-types';
-import { useEffect, useState } from 'react';
 
-export const ConfirmationPopUp = ({ message }) => {
-	const [popUp, setPopUp] = useState(true);
+export const ConfirmationPopUp = ({ message, visible, setVisible }) => {
 
 	const handleClosePopUp = () => {
-		setPopUp(false);
+		setVisible((prevVisible)=>({...prevVisible, deactivateUserWarning: false}));
 	};
 
-	useEffect(() => {
-		const main = document.querySelector('main');
-		main.classList.add('removePadding');
-	}, []);
-
 	return (
-		<div className={popUp ? styles.coverOpacity : styles.coverHidden}>
+		<div className={visible ? styles.coverOpacity : styles.coverHidden}>
 			<div className={styles.card}>
 				<div className={styles.card__circle}>
 					<img
@@ -47,4 +40,6 @@ export const ConfirmationPopUp = ({ message }) => {
 
 ConfirmationPopUp.propTypes = {
 	message: PropTypes.string,
+	visible: PropTypes.obj,
+	setVisible: PropTypes.func,
 };
