@@ -16,10 +16,13 @@ trait MakesJsonApiRequests
         parent::setUp();
         //add functionality to the TestResponse class
         TestResponse::macro('assertJsonApiValidationErrors', $this->assertJsonApiValidationErrors());
-
         TestResponse::macro(
             'assertJsonApiUserResource',
             $this->assertJsonApiUserResource()
+        );
+        TestResponse::macro(
+            'assertJsonApiAuthResource',
+            $this->assertJsonApiAuthResource()
         );
     }
 
@@ -52,7 +55,7 @@ trait MakesJsonApiRequests
         };
     }
 
-    protected function assertJsonApiUserResource(): Closure
+    protected function assertJsonApiAuthResource(): Closure
     {
         return function ($user , $code = 200) {
             /**
@@ -73,6 +76,36 @@ trait MakesJsonApiRequests
                         'description' => $user->description,
                         'state' => '1',
                         'token'=> $this->json('data.attributes.token')
+                    ],
+                    'links' => [
+                        'self' => route('api.user.show' , $user->getRouteKey())
+                    ]
+                ]
+            ]);
+        };
+    }
+
+
+    protected function assertJsonApiUserResource(): Closure
+    {
+        return function ($user , $code = 200) {
+            /**
+                @var TestResponse $this
+             */
+
+            $this->assertStatus($code);
+            $this->assertJson([
+                'data' =>
+                [
+                    'type' => 'user',
+                    'id' => (string) $user->getRouteKey(),
+                    'attributes' => [
+                        'user_name' => $user->user_name,
+                        'code' => $user->code,
+                        'email' => $user->email,
+                        'role_id' => $user->role_id,
+                        'description' => $user->description,
+                        'state' => $user->state,
                     ],
                     'links' => [
                         'self' => route('api.user.show' , $user->getRouteKey())
