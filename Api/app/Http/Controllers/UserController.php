@@ -34,7 +34,7 @@ class UserController extends Controller
             $user->user_name = $userApi['nombre'] . '_' . $userApi['apellidos'];
             $user->code = $userApi['codigo'];
             $user->email = $userApi['email'];
-            $user->password = Hash::make($request->input('password'));
+            $user->password = Hash::make($request->input('data.attributes.password'));
 
             // Check rol
             $userTipo = $userApi['tipo'];

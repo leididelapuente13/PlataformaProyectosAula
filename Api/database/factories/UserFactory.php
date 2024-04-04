@@ -33,7 +33,7 @@ class UserFactory extends Factory
         //Return the user generated
         return [
             'state' => $this->faker->randomElement(['0', '1']),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'user_name' => $user['nombre'] . "_" . $user['apellidos'],
             'code' => $user['codigo'],
