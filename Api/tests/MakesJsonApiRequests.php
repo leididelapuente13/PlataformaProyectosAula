@@ -15,7 +15,10 @@ trait MakesJsonApiRequests
     {
         parent::setUp();
         //add functionality to the TestResponse class
-        TestResponse::macro('assertJsonApiValidationErrors', $this->assertJsonApiValidationErrors());
+        TestResponse::macro(
+            'assertJsonApiValidationErrors',
+            $this->assertJsonApiValidationErrors()
+        );
         TestResponse::macro(
             'assertJsonApiUserResource',
             $this->assertJsonApiUserResource()
@@ -23,6 +26,10 @@ trait MakesJsonApiRequests
         TestResponse::macro(
             'assertJsonApiAuthResource',
             $this->assertJsonApiAuthResource()
+        );
+        TestResponse::macro(
+            'assertJsonUsersFilterResource',
+            $this->assertJsonUsersFilterResource()
         );
     }
 
@@ -57,7 +64,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiAuthResource(): Closure
     {
-        return function ($user , $code = 200) {
+        return function ($user, $code = 200) {
             /**
                 @var TestResponse $this
              */
@@ -75,10 +82,10 @@ trait MakesJsonApiRequests
                         'role_id' => $user->role_id,
                         'description' => $user->description,
                         'state' => '1',
-                        'token'=> $this->json('data.attributes.token')
+                        'token' => $this->json('data.attributes.token')
                     ],
                     'links' => [
-                        'self' => route('api.user.show' , $user->getRouteKey())
+                        'self' => route('api.user.show', $user->getRouteKey())
                     ]
                 ]
             ]);
@@ -88,7 +95,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiUserResource(): Closure
     {
-        return function ($user , $code = 200) {
+        return function ($user, $code = 200) {
             /**
                 @var TestResponse $this
              */
@@ -108,9 +115,38 @@ trait MakesJsonApiRequests
                         'state' => $user->state,
                     ],
                     'links' => [
-                        'self' => route('api.user.show' , $user->getRouteKey())
+                        'self' => route('api.user.show', $user->getRouteKey())
                     ]
                 ]
+            ]);
+        };
+    }
+
+
+    protected function assertJsonUsersFilterResource(): Closure
+    {
+        return function () {
+            /**
+                @var TestResponse $this
+             */
+            $this->assertOk();
+            $this->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'type',
+                        'id',
+                        'attributes' => [
+                            'user_name',
+                            'code',
+                            'email',
+                            'role_id',
+                            'description',
+                            'state'
+                        ],
+                        'links'
+                    ],
+                ]
+
             ]);
         };
     }

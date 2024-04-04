@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -59,7 +60,8 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    function filterUser(){
-        return response()->json(200);
+    function filterUser($filter){
+        $users = User::where('user_name', 'LIKE', '%'. $filter. '%')->get();
+        return UserCollection::make($users);
     }
 }

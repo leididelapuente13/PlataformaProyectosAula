@@ -34,11 +34,23 @@ class ListUserTest extends TestCase
         $response->assertJsonApiUserResource($this->user, 200);
     }
 
-    public function test_admin_can_filter_users()
+    public function test_admin_can_filter_users_for_user_name()
     {
+        $this->withoutExceptionHandling();
+        $users = User::factory(30)->create();
+        $users->first()->user_name = 'Pedro';
+        $users->first()->save();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken' , ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'parametro'));
-        $response->assertOk();
+        ])->getJson(route('api.user.filter', 'Pedro'));
+        $usersResponse =$response->json()['data'];
+        foreach ($usersResponse as $userResponse){
+            foreach($users as $user){
+                if($userResponse['attributes']['code'] == $user->code){
+                    $this->assertEquals($userResponse['attributes']['email'] , $user->email);
+                }
+            }
+        }
+        $response->assertJsonUsersFilterResource();
     }
 }
