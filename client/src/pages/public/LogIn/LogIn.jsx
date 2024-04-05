@@ -37,11 +37,11 @@ export const LogIn = () => {
 
 		const handleUserRedirection = (role) => {
 			if (role === 1) {
-				navigate('/adminIndex');
+				navigate('/user-management');
 			} else if (role === 2) {
-				navigate('/studentIndex');
+				navigate('/indexStudent');
 			} else if (role === 3) {
-				navigate('/professorIndex');
+				navigate('/indexProfessor');
 			}
 		};
 
