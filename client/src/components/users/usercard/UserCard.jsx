@@ -4,11 +4,13 @@ import styles from './UserCard.module.scss';
 import icon from '../../../assets/img/default/icon.png';
 // Dependencies
 import { PropTypes } from 'prop-types';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
+// Context
 import { WarningContext } from '../../../context/WarningContext';
 
 export const UserCard = ({ user }) => {
 	const userData = {
+		id: user.data.id,
 		user_name: user.data.attributes.user_name,
 		code: user.data.attributes.code,
 		email: user.data.attributes.email,
@@ -17,15 +19,14 @@ export const UserCard = ({ user }) => {
 		state: user.data.attributes.state,
 	};
 
-	const {visible, setVisible} = useContext(WarningContext);
+	const { setVisible } = useContext(WarningContext);
 
-	useEffect(() => {
-	 console.log(visible)
-	}, [visible]);
-
-	const setConfirmation = () =>{
-		setVisible((prevVisible)=>({...prevVisible, deactivateUserWarning: true}));
-	}
+	const setConfirmation = () => {
+		setVisible((prevVisible) => ({
+			...prevVisible,
+			deactivateUserWarning: true,
+		}));
+	};
 
 	return (
 		<>
@@ -49,10 +50,16 @@ export const UserCard = ({ user }) => {
 					<p className={styles.card__textLight}>{userData.email}</p>
 				</div>
 			</div>
-			<button type='button' className={userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate} onClick={setConfirmation}>
+			<button
+				type='button'
+				className={
+					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
+				}
+				onClick={setConfirmation}
+			>
 				{userData.state === 1 ? 'Desactivar' : 'Activar'}
 			</button>
-			<hr className={styles.card__hr}/>
+			<hr className={styles.card__hr} />
 		</>
 	);
 };
@@ -60,6 +67,7 @@ export const UserCard = ({ user }) => {
 UserCard.propTypes = {
 	user: PropTypes.shape({
 		data: PropTypes.shape({
+			id: PropTypes.number,
 			attributes: PropTypes.shape({
 				email: PropTypes.string.isRequired,
 				code: PropTypes.string.isRequired,

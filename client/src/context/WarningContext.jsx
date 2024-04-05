@@ -5,6 +5,7 @@ const WarningContext = createContext();
 const WarningContextProvider = ({ children }) => {
 	const [visible, setVisible] = useState({
         deactivateUserWarning: false,
+		listUsersError: false,
     });
 
 	return (
