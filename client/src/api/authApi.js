@@ -23,4 +23,12 @@ const loginRequest = async (userData)=>{
     }
 }
 
-export {registerRequest, loginRequest}
+const logoutRequest = async ()=>{
+    try {
+        const response = await axios.post(`${url}logout`, )
+    }catch(error){
+        throw error;
+    }
+}
+
+export {registerRequest, loginRequest, logoutRequest}
