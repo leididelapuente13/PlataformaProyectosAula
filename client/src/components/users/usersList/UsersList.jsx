@@ -34,7 +34,7 @@ export const UsersList = () => {
 				margin: 'auto',
 			}}
 		>
-			<h1 style={{ marginBlock: '4rem 1.7rem', color: '#' }}>Usuarios</h1>
+			<h1 style={{ marginBlock: '6rem 1.7rem', color: '#' }}>Usuarios</h1>
 			{response.data && response.data.length === 0 && <NothingToSee />}
 			{response.isLoading && (
 				<div
