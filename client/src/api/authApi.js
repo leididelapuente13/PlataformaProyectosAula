@@ -1,11 +1,11 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const url = 'https://6e32-186-116-193-121.ngrok-free.app/api/'
+const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/'
 
 const registerRequest = async (userData) =>{
     try {
         const response = await axios.post(`${url}user`, userData);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error: ', error.response.data.errors);
@@ -24,9 +24,20 @@ const loginRequest = async (userData)=>{
 }
 
 const logoutRequest = async ()=>{
+    axios.interceptors.request.use(
+        (config) => {
+            config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+            return config;
+        },
+    
+        (error) => {
+            return Promise.reject(error);
+        },
+    );
+
     try {
         const response = await axios.post(`${url}logout`);
-        return response;
+        return response.status;
     }catch(error){
         throw error;
     }

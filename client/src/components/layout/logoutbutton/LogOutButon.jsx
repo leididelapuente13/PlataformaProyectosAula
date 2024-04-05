@@ -1,47 +1,56 @@
 // Icon
 import { IoLogOut } from 'react-icons/io5';
 // Dependencies
-import { useMutation, useQueryClient } from 'react-query';
-import Cookies from 'js-cookie'
-import {Navigate} from 'react-router-dom'
+import { isError, useMutation, useQueryClient } from 'react-query';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 // Request
 import { logoutRequest } from '../../../api/authApi';
+import { ErrorPopUp } from '../../utils/error/ErrorPopUp';
+import { useContext } from 'react';
+import { WarningContext } from '../../../context/WarningContext';
 
 export const LogOutButon = ({ componentClass }) => {
-    const logoutMutation = useMutation(logoutRequest);
+	const logoutMutation = useMutation(logoutRequest);
 
-    const QueryClient = useQueryClient();
+	const QueryClient = useQueryClient();
 
-    const handleLogOut = async () => {
-        try {
-            await logoutMutation.mutateAsync(Cookies.get('token'), {
-                onSuccess: () => {
-                    console.log(Cookies.get('token'));
-                    Cookies.remove('token');
-                    Cookies.remove('role');
-                    QueryClient.clear();
-                    return <Navigate to='/' />
-                }
-            });
+    const {setVisible} = useContext(WarningContext);
 
-            // if(logoutMutation.data.response.data === 404 || logoutMutation.data.response === 'UnAuthorzed.'){
-            //     console.log(Cookies.get('token'));
-            // }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+	const navigate = useNavigate();
+
+	const handleLogOut = async () => {
+		const token = Cookies.get('token');
+		try {
+			await logoutMutation.mutateAsync(token, {
+				onSuccess: (data) => {
+					Cookies.remove('token');
+					Cookies.remove('role');
+					QueryClient.clear();
+					if (data === 204) {
+						navigate('/');
+					}
+				},
+			});
+		} catch (error) {
+            setVisible((previous)=>{setVisible({...previous, logoutError: true})});
+			console.log(error);
+		}
+	};
 
 	return (
-		<button
-			className={componentClass}
-			type='button'
-			role='button'
-			onClick={() => {
-				handleLogOut();
-			}}
-		>
-			<IoLogOut /> Cerrar Sesion
-		</button>
+		<>
+            {isError.message && <ErrorPopUp message={logoutMutation.error.message} />}
+			<button
+				className={componentClass}
+				type='button'
+				role='button'
+				onClick={() => {
+					handleLogOut();
+				}}
+			>
+				<IoLogOut /> Cerrar Sesion
+			</button>
+		</>
 	);
 };

@@ -3,11 +3,11 @@ import styles from './Nav.module.scss';
 //Icons
 import { FaMagnifyingGlass, FaUsers } from 'react-icons/fa6';
 import { FaBell } from 'react-icons/fa';
-import { IoLogOut } from 'react-icons/io5';
 import { MdReport } from 'react-icons/md';
 //Dependencies
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
 export const Nav = () => {
 	const [nav, setNav] = useState(false);
@@ -49,9 +49,7 @@ export const Nav = () => {
 					</Link>
 				</li>
 				<li>
-					<button type='button' role='button' className={styles.nav__buttonNav}>
-						<IoLogOut /> Cerrar Sesion
-					</button>
+					<LogOutButon componentClass={styles.nav__buttonNav}/>
 				</li>
 			</ul>
 		</nav>
