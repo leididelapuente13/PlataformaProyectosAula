@@ -14,10 +14,11 @@ export const UserManagement = () => {
 	return (
 		<>
 			<Nav />
-			{visible.deactivateUserWarning && <ConfirmationPopUp message="¿Esta seguro de querer desactvar el perfil?" visible={visible} setVisible={setVisible} />}
-			{visible.listUsersError && <ErrorPopUp/>}
+			{visible && visible.deactivateUserWarning && <ConfirmationPopUp message="¿Esta seguro de querer desactvar el perfil?" visible={visible} setVisible={setVisible} />}
+			{visible && visible.listUsersError && <ErrorPopUp message="Ha ocurrido un error al tratar de listar los usuarios" />}
+			{visible && visible.logoutError && <ErrorPopUp message="Ha ocurrido un error al tratar de cerrar sesión" />}
 			<main>
-				<UsersList />
+				{/* <UsersList /> */}
 			</main>
 		</>
 	);

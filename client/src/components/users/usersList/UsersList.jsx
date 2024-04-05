@@ -6,14 +6,17 @@ import { useContext, useEffect } from 'react';
 import { WarningContext } from '../../../context/WarningContext';
 //Component
 import { UserCard } from '../usercard/UserCard';
-// Request
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
+// Request
+import {getUsers} from '../../../api/usersApi'
 
 export const UsersList = () => {
 	// const response = useQuery({ queryKey: ['users'], queryFn: getUsers() });
 	const { setVisible, visible } = useContext(WarningContext);
+	
 	const response = useQuery({
 		queryKey: ['users'],
+		queryFn: getUsers,
 	});
 
 	useEffect(() => {

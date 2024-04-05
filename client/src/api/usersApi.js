@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const url = '';
+const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/';
 
 axios.interceptors.request.use(
 	(config) => {
