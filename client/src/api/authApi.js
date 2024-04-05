@@ -25,7 +25,8 @@ const loginRequest = async (userData)=>{
 
 const logoutRequest = async ()=>{
     try {
-        const response = await axios.post(`${url}logout`, )
+        const response = await axios.post(`${url}logout`);
+        return response;
     }catch(error){
         throw error;
     }
