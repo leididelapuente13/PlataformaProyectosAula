@@ -1,0 +1,60 @@
+@import '../../../assets/styles/partials/variables';
+
+.card {
+	width: 100%;
+	display: flex;
+	gap: 0.7rem;
+	align-items: flex-start;
+
+	&__img {
+		width: 45%;
+		max-width: 210px;
+		border-radius: 0.4rem;
+	}
+
+	&__textBold {
+		font-size: 0.8rem;
+		font-weight: 600;
+		&:nth-child(2) {
+			margin-bottom: 0.4rem;
+		}
+	}
+
+	&__textLight {
+		font-size: 0.77rem;
+		color: $text-grey;
+	}
+
+	&__hr {
+		margin-bottom: 3rem;
+		opacity: 0.4;
+	}
+}
+
+.button {
+	margin-block: 1rem;
+	font-size: 0.7rem;
+	color: #fff;
+	padding: 0.6rem 0.9rem;
+	font-weight: 600;
+
+	&:hover {
+		transition: background-color 0.3s 0.3s ease-in;
+	}
+}
+
+.buttonDeactivate {
+	@extend .button;
+	background-color: $secondary-red;
+	&:hover {
+		background-color: $primary-red;
+	}
+}
+
+.buttonActivate {
+	@extend .button;
+	background-color: #2e8b57;
+    &:hover {
+		background-color: #1d6d40;
+	}
+}
