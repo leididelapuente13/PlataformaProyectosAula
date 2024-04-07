@@ -108,3 +108,10 @@
 	justify-content: center;
 	margin-top: 2rem;
 }
+
+@mixin sectionStyles {
+	width: 100%;
+	max-width: 500px;
+	padding: 1rem;
+	margin: auto;
+}

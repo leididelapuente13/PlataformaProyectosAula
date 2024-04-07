@@ -2,7 +2,7 @@
 
 .nav {
 	background-color: $primary-blue;
-	padding: 1rem;
+	padding: 0.6rem 1rem;
 	position: fixed;
 	width: 100%;
 
@@ -54,7 +54,7 @@
 		opacity: 1;
 		animation: navFadeIn 0.5s ease-in forwards;
 		position: fixed;
-		top: 45px;
+		top: 32px;
 		left: 0;
 		height: 100%;
 		width: 60%;

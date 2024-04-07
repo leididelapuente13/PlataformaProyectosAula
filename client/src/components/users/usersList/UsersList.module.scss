@@ -1,0 +1,60 @@
+@import '../../../assets/styles/mixins/mixins';
+@import '../../../assets/styles/partials/variables';
+
+
+.section {
+	@include sectionStyles;
+
+	&__title {
+		margin-block: 4.5rem 1.7rem;
+	}
+
+	&__loader {
+		@include loaderContainer;
+	}
+
+    &__filter{
+        margin: 2.5rem auto 4rem auto;
+        width: 90%;
+    }
+}
+
+.form{
+    width: 80%;
+    margin: auto;
+    display:  flex;
+    justify-content: center;
+    &__input{
+        width: 85%;
+        border: none;
+        padding: 0.7rem;
+        font-size: 0.9rem;
+        border-radius: 0;
+        outline: none;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        
+        &:focus{
+            box-shadow:
+			rgba(17, 17, 26, 0.05) 0px 1px 0px,
+			rgba(17, 17, 26, 0.1) 0px 0px 8px;
+        }
+    }
+        
+    &__button{
+        width: 15%;
+        padding: 0.3rem;
+        border-radius: 0;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background-color: $secondary-blue;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover{
+           background-color: darkblue;
+           transition: background-color 0.3s 0.3s ease-in;
+        }
+    }
+}

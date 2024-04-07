@@ -1,3 +1,7 @@
+// Styles
+import styles from './UsersList.module.scss';
+// Icons
+import { FaMagnifyingGlass } from 'react-icons/fa6';
 // Dependencies
 import { isError, useQuery } from 'react-query';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -8,12 +12,12 @@ import { WarningContext } from '../../../context/WarningContext';
 import { UserCard } from '../usercard/UserCard';
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
 // Request
-import {getUsers} from '../../../api/usersApi'
+import { getUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
 	// const response = useQuery({ queryKey: ['users'], queryFn: getUsers() });
 	const { setVisible, visible } = useContext(WarningContext);
-	
+
 	const response = useQuery({
 		queryKey: ['users'],
 		queryFn: getUsers,
@@ -28,25 +32,59 @@ export const UsersList = () => {
 		}
 	}, [response.isError, response.isSuccess]);
 
+	const users = [
+		{
+			data: {
+				id: 123,
+				attributes: {
+					email: 'lelelel',
+					code: 'jdjdjjdj',
+					description: 'eeiieiei',
+					state: 1,
+					role_id: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 123,
+				attributes: {
+					email: 'lelelel',
+					code: 'jdjdjjdj',
+					description: 'eeiieiei',
+					state: 1,
+					role_id: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 123,
+				attributes: {
+					email: 'lelelel',
+					code: 'jdjdjjdj',
+					description: 'eeiieiei',
+					state: 1,
+					role_id: 1,
+				},
+			},
+		},
+	];
+
 	return (
-		<section
-			style={{
-				width: '100%',
-				maxWidth: '500px',
-				padding: '1rem',
-				margin: 'auto',
-			}}
-		>
-			<h1 style={{ marginBlock: '6rem 1.7rem', color: '#' }}>Usuarios</h1>
+		<section className={styles.section}>
+			<h1 className={styles.section__title}>Usuarios</h1>
+			<div className={styles.section__filter}>
+				<form className={styles.form}>
+					<input type='text' name='filter' className={styles.form__input} />
+					<button type='submit' className={styles.form__button}>
+						<FaMagnifyingGlass/>
+					</button>
+				</form>
+			</div>
 			{response.data && response.data.length === 0 && <NothingToSee />}
 			{response.isLoading && (
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						marginTop: '40%',
-					}}
-				>
+				<div className={styles.section__loader}>
 					<ClipLoader
 						loading={response.isLoading}
 						color='#0A84F4'
@@ -56,9 +94,12 @@ export const UsersList = () => {
 				</div>
 			)}
 
-			{response.data && response.data.map((user) => (
-				<UserCard user={user} key={user.data.id} />
-			))}
+			{/* {response.data &&
+				response.data.map((user) => (
+					<UserCard user={user} key={user.data.id} />
+				))} */}
+			{users &&
+				users.map((user) => <UserCard user={user} key={user.data.id} />)}
 		</section>
 	);
 };
