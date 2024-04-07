@@ -49,7 +49,8 @@
 @mixin transparentBackground {
 	width: 100%;
 	height: 100vh;
-	position: absolute;
+	z-index: 999;
+	position: fixed;
 	background-color: rgba(184, 178, 178, 70%);
 	display: flex;
 	justify-content: center;

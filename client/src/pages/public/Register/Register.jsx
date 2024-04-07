@@ -11,6 +11,7 @@ import { ValidationError } from '../../../components/utils/validation/Validation
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import { SuccessPopUp } from '../../../components/utils/success/SuccessPopUp';
 import BarLoader from 'react-spinners/BarLoader';
+import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 
 export const Register = () => {
 	const {
@@ -46,10 +47,10 @@ export const Register = () => {
 	return (
 		<>
 			{registerMutation.isError && (
-				<ErrorPopUp message={registerMutation.error.message} role="alert" />
+				<ErrorPopUp message={registerMutation.error.message} role='alert' />
 			)}
 			{registerMutation.isSuccess && (
-				<SuccessPopUp message='Se ha registrado exitosamente' role="status" />
+				<SuccessPopUp message='Se ha registrado exitosamente' role='status' />
 			)}
 			<main className={styles.main}>
 				<form
@@ -105,19 +106,21 @@ export const Register = () => {
 					/>
 					<p>
 						¿Ya tienes una cuenta?{' '}
-						<Link to='/' className={styles.form__link} role="link">
+						<Link to='/' className={styles.form__link} role='link'>
 							Inicia sesion
 						</Link>
 					</p>
 
-					<div data-testid='loader-container' className={styles.form__loader}>
-						<BarLoader
-							color='#0A84F4'
-							height={7}
-							width={470}
-							loading={registerMutation.isLoading}
-						/>
-					</div>
+					{registerMutation.isLoading && (
+						<div data-testid='loader-container' className={styles.form__loader}>
+							<BarLoader
+								color='#0A84F4'
+								height={7}
+								width={470}
+								loading={registerMutation.isLoading}
+							/>
+						</div>
+					)}
 				</form>
 			</main>
 		</>

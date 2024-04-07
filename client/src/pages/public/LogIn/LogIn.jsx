@@ -37,11 +37,11 @@ export const LogIn = () => {
 
 		const handleUserRedirection = (role) => {
 			if (role === 1) {
-				navigate('/indexAdmin');
+				navigate('/user-management');
 			} else if (role === 2) {
 				navigate('/indexStudent');
 			} else if (role === 3) {
-				navigate('./indexProfessor');
+				navigate('/indexProfessor');
 			}
 		};
 
@@ -51,7 +51,8 @@ export const LogIn = () => {
 					reset();
 					const role = mutationResult.data.attributes.role_id;
 					//Save the user token and role in cookies
-					Cookies.set('role', role, 'token', mutationResult.data.attributes.token);
+					Cookies.set('role', role);
+					Cookies.set('token', mutationResult.data.attributes.token);
 					handleUserRedirection(role);
 				},
 			});
@@ -139,7 +140,7 @@ export const LogIn = () => {
 					</p>
 					<div data-testid='loader-container' className={styles.form__loader}>
 						<BarLoader
-							color='#0A84F4'
+							color='#+'
 							height={7}
 							width={470}
 							loading={loginMutation.isLoading}

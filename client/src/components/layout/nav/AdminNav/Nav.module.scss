@@ -1,0 +1,102 @@
+@import '../../../../assets/styles/partials/variables';
+
+.nav {
+	background-color: $primary-blue;
+	padding: 1rem;
+	position: fixed;
+	width: 100%;
+
+	&__button,
+	&__buttonNav {
+		background-color: inherit;
+	}
+
+	&__buttonNav {
+		padding: 0.3rem 0.2rem;
+		color: #fff;
+	}
+
+	&__span {
+		display: block;
+		margin: 3px;
+		background-color: #fff;
+		padding: 2px;
+		width: 25px;
+		border-radius: 2px;
+	}
+
+	&__buttonNav,
+	&__listHidden {
+		font-weight: 600;
+	}
+
+	&__listHidden {
+		background-color: $primary-blue;
+		color: #fff;
+		opacity: 0;
+		position: absolute;
+		top: 45px;
+		width: 60%;
+		max-width: 300px;
+		height: 100vh;
+		left: 0%;
+		padding: 7rem 1rem 0 1rem;
+		font-weight: 600;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		animation: navFadeOut 0.5s ease-out backwards;
+	}
+
+	&__list {
+		background-color: $primary-blue;
+		color: #fff;
+		opacity: 1;
+		animation: navFadeIn 0.5s ease-in forwards;
+		position: fixed;
+		top: 45px;
+		left: 0;
+		height: 100%;
+		width: 60%;
+		max-width: 300px;
+		padding: 7rem 1rem 0 1rem;
+		font-weight: 600;
+		box-shadow:
+			rgba(0, 0, 0, 0.24) 0px 1px 2px;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		margin-top: 1.4rem;
+		@media (min-width: 1400px) {
+			gap: 4rem;
+		}
+	}
+
+	&__link:hover,
+	&__buttonNav:hover {
+		color: $light-grey;
+		transition: color 0.3s 0.4s ease-in;
+	}
+}
+
+@keyframes navFadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-1px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes navFadeOut {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+}

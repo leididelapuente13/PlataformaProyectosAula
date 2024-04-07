@@ -26,7 +26,7 @@ export const ErrorPopUp = ({ message }) => {
 		} else if (message.includes('409')) {
 			message = 'Esta cuenta ya existe';
 		} else {
-			message = 'Intentalo mas tarde';
+			message = message;
 		}
 	}
 

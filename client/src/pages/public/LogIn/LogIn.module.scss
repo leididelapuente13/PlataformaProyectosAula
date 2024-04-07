@@ -8,9 +8,13 @@ body {
 .main {
 	margin: auto;
 	width: 90%;
-	max-width: 750px;
+	max-width: 800px;
 	display: flex;
 	padding-top: 2rem;
+	@media (min-width: 1400px) {
+		width: 50vw;
+		max-width: 1000px;
+	}
 }
 
 .removePadding{
@@ -48,6 +52,11 @@ body {
 	@media (max-width: 767px) {
 		width: 100%;
 		padding: 1.5rem;
+	}
+	@media (min-width: 1400px) {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	&__title {
 		font-size: 1.8rem;
