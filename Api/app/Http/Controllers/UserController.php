@@ -13,9 +13,19 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
 
-
-    function index(){
-        return response()->json([] , 200);
+    function index()
+    {
+        $merge = [];
+        $users = User::all();
+        foreach ($users as $user) {
+            $userApi = Controller::apiUserCodigo($user->code)->json();
+            unset($userApi['id']);
+            $fullUser = array_merge($userApi, $user->toArray());
+            $merge[] = $fullUser;
+        }
+        //Delete the first user ( admin )
+        array_shift($merge);
+        return UserCollection::make($merge);
     }
 
     function create(CreateUserRequest $request)
@@ -63,19 +73,21 @@ class UserController extends Controller
         }
     }
 
-    function show(User $user) {
+    function show(User $user)
+    {
         return UserResource::make($user);
     }
 
-    function filterUser($filter){
-            $merge = [];
-            $users = User::where('user_name', 'LIKE', '%'. $filter. '%')->get();
-            foreach($users as $user){
-                $userApi = Controller::apiUserCodigo($user->code)->json();
-                unset($userApi['id']);
-                $fullUser = array_merge($userApi , $user->toArray());
-                $merge[] = $fullUser;
-            }
+    function filterUser($filter)
+    {
+        $merge = [];
+        $users = User::where('user_name', 'LIKE', '%' . $filter . '%')->get();
+        foreach ($users as $user) {
+            $userApi = Controller::apiUserCodigo($user->code)->json();
+            unset($userApi['id']);
+            $fullUser = array_merge($userApi, $user->toArray());
+            $merge[] = $fullUser;
+        }
         return UserCollection::make($merge);
     }
 }

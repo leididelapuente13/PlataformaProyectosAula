@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
+use Illuminate\Support\Str;
 
 class ListUserTest extends TestCase
 {
@@ -19,9 +20,15 @@ class ListUserTest extends TestCase
         //Create roles
         Role::factory(3)->create();
         //Create a new user
-        $this->user = User::factory(1)->create([
-            'state' => '1'
-        ])->first();
+        $this->user = User::create([
+            'user_name' => 'Administrador',
+            'email' => 'jimmisitho450@gmail.com',
+            'code' => 0,
+            'password' => bcrypt('admin'),
+            'state' => '1',
+            'role_id' => 1,
+            'remember_token' => Str::random(10),
+        ]);
     }
     use RefreshDatabase;
 
@@ -38,20 +45,21 @@ class ListUserTest extends TestCase
 
     public function test_can_list_users(){
         $this->withoutExceptionHandling();
-        $users = User::factory(30)->create();
+        $users = User::factory(10)->create();
         // Send a request with header 'Authorization'
         $response = $this->withHeaders(
             [
                 'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
             ]
-        )->getJson(route('api.user.index'));
-        $response->assertOk();
+        )->getJson(route('api.user.index'))->dump();
+        $usersResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
     }
 
     public function test_admin_can_filter_users_for_user_name()
     {
         $this->withoutExceptionHandling();
-        $users = User::factory(30)->create();
+        $users = User::factory(4)->create();
         $users->first()->user_name = 'Juan_Pedro';
         $users->first()->save();
         $response = $this->withHeaders([
