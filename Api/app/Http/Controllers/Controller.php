@@ -11,11 +11,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    static function apiUser($codigo)
+    static function apiUserCodigo($codigo)
     {
-        $response = Http::get("http://localhost/api_uni/api.php?action=get_userCodigo&codigo=$codigo");
-
-        return $response;
+        return Http::get("http://localhost/api_uni/api.php?action=get_userCodigo&codigo=$codigo");
     }
 
     static function apiUsers(){
@@ -29,7 +27,7 @@ class Controller extends BaseController
     }
 
     static function apiUsersFilter($filter){
-        $return = Http::get("http://localhost/api_uni/api.php?action=filtrar_estudiantes&busqueda=$filter");
+        return Http::get("http://localhost/api_uni/api.php?action=filtrar_estudiantes&busqueda=$filter");
     }
 
 

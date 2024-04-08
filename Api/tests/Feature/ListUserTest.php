@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Role;
 use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class ListUserTest extends TestCase
@@ -38,19 +40,12 @@ class ListUserTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $users = User::factory(30)->create();
-        $users->first()->user_name = 'Pedro';
+        $users->first()->user_name = 'Juan_Pedro';
         $users->first()->save();
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken' , ['admin'])->plainTextToken
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'Pedro'));
-        $usersResponse =$response->json()['data'];
-        foreach ($usersResponse as $userResponse){
-            foreach($users as $user){
-                if($userResponse['attributes']['code'] == $user->code){
-                    $this->assertEquals($userResponse['attributes']['email'] , $user->email);
-                }
-            }
-        }
-        $response->assertJsonUsersFilterResource();
+        $usersResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
     }
 }

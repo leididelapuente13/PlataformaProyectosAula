@@ -112,7 +112,7 @@ trait MakesJsonApiRequests
                         'email' => $user->email,
                         'role_id' => $user->role_id,
                         'description' => $user->description,
-                        'state' => $user->state,
+                        'state' => $user->state
                     ],
                     'links' => [
                         'self' => route('api.user.show', $user->getRouteKey())
@@ -125,14 +125,14 @@ trait MakesJsonApiRequests
 
     protected function assertJsonUsersFilterResource(): Closure
     {
-        return function () {
+        return function ($users, $usersResponse, $listUserTest) {
             /**
                 @var TestResponse $this
              */
             $this->assertOk();
             $this->assertJsonStructure([
                 'data' => [
-                    '*' => [
+                    '*' => [ //Structure is the same for each user
                         'type',
                         'id',
                         'attributes' => [
@@ -141,13 +141,34 @@ trait MakesJsonApiRequests
                             'email',
                             'role_id',
                             'description',
-                            'state'
+                            'state',
+                            'semestre',
+                            'carrera',
+                            'departamento',
                         ],
                         'links'
-                    ],
+                    ]
                 ]
-
             ]);
+
+            // Loop through each user
+            foreach ($usersResponse as $userResponse) {
+                foreach ($users as $user) {
+                    //Only existing users
+                    if ($userResponse['attributes']['code'] == $user->code) {
+                        //Compare received values with actual
+                        $listUserTest->assertEquals($userResponse['attributes']['email'], $user->email);
+                        $listUserTest->assertEquals($userResponse['attributes']['user_name'], $user->user_name);
+                        $listUserTest->assertEquals($userResponse['attributes']['role_id'], $user->role_id);
+                        if ($user->role_id == 2) {
+                            $listUserTest->assertEquals($userResponse['attributes']['departamento'], "");
+                        } else if ($user->role_id == 3) {
+                            $listUserTest->assertEquals($userResponse['attributes']['carrera'], "");
+                            $listUserTest->assertEquals($userResponse['attributes']['semestre'], "");
+                        }
+                    }
+                }
+            }
         };
     }
 }

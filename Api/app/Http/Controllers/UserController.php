@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         //Request  extern api
         $codeUserApi = $request->input('data.attributes.code');
-        $response = Controller::apiUser($codeUserApi);
+        $response = Controller::apiUserCodigo($codeUserApi);
 
 
         // Check if user is already created
@@ -40,6 +40,7 @@ class UserController extends Controller
             // Check rol
             $userTipo = $userApi['tipo'];
             ($userTipo == 'Estudiante') ? $user->role_id = 2 : ($userTipo == 'Profesor' ? $user->role_id = 3 : $user->role_id = 1);
+            $user->state = '1';
             //Create in data base using request's data
             $user->save();
             //Return a resource with user created
@@ -61,7 +62,14 @@ class UserController extends Controller
     }
 
     function filterUser($filter){
-        $users = User::where('user_name', 'LIKE', '%'. $filter. '%')->get();
-        return UserCollection::make($users);
+            $merge = [];
+            $users = User::where('user_name', 'LIKE', '%'. $filter. '%')->get();
+            foreach($users as $user){
+                $userApi = Controller::apiUserCodigo($user->code)->json();
+                unset($userApi['id']);
+                $fullUser = array_merge($userApi , $user->toArray());
+                $merge[] = $fullUser;
+            }
+        return UserCollection::make($merge);
     }
 }
