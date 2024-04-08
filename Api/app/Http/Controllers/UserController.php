@@ -12,6 +12,12 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+
+
+    function index(){
+        return response()->json([] , 200);
+    }
+
     function create(CreateUserRequest $request)
     {
         //Request  extern api

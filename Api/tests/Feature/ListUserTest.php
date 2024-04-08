@@ -36,6 +36,18 @@ class ListUserTest extends TestCase
         $response->assertJsonApiUserResource($this->user, 200);
     }
 
+    public function test_can_list_users(){
+        $this->withoutExceptionHandling();
+        $users = User::factory(30)->create();
+        // Send a request with header 'Authorization'
+        $response = $this->withHeaders(
+            [
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+            ]
+        )->getJson(route('api.user.index'));
+        $response->assertOk();
+    }
+
     public function test_admin_can_filter_users_for_user_name()
     {
         $this->withoutExceptionHandling();
