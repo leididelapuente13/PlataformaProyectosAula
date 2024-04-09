@@ -138,14 +138,17 @@ export const LogIn = () => {
 							Registrate
 						</Link>
 					</p>
-					<div data-testid='loader-container' className={styles.form__loader}>
-						<BarLoader
-							color='#+'
-							height={7}
-							width={470}
-							loading={loginMutation.isLoading}
-						/>
-					</div>
+
+					{loginMutation.isLoading && 
+						<div data-testid='loader-container' className={styles.form__loader}>
+							<BarLoader
+								color='#0A84F4'
+								height={7}
+								width={470}
+								loading={loginMutation.isLoading}
+							/>
+						</div>
+					}
 				</form>
 			</main>
 		</>
