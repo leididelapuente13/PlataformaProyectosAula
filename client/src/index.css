@@ -30,3 +30,7 @@ a, Link{
 	color: inherit;
 }
 
+label{
+	display: block;
+}
+
