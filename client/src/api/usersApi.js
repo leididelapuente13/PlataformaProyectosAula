@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/';
+const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 axios.interceptors.request.use(
 	(config) => {
@@ -17,7 +17,7 @@ axios.interceptors.request.use(
 
 const getUsers = async () => {
 	try {
-		const response = axios.get(`${url}/users`);
+		const response = axios.get(`${baseUrl}/users`);
 		console.log(response);
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
@@ -26,7 +26,7 @@ const getUsers = async () => {
 
 const filterUsers = async (condition) => {
 	try {
-		const response = await axios.get(`${url}/`, { params: condition });
+		const response = await axios.get(`${baseUrl}/`, { params: condition });
 		console.log(condition);
 		console.log(response);
 		return response;
