@@ -49,8 +49,8 @@ export const UsersList = () => {
 	}, [fetchUsers.isError, fetchUsers.isSuccess]);
 
 	useEffect(() => {
-		fetchUsers();
-	}, [filter ==! '']);
+		fetchUsers;
+	}, [filter !== '']);
 
 	return (
 		<section className={styles.section}>
@@ -61,8 +61,8 @@ export const UsersList = () => {
 						type='text'
 						name='filter'
 						className={styles.form__input}
-						onChange={() => {
-							handleInputOnChange();
+						onChange={(e) => {
+							handleInputOnChange(e);
 						}}
 					/>
 					<button type='submit' className={styles.form__button}>
