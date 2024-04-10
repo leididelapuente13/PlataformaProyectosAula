@@ -26,7 +26,7 @@ const getUsers = async () => {
 
 const filterUsers = async (condition) => {
 	try {
-		const response = await axios.get(url, { params: condition });
+		const response = await axios.get(`${url}/`, { params: condition });
 		console.log(condition);
 		console.log(response);
 		return response;
