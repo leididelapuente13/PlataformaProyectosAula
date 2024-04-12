@@ -24,15 +24,15 @@ export const UsersList = () => {
 		queryFn: getUsers,
 	});
 
-	const fetchUsersWithFilter = useQuery({
-		queryKey: ['filter-users'],
-		queryFn: filterUsers(filter),
-		onSuccess: {
-			function() {
-				console.log(fetchUsersWithFilter.data);
-			},
-		},
-	});
+	// const fetchUsersWithFilter = useQuery({
+	// 	queryKey: ['filter-users'],
+	// 	queryFn: filterUsers(filter),
+	// 	onSuccess: {
+	// 		function() {
+	// 			console.log(fetchUsersWithFilter.data);
+	// 		},
+	// 	},
+	// });
 
 	const handleInputOnChange = (e) => {
 		setFilter(e.target.value);
