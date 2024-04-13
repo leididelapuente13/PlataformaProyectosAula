@@ -81,18 +81,33 @@ class UserController extends Controller
     function filterUser($filter)
     {
         $merge = [];
-        $users = User::where('user_name', 'LIKE', '%' . $filter . '%')
-            ->orWhere('state', 'LIKE', ($filter == "Activo" || $filter == "activo") ? 1 : (($filter == "Inactivo" || $filter == "Inactivo") ? 0 : 3))
-            ->orWhere('role_id' , 'LIKE' , ($filter == "Estudiante") ? 2 : ( $filter == "Profesor" ? 3 : 0) )
-            ->get();
-        foreach ($users as $user) {
-            $userApi = Controller::apiUserCodigo($user->code)->json();
-            unset($userApi['id']);
-            $fullUser = array_merge($userApi, $user->toArray());
-            $merge[] = $fullUser;
+        $usersApi = Controller::apiUsersFilter($filter)->json();
+        if ((isset($usersApi['message'])) && $usersApi['message'] === "No encontrado") {
+            //No match found in external api search in local database
+            $users = User::where('user_name', 'LIKE', '%' . $filter . '%')
+                ->orWhere('state', 'LIKE', ($filter == "Activo" || $filter == "activo") ? 1 : (($filter == "Inactivo" || $filter == "Inactivo") ? 0 : 3))
+                ->orWhere('role_id', 'LIKE', ($filter == "Estudiante") ? 2 : ($filter == "Profesor" ? 3 : 0))
+                ->get();
+            //Join the information of the users
+            foreach ($users as $user) {
+                $userApi = Controller::apiUserCodigo($user->code)->json();
+                unset($userApi['id']);
+                $fullUser = array_merge($userApi, $user->toArray());
+                $merge[] = $fullUser;
+            }
+            //Delete the first user ( admin )
+            array_shift($merge);
+        }else{
+            //Matches was found in external api
+            foreach($usersApi as $userApi) {
+                $user = User::where('code' , $userApi['codigo'])->first();
+                if($user){
+                    unset($userApi['id']);
+                    $fullUser = array_merge($userApi, $user->toArray());
+                    $merge[] = $fullUser;
+                }
+            }
         }
-        //Delete the first user ( admin )
-        array_shift($merge);
         return UserCollection::make($merge);
     }
 }
