@@ -160,6 +160,7 @@ trait MakesJsonApiRequests
                         $listUserTest->assertEquals($userResponse['attributes']['email'], $user->email);
                         $listUserTest->assertEquals($userResponse['attributes']['user_name'], $user->user_name);
                         $listUserTest->assertEquals($userResponse['attributes']['role_id'], $user->role_id);
+                        $listUserTest->assertEquals($userResponse['attributes']['state'], $user->state);
                         if ($user->role_id == 2) {
                             $listUserTest->assertEquals($userResponse['attributes']['departamento'], "");
                         } else if ($user->role_id == 3) {

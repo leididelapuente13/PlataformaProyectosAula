@@ -22,7 +22,7 @@ Group routes for controller UserController line 23
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::controller(UserController::class)->group(function(){
         Route::get('user/{user}' , 'show')->name('api.user.show');
-        Route::get('users' , 'index')->name('api.user.index')->middleware(['abilities:admin']);
+        Route::get('user' , 'index')->name('api.user.index')->middleware(['abilities:admin']);
         Route::get('user/filter/{user}' , 'filterUser')->name('api.user.filter')->middleware(['abilities:admin']);
     });
     Route::post('logout' , [SessionController::class , 'logout'])->name('api.user.logout');

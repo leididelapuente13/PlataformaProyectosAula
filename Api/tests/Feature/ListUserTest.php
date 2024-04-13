@@ -51,7 +51,7 @@ class ListUserTest extends TestCase
             [
                 'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
             ]
-        )->getJson(route('api.user.index'))->dump();
+        )->getJson(route('api.user.index'));
         $usersResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
     }
@@ -65,6 +65,18 @@ class ListUserTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'Pedro'));
+        $usersResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
+    }
+
+    public function test_can_list_users_for_state(){
+        $this->withoutExceptionHandling();
+        $users = User::factory(10)->create();
+        $users->first()->user_name = 'Juan_Pedro';
+        $users->first()->save();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'inactivo'))->dump();
         $usersResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
     }

@@ -81,13 +81,17 @@ class UserController extends Controller
     function filterUser($filter)
     {
         $merge = [];
-        $users = User::where('user_name', 'LIKE', '%' . $filter . '%')->get();
+        $users = User::where('user_name', 'LIKE', '%' . $filter . '%')
+            ->orWhere('state', 'LIKE', ($filter == "Activo" || $filter == "activo") ? 1 : (($filter == "Inactivo" || $filter == "Inactivo") ? 0 : 3))
+            ->get();
         foreach ($users as $user) {
             $userApi = Controller::apiUserCodigo($user->code)->json();
             unset($userApi['id']);
             $fullUser = array_merge($userApi, $user->toArray());
             $merge[] = $fullUser;
         }
+        //Delete the first user ( admin )
+        array_shift($merge);
         return UserCollection::make($merge);
     }
 }
