@@ -99,6 +99,15 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
+    public function test_admin_can_list_students_for_career(){
+        $this->withoutExceptionHandling();
+        $users = User::factory(50)->create();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'Ingenieria'))->dump();
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
+    }
 
 
 }
