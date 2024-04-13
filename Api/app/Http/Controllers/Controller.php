@@ -27,7 +27,7 @@ class Controller extends BaseController
     }
 
     static function apiUsersFilter($filter){
-        return Http::get("http://localhost/api_uni/api.php?action=filtrar_estudiantes&busqueda=$filter");
+        return Http::get("http://localhost/api_uni/api.php?action=filtrar_users&busqueda=$filter");
     }
 
 

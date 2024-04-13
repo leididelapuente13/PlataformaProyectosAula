@@ -91,7 +91,7 @@ class ListUserTest extends TestCase
 
     public function test_admin_can_list_students_for_semester(){
         $this->withoutExceptionHandling();
-        $users = User::factory(50)->create();
+        $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'Semestre 4'));
@@ -101,10 +101,20 @@ class ListUserTest extends TestCase
 
     public function test_admin_can_list_students_for_career(){
         $this->withoutExceptionHandling();
-        $users = User::factory(50)->create();
+        $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Ingenieria'))->dump();
+        ])->getJson(route('api.user.filter', 'Ingenieria'));
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
+    }
+
+    public function test_admin_can_list_teachers_for_department(){
+        $this->withoutExceptionHandling();
+        $users = User::factory(20)->create();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'Idiomas'))->dump();
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
