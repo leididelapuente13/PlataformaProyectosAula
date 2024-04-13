@@ -76,8 +76,20 @@ class ListUserTest extends TestCase
         $users->first()->save();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'inactivo'))->dump();
+        ])->getJson(route('api.user.filter', 'inactivo'));
         $usersResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
+    }
+
+    public function test_admin_can_list_users_for_role(){
+        $this->withoutExceptionHandling();
+        $users = User::factory(10)->create();
+        $users->first()->user_name = 'Juan_Pedro';
+        $users->first()->save();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'Profesor'))->dump();
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 }

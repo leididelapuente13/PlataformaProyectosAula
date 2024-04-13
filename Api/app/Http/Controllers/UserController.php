@@ -83,6 +83,7 @@ class UserController extends Controller
         $merge = [];
         $users = User::where('user_name', 'LIKE', '%' . $filter . '%')
             ->orWhere('state', 'LIKE', ($filter == "Activo" || $filter == "activo") ? 1 : (($filter == "Inactivo" || $filter == "Inactivo") ? 0 : 3))
+            ->orWhere('role_id' , 'LIKE' , ($filter == "Estudiante") ? 2 : ( $filter == "Profesor" ? 3 : 0) )
             ->get();
         foreach ($users as $user) {
             $userApi = Controller::apiUserCodigo($user->code)->json();
