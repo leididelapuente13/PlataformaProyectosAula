@@ -43,7 +43,8 @@ class ListUserTest extends TestCase
         $response->assertJsonApiUserResource($this->user, 200);
     }
 
-    public function test_can_list_users(){
+    public function test_can_list_users()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(10)->create();
         // Send a request with header 'Authorization'
@@ -52,8 +53,8 @@ class ListUserTest extends TestCase
                 'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
             ]
         )->getJson(route('api.user.index'));
-        $usersResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
     public function test_admin_can_filter_users_for_user_name()
@@ -64,22 +65,24 @@ class ListUserTest extends TestCase
         $users->first()->save();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Pedro'));
-        $usersResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
+        ])->getJson(route('api.user.filter', 'Juan_Pedro'));
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-    public function test_can_list_users_for_state(){
+    public function test_can_list_users_for_state()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'inactivo'));
-        $usersResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($users, $usersResponse, $this);
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_users_for_role(){
+    public function test_admin_can_list_users_for_role()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
@@ -89,17 +92,19 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_students_for_semester(){
+    public function test_admin_can_list_students_for_semester()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Semestre 4'));
+        ])->getJson(route('api.user.filter', 'Semestre 4'))->dump();
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_students_for_career(){
+    public function test_admin_can_list_students_for_career()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
@@ -109,15 +114,24 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_teachers_for_department(){
+    public function test_admin_can_list_teachers_for_department()
+    {
         $this->withoutExceptionHandling();
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Idiomas'))->dump();
+        ])->getJson(route('api.user.filter', 'Idiomas'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }
 
-
+    public function test_there_is_no_matched_in_the_filter()
+    {
+        $this->withoutExceptionHandling();
+        $users = User::factory(20)->create();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.user.filter', 'Esto no existe'))->dump();
+        $response->assertStatus(204);
+    }
 }
