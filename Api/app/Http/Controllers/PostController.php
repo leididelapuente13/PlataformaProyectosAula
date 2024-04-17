@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
 
+    function index(){
+        return response()->json([],200);
+    }
+    
     function create(CreatePostRequest $request){
         $title = $request->input('data.attributes.title');
         $description = $request->input('data.attributes.description');
