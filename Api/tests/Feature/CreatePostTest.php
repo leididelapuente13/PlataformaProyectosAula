@@ -28,11 +28,59 @@ class CreatePostTest extends TestCase
     {
         $response = $this->withHeaders(
             [
-                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken' , ['student'])->plainTextToken
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
             ]
         )->postJson(
-            route('api.post.create')
+            route('api.post.create'),
+            [
+                'data' => [
+                    'type' => 'post',
+                    'attributes' => [
+                        'title' => 'Test Title',
+                        'description' => 'Test Content',
+                    ]
+                ]
+            ]
         );
-        $response->assertStatus(200);
+        $response->assertOk();
     }
+
+    public function test_title_validations(){
+        $response = $this->withHeaders(
+            [
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
+            ]
+        )->postJson(
+            route('api.post.create'),
+            [
+                'data' => [
+                    'type' => 'post',
+                    'attributes' => [
+                        'description' => 'Test Content',
+                    ]
+                ]
+            ]
+        );
+        $response->assertJsonApiValidationErrors('title');
+    }
+
+    public function test_description_validation(){
+        $response = $this->withHeaders(
+            [
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
+            ]
+        )->postJson(
+            route('api.post.create'),
+            [
+                'data' => [
+                    'type' => 'post',
+                    'attributes' => [
+                        'title' => 'Test Title',
+                    ]
+                ]
+            ]
+        );
+        $response->assertJsonApiValidationErrors('description');
+    }
+
 }
