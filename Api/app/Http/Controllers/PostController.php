@@ -27,4 +27,8 @@ class PostController extends Controller
         ]);
         return PostResource::make($post);
     }
+
+    function filterPosts($filter){
+        return response()->json([] , 200);
+    }
 }

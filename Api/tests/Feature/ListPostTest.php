@@ -12,6 +12,7 @@ use Tests\TestCase;
 class ListPostTest extends TestCase
 {
     private $user;
+    private $posts;
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,17 +23,26 @@ class ListPostTest extends TestCase
             'state' => '1',
             'role_id' => 2
         ])->first();
+
+        $this->posts = Post::factory(40)->create();
     }
 
     use RefreshDatabase;
     public function test_list_all_post(): void
     {
-        $posts = Post::factory(30)->create();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.index'))->dump();
+        )->getJson(route('api.post.index'));
         $postsResponse = $response->json()['data'];
-        $response->assertJsonPostsResource($posts, $postsResponse, $this);
+        $response->assertJsonPostsResource($this->posts, $postsResponse, $this);
+    }
+
+    public function test_filter_posts_for_title(){
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )->getJson(route('api.post.filter' , 'Cualquier cosa'))->assertOk();
     }
 }
