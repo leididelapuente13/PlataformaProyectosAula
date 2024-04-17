@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,10 +27,12 @@ class ListPostTest extends TestCase
     use RefreshDatabase;
     public function test_list_all_post(): void
     {
+        $posts = Post::factory(30)->create();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.index'));
-        $response->assertStatus(200);
+        )->getJson(route('api.post.index'))->dump();
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonPostsResource($posts, $postsResponse, $this);
     }
 }

@@ -35,6 +35,10 @@ trait MakesJsonApiRequests
             'assertJsonApiPostResource',
             $this->assertJsonApiPostResource()
         );
+        TestResponse::macro(
+            'assertJsonPostsResource',
+            $this->assertJsonPostsResource()
+        );
     }
 
 
@@ -204,6 +208,48 @@ trait MakesJsonApiRequests
                     ]
                 ]
             ]);
+        };
+    }
+
+    protected function assertJsonPostsResource(): Closure
+    {
+        return function ($posts , $postsResponse , $listPostTest) {
+            /**
+                @var TestResponse $this
+             */
+            $this->assertOk();
+            $this->assertJsonStructure([
+                'data' => [
+                    '*' => [ //Structure is the same for each user
+                        'type',
+                        'id',
+                        'attributes' => [
+                            'title',
+                            'description',
+                        ],
+                        'relationships' => [
+                            'user' => [
+                                'links' => [
+                                    'related'
+                                ]
+                            ]
+                        ],
+                        'links' => [
+                            //'self' => route('api.post.show', $post->getRouteKey())
+                        ]
+                    ]
+                ]
+            ]);
+
+            foreach($posts as $post){
+                foreach($postsResponse as $postResponse){
+                    if($postResponse['id'] == $post->id){
+                        $listPostTest->assertEquals($postResponse['attributes']['title'], $post->title);
+                        $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
+                        $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
+                    }
+                }
+            }
         };
     }
 }
