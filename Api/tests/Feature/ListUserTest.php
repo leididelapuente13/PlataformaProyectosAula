@@ -131,7 +131,7 @@ class ListUserTest extends TestCase
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Esto no existe'))->dump();
+        ])->getJson(route('api.user.filter', 'Esto no existe'));
         $response->assertStatus(204);
     }
 }

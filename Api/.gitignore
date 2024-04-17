@@ -22,3 +22,4 @@ tests/Feature/ValidateHeadersTest.php
 routes/web.php
 lang/
 app/Http/Middleware/Authenticate.php
+tests/Feature/CreatePostTest.php
