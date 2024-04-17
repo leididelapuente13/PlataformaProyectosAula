@@ -195,12 +195,12 @@ trait MakesJsonApiRequests
                     'relationships' => [
                         'user' => [
                             'links' => [
-                                'related' => route('api.user.show', $post->user->getRouteKey)
+                                'related' => route('api.user.show', $post->user->getRouteKey())
                             ]
                         ]
                     ],
                     'links' => [
-                        'self' => route('api.post.show', $post->getRouteKey())
+                        //'self' => route('api.post.show', $post->getRouteKey())
                     ]
                 ]
             ]);

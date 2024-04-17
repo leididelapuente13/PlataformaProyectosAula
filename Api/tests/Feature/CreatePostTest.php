@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,6 +27,7 @@ class CreatePostTest extends TestCase
     use RefreshDatabase;
     public function test_student_can_create_post(): void
     {
+        $this->withoutExceptionHandling();
         $response = $this->withHeaders(
             [
                 'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
@@ -42,7 +44,8 @@ class CreatePostTest extends TestCase
                 ]
             ]
         );
-        $response->assertOk();
+        $post = Post::first();
+        $response->assertJsonApiPostResource($post , 201);
     }
 
     public function test_title_validations(){
