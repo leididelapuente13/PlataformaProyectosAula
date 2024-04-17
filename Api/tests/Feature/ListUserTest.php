@@ -98,7 +98,7 @@ class ListUserTest extends TestCase
         $users = User::factory(20)->create();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Semestre 4'))->dump();
+        ])->getJson(route('api.user.filter', 'Semestre 4'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($users, $userResponse, $this);
     }

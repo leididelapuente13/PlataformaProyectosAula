@@ -31,6 +31,10 @@ trait MakesJsonApiRequests
             'assertJsonUsersFilterResource',
             $this->assertJsonUsersFilterResource()
         );
+        TestResponse::macro(
+            'assertJsonApiPostResource',
+            $this->assertJsonApiPostResource()
+        );
     }
 
 
@@ -92,7 +96,6 @@ trait MakesJsonApiRequests
         };
     }
 
-
     protected function assertJsonApiUserResource(): Closure
     {
         return function ($user, $code = 200) {
@@ -121,7 +124,6 @@ trait MakesJsonApiRequests
             ]);
         };
     }
-
 
     protected function assertJsonUsersFilterResource(): Closure
     {
@@ -170,6 +172,38 @@ trait MakesJsonApiRequests
                     }
                 }
             }
+        };
+    }
+
+    protected function assertJsonApiPostResource(): Closure
+    {
+        return function ($post, $code = 200) {
+            /**
+                @var TestResponse $this
+             */
+
+            $this->assertStatus($code);
+            $this->assertJson([
+                'data' =>
+                [
+                    'type' => 'post',
+                    'id' => (string) $post->getRouteKey(),
+                    'attributes' => [
+                        'title' => $post->title,
+                        'description' => $post->description,
+                    ],
+                    'relationships' => [
+                        'user' => [
+                            'links' => [
+                                'related' => route('api.user.show', $post->user->getRouteKey)
+                            ]
+                        ]
+                    ],
+                    'links' => [
+                        'self' => route('api.post.show', $post->getRouteKey())
+                    ]
+                ]
+            ]);
         };
     }
 }
