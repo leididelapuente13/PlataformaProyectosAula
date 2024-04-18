@@ -39,7 +39,7 @@ function App() {
 						<Route path='/project-details' element={<h1>Profile</h1>} />
 						<Route path='*' element={<h1>404</h1>} />
 						<Route path='/user-management' element={<UserManagement />} />
-						<Route path='/form-project' element={<ProjectManagementForm />} />
+						<Route path='/project-form' element={<ProjectManagementForm />} />
 					</Routes>
 				</BrowserRouter>
 			</WarningContextProvider>
