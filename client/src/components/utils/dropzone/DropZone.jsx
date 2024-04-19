@@ -1,5 +1,4 @@
 // Dependencies
-import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 export const DropZone = ({ onDrop, accept }) => {
@@ -7,7 +6,7 @@ export const DropZone = ({ onDrop, accept }) => {
 
 	return (
 		<div {...getRootProps()} style={DropZoneStyles}>
-			<input {...getInputProps} style={inputStyles} />
+			<input {...getInputProps()} style={inputStyles} />
 			<p>
 				Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
 			</p>
@@ -31,6 +30,7 @@ const DropZoneStyles = {
 };
 
 const inputStyles = {
+	display: 'none',
 	border: 'none',
 	backgroundColor: 'inherit',
 	outline: 'none',

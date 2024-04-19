@@ -9,7 +9,7 @@ import { Nav } from '../../../../components/layout/nav/StudentNav/Nav';
 // import BarLoader from 'react-spinners/BarLoader';
 import { ValidationError } from '../../../../components/utils/validation/ValidationError';
 import { DropZone } from '../../../../components/utils/dropzone/DropZone';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const ProjectManagementForm = () => {
 	const {
@@ -22,14 +22,13 @@ export const ProjectManagementForm = () => {
 	const [projectFile, setProjectFile] = useState(null);
 	const [projectCover, setProjectCover] = useState(null);
 
-	const onDropProjectFile = (acceptedFile) => {
-		setProjectFile('projectFile', acceptedFile[0]);
+	const onDropProjectFile = (acceptedFiles) => {
+		setProjectFile(acceptedFiles[0]);
 	};
 
-	const onDropProjectCover = (acceptedFile) => {
-		setProjectCover('projectCover', acceptedFile[0]);
+	const onDropProjectCover = (acceptedFiles) => {
+		setProjectCover(acceptedFiles[0]);
 	};
-
 	return (
 		<main className={styles.main}>
 			<Nav />

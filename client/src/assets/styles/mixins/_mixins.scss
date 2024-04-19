@@ -19,11 +19,11 @@
 }
 
 @mixin greenFormButton {
+	@include button-styles(#3aaa35, #fff, #58d451);
 	display: block;
-	margin: 1.2rem auto;
+	margin: 2rem auto;
 	width: 80%;
 	font-size: 1rem;
-	@include button-styles(#3aaa35, #fff, #58d451);
 }
 
 @mixin blueLink {
