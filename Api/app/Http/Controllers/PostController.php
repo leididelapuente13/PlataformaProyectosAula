@@ -29,6 +29,7 @@ class PostController extends Controller
     }
 
     function filterPosts($filter){
-        return response()->json([] , 200);
+        $posts = Post::where('title', 'LIKE' , '%'.$filter.'%')->get();
+        return PostCollection::make($posts);
     }
 }

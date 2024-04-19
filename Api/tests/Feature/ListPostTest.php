@@ -24,7 +24,7 @@ class ListPostTest extends TestCase
             'role_id' => 2
         ])->first();
 
-        $this->posts = Post::factory(2)->create();
+        $this->posts = Post::factory(10)->create();
     }
 
     use RefreshDatabase;
@@ -33,16 +33,21 @@ class ListPostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.index'))->dump();
+        )->getJson(route('api.post.index'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
     public function test_filter_posts_for_title(){
+
+        $this->posts->first()->title = 'title for my post';
+        $this->posts->first()->save();
         $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.filter' , 'Cualquier cosa'))->assertOk();
+        )->getJson(route('api.post.filter' , 'title'));
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 }
