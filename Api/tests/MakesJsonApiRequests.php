@@ -36,8 +36,8 @@ trait MakesJsonApiRequests
             $this->assertJsonApiPostResource()
         );
         TestResponse::macro(
-            'assertJsonPostsResource',
-            $this->assertJsonPostsResource()
+            'assertJsonApiPostsResource',
+            $this->assertJsonApiPostsResource()
         );
     }
 
@@ -211,7 +211,7 @@ trait MakesJsonApiRequests
         };
     }
 
-    protected function assertJsonPostsResource(): Closure
+    protected function assertJsonApiPostsResource(): Closure
     {
         return function ($posts , $postsResponse , $listPostTest) {
             /**
@@ -226,6 +226,7 @@ trait MakesJsonApiRequests
                         'attributes' => [
                             'title',
                             'description',
+                            'created_at'
                         ],
                         'relationships' => [
                             'user' => [
@@ -246,6 +247,7 @@ trait MakesJsonApiRequests
                     if($postResponse['id'] == $post->id){
                         $listPostTest->assertEquals($postResponse['attributes']['title'], $post->title);
                         $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
+                        $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
                         $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
                     }
                 }
