@@ -8,16 +8,19 @@ use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PostController extends Controller
 {
 
-    function index(){
+    function index()
+    {
         $posts = Post::all();
         return PostCollection::make($posts);
     }
 
-    function create(CreatePostRequest $request){
+    function create(CreatePostRequest $request)
+    {
         $title = $request->input('data.attributes.title');
         $description = $request->input('data.attributes.description');
         $post = Post::create([
@@ -28,8 +31,24 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
-    function filterPosts($filter){
-        $posts = Post::where('title', 'LIKE' , '%'.$filter.'%')->get();
+
+    function filterPosts($filter)
+    {
+        $filter = SettingsController::transl_to_en_carbon($filter);
+        try {
+            $date = Carbon::parse($filter);
+            $month = $date->month;
+            $year = $date->year;
+            $day = $date->day;
+
+            $posts = Post::whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->whereDay('created_at', $day)
+                ->get();
+
+        } catch (\Exception $e) {
+            $posts = Post::where('title', 'LIKE', '%' . $filter . '%')->get();
+        }
         return PostCollection::make($posts);
     }
 }
