@@ -134,4 +134,18 @@ class ListUserTest extends TestCase
         ])->getJson(route('api.user.filter', 'Esto no existe'));
         $response->assertStatus(204);
     }
+
+    public function test_can_filter_user_by_rol_and_state()
+    {
+        $this->withoutExceptionHandling();
+        $users = User::factory(10)->create();
+        // Send a request with header 'Authorization'
+        $response = $this->withHeaders(
+            [
+                'Authorization' => 'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+            ]
+        )->getJson(route('api.user.index').'?filter[role_id]=2&filter[state]=1')->dump();
+        $userResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($users, $userResponse, $this);
+    }
 }

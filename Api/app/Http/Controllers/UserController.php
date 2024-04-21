@@ -13,20 +13,29 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
 
-    function index()
+    function index(Request $request)
     {
+        $query = User::query();
+        if($request->has('filter')){
+            foreach($request->filter as $key => $value){
+                $query->where($key, $value); // Add the query with the filter
+            }
+        }
+        $query->where('role_id' , '!=' , 1); //exclude the first user admin
         $merge = [];
-        $users = User::all();
+        $users = $query->get(); // Get the users
         foreach ($users as $user) {
+            //Join and prepare the full user information
             $userApi = Controller::apiUserCodigo($user->code)->json();
             unset($userApi['id']);
             $fullUser = array_merge($userApi, $user->toArray());
             $merge[] = $fullUser;
         }
-        //Delete the first user ( admin )
-        array_shift($merge);
+
         return UserCollection::make($merge);
     }
+
+
 
     function create(CreateUserRequest $request)
     {
