@@ -35,17 +35,25 @@ class PostController extends Controller
     function filterPosts($filter)
     {
         $filter = SettingsController::transl_to_en_carbon($filter);
+        $dateComponents = explode(' ', $filter);
         try {
             $date = Carbon::parse($filter);
             $month = $date->month;
             $year = $date->year;
-            $day = $date->day;
+            $day = null;
+            if (count($dateComponents) >= 3 && is_numeric($dateComponents[1])) {
+                $day = $dateComponents[1];
+            }
 
-            $posts = Post::whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
-                ->whereDay('created_at', $day)
-                ->get();
-
+            //Bluid the consultation
+            $query = Post::query();
+            $query->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month);
+            //The day was specified
+            if ($day !== null) {
+                $query->whereDay('created_at', $day);
+            }
+            $posts = $query->get();
         } catch (\Exception $e) {
             $posts = Post::where('title', 'LIKE', '%' . $filter . '%')->get();
         }
