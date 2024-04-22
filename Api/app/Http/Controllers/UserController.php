@@ -87,7 +87,7 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    function filterUser($filter)
+    public function filterUser($filter)
     {
         $merge = [];
         $usersApi = Controller::apiUsersFilter($filter)->json();

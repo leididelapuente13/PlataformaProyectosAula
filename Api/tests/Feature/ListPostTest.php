@@ -38,7 +38,8 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_filter_posts_for_title(){
+    public function test_filter_posts_for_title()
+    {
 
         $this->posts->first()->title = 'title for my post';
         $this->posts->first()->save();
@@ -46,12 +47,13 @@ class ListPostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.filter' , 'title'));
+        )->getJson(route('api.post.filter', 'title'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_filter_posts_for_month_day_year(){
+    public function test_filter_posts_for_month_day_year()
+    {
         $this->withoutExceptionHandling();
         $this->posts->first()->created_at = '2022-01-19 03:58:08';
         $this->posts->skip(2)->first()->created_at = '2022-01-01 03:58:08';
@@ -61,12 +63,13 @@ class ListPostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.filter' , 'Enero 19 2022'));
+        )->getJson(route('api.post.filter', 'Enero 19 2022'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_filter_posts_for_month_year(){
+    public function test_filter_posts_for_month_year()
+    {
         $this->withoutExceptionHandling();
         $this->posts->first()->created_at = '2022-01-02 03:58:08';
         $this->posts->skip(2)->first()->created_at = '2022-01-01 03:58:08';
@@ -76,9 +79,20 @@ class ListPostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.filter' , 'Enero 2022'));
+        )->getJson(route('api.post.filter', 'Enero 2022'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
+    public function test_filter_posts_for_career()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )
+            ->getJson(route('api.post.index').'?filter[career]=Ingenieria de Sistemas')->dump();
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    }
 }

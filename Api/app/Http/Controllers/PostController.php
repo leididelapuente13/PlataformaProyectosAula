@@ -13,11 +13,26 @@ use Illuminate\Support\Carbon;
 class PostController extends Controller
 {
 
-    function index()
+    function index(Request $request)
     {
-        $posts = Post::all();
+        $controller = new UserController();
+        $query = Post::query();
+        if ($request->has('filter')) {
+            foreach ($request->get('filter') as $key => $value) {
+                if ($key == 'career') {
+                    $users = $controller->filterUser($value);
+                    $usersArray = $users->all(); // Convertir la colección en un array
+                    $userIds = collect($usersArray)->pluck('id')->toArray(); // Pluck solo si $usersArray es una colección
+                    $query->whereIn('user_id', $userIds);
+                } else {
+                    $query->where($key, $value);
+                }
+            }
+        }
+        $posts = $query->get();
         return PostCollection::make($posts);
     }
+
 
     function create(CreatePostRequest $request)
     {
