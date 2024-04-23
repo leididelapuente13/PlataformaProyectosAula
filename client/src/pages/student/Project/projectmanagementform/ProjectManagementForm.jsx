@@ -29,10 +29,15 @@ export const ProjectManagementForm = () => {
 	const onDropProjectCover = (acceptedFiles) => {
 		setProjectCover(acceptedFiles[0]);
 	};
+
+	const handleSubmitProject = () => {
+
+	};
+
 	return (
 		<main className={styles.main}>
 			<Nav />
-			<form className={styles.form} onSubmit={handleSubmit}>
+			<form className={styles.form} onSubmit={handleSubmit(handleSubmitProject)}>
 				<h1 className={styles.form__title}>Gestionar Proyecto</h1>
 				<div>
 					<label htmlFor='name' className={styles.form__label}>
