@@ -2,7 +2,7 @@
 import styles from './ProjectManagementForm.module.scss';
 // Dependencies
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+// import { useMutation } from 'react-query';
 // Request
 // Components
 import { Nav } from '../../../../components/layout/nav/StudentNav/Nav';
@@ -30,31 +30,50 @@ export const ProjectManagementForm = () => {
 		setProjectCover(acceptedFiles[0]);
 	};
 
-	const handleSubmitProject = () => {
+	const handleSubmitProject = (data) => {
+		const projectData = {
+			data: {
+				type: 'post',
+				attributes: {
+					title: data.title,
+					description: data.description,
+				},
+				relationships: {
+					user: {
+						links: {
+							related: '',
+						},
+					},
+				},
 
+				links: []
+			}
+		}
+		console.log(projectData);
+		reset();
 	};
 
 	return (
 		<main className={styles.main}>
 			<Nav />
-			<form className={styles.form} onSubmit={handleSubmit(handleSubmitProject)}>
+			<form className={styles.form} role='form' onSubmit={handleSubmit(handleSubmitProject)}>
 				<h1 className={styles.form__title}>Gestionar Proyecto</h1>
 				<div>
-					<label htmlFor='name' className={styles.form__label}>
+					<label htmlFor='title' className={styles.form__label}>
 						Nombre del proyecto
 					</label>
 					<input
 						className={styles.form__input}
 						type='text'
-						id='name'
-						{...register('name', {
+						id='title'
+						{...register('title', {
 							required: {
 								value: true,
 								message: 'Este campo es requerido',
 							},
 						})}
 					/>
-					{errors.name && <ValidationError message={errors.message.name} />}
+					{errors.title && <ValidationError message={errors.title.message} />}
 				</div>
 				<div>
 					<label htmlFor='description' className={styles.form__label}>
