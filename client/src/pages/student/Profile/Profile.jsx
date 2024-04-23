@@ -9,13 +9,15 @@ import { useQuery } from 'react-query';
 import { getMyProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Profile = () => {
-	const profile = useQuery({
-		queryKey: ['profile', { key: localStorage.getItem('token') }],
-		queryFn: getMyProfile(localStorage.getItem('token')),
-	});
+	const [section, setSection] = useState({ projects: true, groups: false });
+
+	// const profile = useQuery({
+	// 	queryKey: ['profile', { key: localStorage.getItem('token') }],
+	// 	queryFn: getMyProfile(localStorage.getItem('token')),
+	// });
 
 	// useEffect(()=>{
 	//     profile();
@@ -48,6 +50,44 @@ export const Profile = () => {
 						<div className={styles.profile__rectangle}>Carrera</div>
 						<div className={styles.profile__rectangle}>Semestre</div>
 					</div>
+				</section>
+				<section className={styles.section}>
+					<div className={styles.section__button__container}>
+						<button
+							className={
+								section.projects
+									? styles.section__button__active
+									: styles.section__button
+							}
+							onClick={() =>
+								setSection((prev) => ({
+									...prev,
+									projects: true,
+									groups: false,
+								}))
+							}
+						>
+							Mis Proyectos
+						</button>
+						<button
+							className={
+								section.groups
+									? styles.section__button__active
+									: styles.section__button
+							}
+							onClick={() =>
+								setSection((prev) => ({
+									...prev,
+									groups: true,
+									projects: false,
+								}))
+							}
+						>
+							Mis Grupos
+						</button>
+					</div>
+					{section.projects && <h4>Proyectos</h4>}
+					{section.groups && <h4>Grupos</h4>}
 				</section>
 			</main>
 		</>
