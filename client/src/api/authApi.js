@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/'
 
@@ -26,7 +25,7 @@ const loginRequest = async (userData)=>{
 const logoutRequest = async ()=>{
     axios.interceptors.request.use(
         (config) => {
-            config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+            config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
             return config;
         },
     

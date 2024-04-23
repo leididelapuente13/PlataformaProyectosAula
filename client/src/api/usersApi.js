@@ -1,12 +1,11 @@
 // Dependencies
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const url = '';
 
 axios.interceptors.request.use(
 	(config) => {
-		config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+		config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
 		return config;
 	},
 
