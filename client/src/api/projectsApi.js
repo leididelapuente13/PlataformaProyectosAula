@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 axios.interceptors.request.use(
 	(config) => {
-		config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
+		config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 		return config;
 	},
 
@@ -14,13 +14,13 @@ axios.interceptors.request.use(
 	},
 );
 
-const createProject = async (data)=>{
+const createProjectRequest = async (data)=>{
     try {
-        const response = await axios.post(`${baseUrl}/project`, {headers: {'ngrok-skip-browser-warning': true}}, {params: data} );
-        return response.data;
+        const response = await axios.post(`${baseUrl}/post`, {headers: {'ngrok-skip-browser-warning': true}}, {params: data} );
+        return response;
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 }
 
-export {createProject}
+export {createProjectRequest}

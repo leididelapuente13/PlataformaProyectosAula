@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 axios.interceptors.request.use(
 	(config) => {
-		config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
+		config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 		return config;
 	},
 

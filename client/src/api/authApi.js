@@ -25,7 +25,7 @@ const loginRequest = async (userData)=>{
 const logoutRequest = async ()=>{
     axios.interceptors.request.use(
         (config) => {
-            config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
+            config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
             return config;
         },
     
@@ -36,6 +36,8 @@ const logoutRequest = async ()=>{
 
     try {
         const response = await axios.post(`${baseUrl}logout`);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
         return response.status;
     }catch(error){
         throw error;
