@@ -38,17 +38,17 @@ export const Nav = () => {
 				className={nav ? styles.nav__list : styles.nav__listHidden}
 			>
 				<li>
-					<Link to='/studentIndex' className={styles.nav__link}>
+					<Link to='/indexStudent' className={styles.nav__link}>
 						<FaHouseChimney /> Inicio
 					</Link>
 				</li>
 				<li>
-					<Link to='/buscador' className={styles.nav__link}>
+					<Link to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
 				<li>
-					<Link to='/perfil' className={styles.nav__link}>
+					<Link to='/profile' className={styles.nav__link}>
 						<CgProfile /> Mi Pefil
 					</Link>
 				</li>

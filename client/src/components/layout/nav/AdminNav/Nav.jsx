@@ -34,22 +34,22 @@ export const Nav = () => {
 					</button>
 				</li>
 				<li>
-					<Link className={styles.nav__link}>
+					<Link className={styles.nav__link} to='user-management'>
 						<FaUsers /> Usuarios
 					</Link>
 				</li>
 				<li>
-					<Link className={styles.nav__link}>
+					<Link className={styles.nav__link} to='reports'>
 						<MdReport /> Reportes
 					</Link>
 				</li>
 				<li>
-					<Link to='/buscador' className={styles.nav__link}>
+					<Link to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
 				<li>
-					<LogOutButon componentClass={styles.nav__buttonNav}/>
+					<LogOutButon componentClass={styles.nav__buttonNav} />
 				</li>
 			</ul>
 		</nav>
