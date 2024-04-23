@@ -4,13 +4,24 @@ import styles from './Profile.module.scss';
 import { IoSettingsSharp } from 'react-icons/io5';
 import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
-
+import { useQuery } from 'react-query';
 // Request
-
+import { getMyProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
+import { useEffect } from 'react';
 
 export const Profile = () => {
+	const profile = useQuery({
+		queryKey: ['profile', { key: localStorage.getItem('token') }],
+		queryFn: getMyProfile(localStorage.getItem('token')),
+	});
+
+	// useEffect(()=>{
+	//     profile();
+	// console.log(fetchMyProfile.data);
+	// }, []);
+
 	return (
 		<>
 			<main>
