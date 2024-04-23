@@ -4,7 +4,6 @@ import styles from './LogIn.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import Cookies from 'js-cookie';
 // Request
 import { loginRequest } from '../../../api/authApi';
 // Components
@@ -50,9 +49,11 @@ export const LogIn = () => {
 				onSuccess: (mutationResult) => {
 					reset();
 					const role = mutationResult.data.attributes.role_id;
-					//Save the user token and role in cookies
-					Cookies.set('role', role);
-					Cookies.set('token', mutationResult.data.attributes.token);
+					//Save the user token and role in localstorage
+					localStorage.setItem('role', role);
+					localStorage.setItem('token', mutationResult.data.attributes.token);
+					console.log(localStorage.getItem('role'));
+					console.log(localStorage.getItem('token'));
 					handleUserRedirection(role);
 				},
 			});

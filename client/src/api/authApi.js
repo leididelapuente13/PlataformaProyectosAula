@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -26,7 +25,7 @@ const loginRequest = async (userData)=>{
 const logoutRequest = async ()=>{
     axios.interceptors.request.use(
         (config) => {
-            config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+            config.headers['Authorization'] = `Bearer ${localStorage.get('token')}`;
             return config;
         },
     
