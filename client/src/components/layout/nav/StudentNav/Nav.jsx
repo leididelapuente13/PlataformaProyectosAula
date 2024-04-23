@@ -6,7 +6,7 @@ import { FaBell } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 // Dependencies
 import { Link } from 'react-router-dom';
-import icon from '../../../../assets/img/default/icon.png';
+import icon from '../../../../assets/img/default/profile-picture.jpg';
 import { useState } from 'react';
 import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
