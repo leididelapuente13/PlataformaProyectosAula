@@ -5,12 +5,12 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
 import { useQuery } from 'react-query';
+import { useEffect, useState } from 'react';
 // Request
 import { getMyProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
-import { useEffect, useState } from 'react';
-import { ProjectCard } from '../../../components/project/ProjectCard';
+import { MyProjects } from '../Project/myprojects/MyProjects';
 
 export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
@@ -87,7 +87,7 @@ export const Profile = () => {
 							Mis Grupos
 						</button>
 					</div>
-					{section.projects && <ProjectCard />}
+					{section.projects && <MyProjects />}
 					{section.groups && <h4>Grupos</h4>}
 				</section>
 			</main>

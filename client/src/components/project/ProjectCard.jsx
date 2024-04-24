@@ -8,19 +8,16 @@ import cover from '../../assets/img/default/projectcover.jpg';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-export const ProjectCard = () => {
-	const texto =
-		'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, ducimus?';
-
+export const ProjectCard = ({project}) => {
 	return (
 		<div className={styles.card}>
 			<div className={styles.card__imgContainer}>
 				<img src={cover} alt='project cover' className={styles.card__img} />
 			</div>
 			<div className={styles.card__contentContainer}>
-				<p className={styles.card__title}>Lorem, ipsum dolor.</p>
+				<p className={styles.card__title}>{project.title}</p>
 				<p className={styles.card__text}>
-					{texto.slice(0, 110)}...
+					{project.description.slice(0, 110)}...
 					<Link className={styles.card__link}>ver mas</Link>
 				</p>
 			</div>
@@ -29,13 +26,13 @@ export const ProjectCard = () => {
 					<button type='button' className={styles.card__buttonLike}>
 						<FaHeart />
 					</button>
-					<p className={styles.card__text__light}>30</p>
+					<p className={styles.card__text__light}>{project.likes}</p>
 				</div>
 				<div className={styles.card__wrapper}>
 					<button type='button' className={styles.card__buttonComment}>
 						<FaCommentAlt />
 					</button>
-					<p className={styles.card__text__light}>5</p>
+					<p className={styles.card__text__light}>{project.comments}</p>
 				</div>
 			</div>
 		</div>
