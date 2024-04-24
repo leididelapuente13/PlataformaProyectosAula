@@ -14,13 +14,30 @@ axios.interceptors.request.use(
 	},
 );
 
-const createProjectRequest = async (data)=>{
-    try {
-        const response = await axios.post(`${baseUrl}/post`, {headers: {'ngrok-skip-browser-warning': true}}, {params: data} );
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
+const createProjectRequest = async (data) => {
+	try {
+		const response = await axios.post(
+			`${baseUrl}/post`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: data },
+		);
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
 
-export {createProjectRequest}
+const getProjectRequest = async (projectId) => {
+	try {
+		const response = await axios.get(
+			`${baseUrl}/post`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: projectId },
+		);
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { createProjectRequest, getProjectRequest };
