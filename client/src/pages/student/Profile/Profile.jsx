@@ -15,9 +15,11 @@ import { MyProjects } from '../Project/myprojects/MyProjects';
 export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
 
+	const userId = localStorage.getItem('userId');
+
 	// const profile = useQuery({
-	// 	queryKey: ['profile', { key: localStorage.getItem('token') }],
-	// 	queryFn: getMyProfile(localStorage.getItem('token')),
+	// 	queryKey: ['profile', { userId }],
+	// 	queryFn: getMyProfile(userId),
 	// });
 
 	// useEffect(()=>{
@@ -87,7 +89,7 @@ export const Profile = () => {
 							Mis Grupos
 						</button>
 					</div>
-					{section.projects && <MyProjects />}
+					{section.projects && <MyProjects userId={userId} />}
 					{section.groups && <h4>Grupos</h4>}
 				</section>
 			</main>

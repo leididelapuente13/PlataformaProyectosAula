@@ -52,8 +52,10 @@ export const LogIn = () => {
 					//Save the user token and role in localstorage
 					localStorage.setItem('role', role);
 					localStorage.setItem('token', mutationResult.data.attributes.token);
+					localStorage.setItem('userId', mutationResult.data.id);
 					console.log(localStorage.getItem('role'));
 					console.log(localStorage.getItem('token'));
+					console.log(localStorage.getItem('userId'));
 					handleUserRedirection(role);
 				},
 			});

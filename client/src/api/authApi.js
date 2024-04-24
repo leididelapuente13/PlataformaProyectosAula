@@ -38,6 +38,7 @@ const logoutRequest = async ()=>{
         const response = await axios.post(`${baseUrl}logout`);
         localStorage.removeItem('token');
         localStorage.removeItem('role');
+        localStorage.removeItem('userId');
         return response.status;
     }catch(error){
         throw error;

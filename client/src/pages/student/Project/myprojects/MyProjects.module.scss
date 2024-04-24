@@ -1,3 +1,4 @@
+@import '../../../../assets/styles/mixins/mixins';
 .section{
     padding: 3rem 1rem;
     display: flex;
@@ -11,4 +12,8 @@
         flex-wrap: wrap;
         margin: auto;
     }
+}
+
+.loaderContainer{
+    @include loaderContainer;
 }

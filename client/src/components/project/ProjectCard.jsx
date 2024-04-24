@@ -42,7 +42,7 @@ export const ProjectCard = ({project}) => {
 ProjectCard.propTypes = {
 	project: PropTypes.shape({
 		id: PropTypes.number,
-		cover: PropTypes.string,
+		// cover: PropTypes.string,
 		title: PropTypes.string,
 		description: PropTypes.string,
 		likes: PropTypes.number,

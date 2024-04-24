@@ -13,7 +13,7 @@ axios.interceptors.request.use(
 	},
 );
 
-const getMyProfile = async (token) => {
+const getMyProfile = async (userId) => {
 	try {
 		const response = await axios.get(
 			`${baseUrl}/profile`,
@@ -22,7 +22,7 @@ const getMyProfile = async (token) => {
 					'ngrok-skip-browser-warning': true,
 				},
 			},
-			{ params: { token } },
+			{ params: { userId } },
 		);
 		console.log(response);
 		return response;
@@ -31,12 +31,12 @@ const getMyProfile = async (token) => {
 	}
 };
 
-const getMyProjects = async (key) => {
+const getMyProjects = async (userId) => {
 	try {
 		const response = await axios.get(
 			`${baseUrl}/post`,
 			{ headers: { 'ngrok-skip-browser-warning': true } },
-			{ params: { key } },
+			{ params: { userId } },
 		);
 		return response;
 	} catch (error) {
