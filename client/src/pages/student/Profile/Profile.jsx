@@ -10,6 +10,7 @@ import { getMyProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { useEffect, useState } from 'react';
+import { ProjectCard } from '../../../components/project/ProjectCard';
 
 export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
@@ -86,7 +87,7 @@ export const Profile = () => {
 							Mis Grupos
 						</button>
 					</div>
-					{section.projects && <h4>Proyectos</h4>}
+					{section.projects && <ProjectCard />}
 					{section.groups && <h4>Grupos</h4>}
 				</section>
 			</main>
