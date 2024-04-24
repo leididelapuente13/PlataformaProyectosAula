@@ -31,4 +31,17 @@ const getMyProfile = async (token) => {
 	}
 };
 
-export {getMyProfile}
+const getMyProjects = async (key) => {
+	try {
+		const response = await axios.get(
+			`${baseUrl}/post`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: { key } },
+		);
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { getMyProfile, getMyProjects};
