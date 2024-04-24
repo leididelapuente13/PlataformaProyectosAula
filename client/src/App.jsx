@@ -10,6 +10,7 @@ import { UserManagement } from './pages/admin/Users/UserManagement';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
+import { ProjectDetails } from './pages/student/Project/projectdetails/ProjectDetails';
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ function App() {
 						</Route>
 						<Route path='/filter' element={<h1>Filter</h1>} />
 						<Route path='/report' element={<h1>Report</h1>} />
-						<Route path='/project-details' element={<h1>Profile</h1>} />
+						<Route path='/project-details' element={<ProjectDetails />} />
 						<Route path='/profile' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
 					</Routes>
