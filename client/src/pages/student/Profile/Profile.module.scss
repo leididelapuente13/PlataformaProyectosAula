@@ -54,6 +54,7 @@
 
 .section {
 	background-color: $primary-white;
+	min-height: 50vh;
 	&__button__container {
         border-bottom: 1px solid $primary-grey;
 	}
