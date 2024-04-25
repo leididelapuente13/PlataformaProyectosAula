@@ -18,7 +18,7 @@ export const ProjectCard = ({project}) => {
 				<p className={styles.card__title}>{project.title}</p>
 				<p className={styles.card__text}>
 					{project.description.slice(0, 110)}...
-					<Link className={styles.card__link}>ver mas</Link>
+					<Link to={`../project-details/${project.id}`} className={styles.card__link}>ver mas</Link>
 				</p>
 			</div>
 			<div className={styles.card__buttonContainer}>

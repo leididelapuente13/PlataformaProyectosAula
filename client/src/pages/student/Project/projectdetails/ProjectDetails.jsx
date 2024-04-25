@@ -8,6 +8,10 @@ import cover from '../../../../assets/img/default/projectcover.jpg';
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as AdminNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getProjectRequest } from '../../../../api/projectsApi';
+import { useEffect } from 'react';
 export const ProjectDetails = () => {
 	const project = {
 		id: 1,
@@ -20,6 +24,17 @@ export const ProjectDetails = () => {
 
 	const role = localStorage.getItem('role');
 
+	const { projectId } = useParams();
+
+	// const Project = useQuery({
+	// 	queryKey: ['project', { projectId }],
+	// 	queryFn: getProjectRequest(projectId),
+	// });
+
+	// useEffect(() => {
+	// console.log(projectId);
+	// 	Project();
+	// }, []);
 	return (
 		<>
 			<main>
@@ -49,12 +64,12 @@ export const ProjectDetails = () => {
 							</div>
 							<div>
 								<button
-                                    className={styles.card__button__download}
+									className={styles.card__button__download}
 									onClick={() => {
 										window.open(file, '_blank');
 									}}
 								>
-									Ver
+									Archivo del proyecto
 								</button>
 							</div>
 						</div>

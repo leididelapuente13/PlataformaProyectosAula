@@ -38,7 +38,7 @@ function App() {
 						</Route>
 						<Route path='/filter' element={<h1>Filter</h1>} />
 						<Route path='/report' element={<h1>Report</h1>} />
-						<Route path='/project-details' element={<ProjectDetails />} />
+						<Route path='/project-details/:projectId' element={<ProjectDetails />} />
 						<Route path='/profile' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
 					</Routes>
