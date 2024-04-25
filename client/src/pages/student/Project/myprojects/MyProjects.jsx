@@ -5,7 +5,7 @@ import { getMyProjects } from '../../../../api/profileApi';
 // Dependencies
 import PropTypes from 'prop-types';
 // Components
-import { ProjectCard } from '../../../../components/project/ProjectCard';
+import { ProjectCard } from '../../../../components/project/projectcard/ProjectCard';
 import { useQuery } from 'react-query';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 import { NothingToSee } from '../../../../components/utils/NothingToSee/NothingToSee';
