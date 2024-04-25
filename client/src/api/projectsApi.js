@@ -42,11 +42,24 @@ const getProjectRequest = async (projectId) => {
 
 const deleteProjectRequest = async (projectId) => {
 	try {
-		const response = await axios.delete(`${baseUrl}post`, { params: { projectId } });
+		const response = await axios.delete(`${baseUrl}post`, {
+			params: { projectId },
+		});
 		return response;
 	} catch (error) {
 		throw error;
 	}
 };
 
-export { createProjectRequest, getProjectRequest, deleteProjectRequest };
+const getTrendingProjects = async () => {
+	try {
+		const response = await axios.get(`${baseUrl}post/trend`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+		});
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { createProjectRequest, getProjectRequest, deleteProjectRequest, getTrendingProjects };
