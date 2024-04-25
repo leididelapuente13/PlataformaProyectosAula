@@ -8,25 +8,37 @@ import { MdReport } from 'react-icons/md';
 // Dependencies
 import PropTypes from 'prop-types';
 
-const Menu = ({ closeMenu, projectId }) => {
+const Menu = ({ closeMenu, projectId, authorId}) => {
+	const role = localStorage.getItem('role');
+	const userId = localStorage.getItem('role');
 	return (
 		<div className={styles.menuContainer}>
 			<div className={styles.menu}>
-				<button type='button' className={styles.menu__buttonClose} onClick={closeMenu}>
+				<button
+					type='button'
+					className={styles.menu__buttonClose}
+					onClick={closeMenu}
+				>
 					<IoIosCloseCircle />
 				</button>
-				<button type='button' className={styles.menu__button}>
-					<MdDelete />
-					<p>Eliminar</p>
-				</button>
-				<button type='button' className={styles.menu__button}>
-					<FaEdit />
-					<p>Editar</p>
-				</button>
-				<button type='button' className={styles.menu__button}>
-					<MdReport />
-					<p>Reportar</p>
-				</button>
+				{(role === 1 || userId === authorId) && (
+					<button type='button' className={styles.menu__button}>
+						<MdDelete />
+						<p>Eliminar</p>
+					</button>
+				)}
+				{userId === authorId && (
+					<button type='button' className={styles.menu__button}>
+						<FaEdit />
+						<p>Editar</p>
+					</button>
+				)}
+				{(role === 2 || role === 3) && (
+					<button type='button' className={styles.menu__button}>
+						<MdReport />
+						<p>Reportar</p>
+					</button>
+				)}
 			</div>
 		</div>
 	);
@@ -35,6 +47,7 @@ const Menu = ({ closeMenu, projectId }) => {
 Menu.propTypes = {
 	closeMenu: PropTypes.func,
 	projectId: PropTypes.number,
+    authorId: PropTypes.number,
 };
 
 export default Menu;

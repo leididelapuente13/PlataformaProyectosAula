@@ -30,7 +30,7 @@ export const ProjectCard = ({ project }) => {
 				>
 					<CiMenuKebab />
 				</button>
-				{menu && <Menu closeMenu={closeMenu} projectId={project.id} />}
+				{menu && <Menu closeMenu={closeMenu} projectId={project.id} projectOwner={project.owner}/>}
 			</div>
 			<div className={styles.card__contentContainer}>
 				<p className={styles.card__title}>{project.title}</p>
