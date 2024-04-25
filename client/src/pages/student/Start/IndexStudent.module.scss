@@ -1,6 +1,7 @@
 @import '../../../assets/styles/partials/variables';
+@import '../../../assets/styles/mixins/mixins';
 
-.main {
+body{
    background-color: #F8F8FF;
 }
 .section {
@@ -23,5 +24,8 @@
             color: $secondary-blue;
             transition: 0.3s 0.3s ease-in;
         }
+    }
+    &__loaderContainer{
+        margin: 3rem;
     }
 }

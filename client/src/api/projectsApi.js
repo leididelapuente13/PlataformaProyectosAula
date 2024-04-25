@@ -51,7 +51,7 @@ const deleteProjectRequest = async (projectId) => {
 	}
 };
 
-const getTrendingProjects = async () => {
+const getTrendingProjectsRequest = async () => {
 	try {
 		const response = await axios.get(`${baseUrl}post/trend`, {
 			headers: { 'ngrok-skip-browser-warning': true },
@@ -62,4 +62,4 @@ const getTrendingProjects = async () => {
 	}
 };
 
-export { createProjectRequest, getProjectRequest, deleteProjectRequest, getTrendingProjects };
+export { createProjectRequest, getProjectRequest, deleteProjectRequest, getTrendingProjectsRequest };

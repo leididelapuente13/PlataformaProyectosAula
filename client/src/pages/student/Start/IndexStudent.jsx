@@ -9,6 +9,10 @@ import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
 import Number from '../../../components/project/trendnumber/Number';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getTrendingProjectsRequest } from '../../../api/projectsApi';
+import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 export const IndexStudent = () => {
 	const projects = [
@@ -80,8 +84,14 @@ export const IndexStudent = () => {
 
 	const trend = projects.slice(0, 3);
 
+	const { isLoading, data, isError, error } = useQuery({
+		queryKey: ['trending-projects'],
+		queryFn: getTrendingProjectsRequest,
+	});
+
 	return (
 		<>
+			{/* {isError && <ErrorPopUp message={error.message}/>} */}
 			<main className={styles.main}>
 				<Nav />
 				<section className={styles.section}>
@@ -89,13 +99,24 @@ export const IndexStudent = () => {
 				</section>
 				<section className={styles.section}>
 					<h3 className={styles.section__title}>Tendencias</h3>
-					{trend.map((project) => (
-						<div>
-							<Number trendNumber={trend.indexOf(project) + 1} />
-							<ProjectCard project={project} key={project.id} />
+					{/* {isLoading ? (
+						<div className={styles.section__loaderContainer}>
+							<PacmanLoader
+								color='#004D95'
+								cssOverride={{ alignSelf: 'center' }}
+							/>
 						</div>
-					))}
-					<Link className={styles.section__link}>Ver mas...</Link>
+					) : (
+						<>
+							{trend.map((project) => (
+								<div>
+									<Number trendNumber={trend.indexOf(project) + 1} />
+									<ProjectCard project={project} key={project.id} />
+								</div>
+							))}
+							<Link className={styles.section__link}>Ver mas...</Link>
+						</>
+					)} */}
 				</section>
 				<section className={styles.section}>
 					<h3 className={styles.section__title}>Para ti</h3>
