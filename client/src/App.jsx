@@ -7,10 +7,11 @@ import { Register } from './pages/public/Register/Register';
 import { Profile } from './pages/student/Profile/Profile';
 import { ProjectManagementForm } from './pages/student/Project/projectmanagementform/ProjectManagementForm';
 import { UserManagement } from './pages/admin/Users/UserManagement';
+import { ProjectDetails } from './pages/student/Project/projectdetails/ProjectDetails';
+import { IndexStudent } from './pages/student/Start/IndexStudent';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
-import { ProjectDetails } from './pages/student/Project/projectdetails/ProjectDetails';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,7 @@ function App() {
 					<Routes>
 						<Route path='/' element={<LogIn />} />
 						<Route path='/register' element={<Register />} />
-						<Route path='/indexStudent' element={<h1>Student</h1>} />
+						<Route path='/indexStudent' element={<IndexStudent />} />
 						<Route element={<ProtectedRoute role='1' />}>
 							<Route path='/user-management' element={<UserManagement />} />
 							<Route path='/reports' element={<h1>Admin</h1>} />
@@ -38,7 +39,10 @@ function App() {
 						</Route>
 						<Route path='/filter' element={<h1>Filter</h1>} />
 						<Route path='/report' element={<h1>Report</h1>} />
-						<Route path='/project-details/:projectId' element={<ProjectDetails />} />
+						<Route
+							path='/project-details/:projectId'
+							element={<ProjectDetails />}
+						/>
 						<Route path='/profile' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
 					</Routes>
