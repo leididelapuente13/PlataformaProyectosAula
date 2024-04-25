@@ -4,7 +4,7 @@ import styles from './Profile.module.scss';
 import { IoSettingsSharp } from 'react-icons/io5';
 import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
-import { useQuery } from 'react-query';
+import { isError, useQuery } from 'react-query';
 import { useContext, useEffect, useState } from 'react';
 // Request
 import { getMyProfile } from '../../../api/profileApi';
@@ -18,20 +18,18 @@ export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
 	const userId = localStorage.getItem('userId');
 	const { visible } = useContext(WarningContext);
-	// const profile = useQuery({
+	// const {isError, error, data} = useQuery({
 	// 	queryKey: ['profile', { userId }],
 	// 	queryFn: getMyProfile(userId),
 	// });
 
-	// useEffect(()=>{
-	//     profile();
-	// console.log(fetchMyProfile.data);
-	// }, []);
-
 	return (
 		<>
 			{visible.deleteMyProjectError && <ErrorPopUp />}
-			{visible.deleteMyProjectSuccess && <SuccessPopUp message="Proyecto Eliminado"/>}
+			{visible.deleteMyProjectSuccess && (
+				<SuccessPopUp message='Proyecto Eliminado' />
+			)}
+			{/* {isError && <ErrorPopUp message={error.message} />} */}
 			<main>
 				<Nav />
 				<section className={styles.profile}>

@@ -6,13 +6,14 @@ import { FaCommentAlt } from 'react-icons/fa';
 import cover from '../../../../assets/img/default/projectcover.jpg';
 // Dependencies
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { isError, useQuery } from 'react-query';
 import { getProjectRequest } from '../../../../api/projectsApi';
 import { useEffect } from 'react';
 // Components
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as AdminNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
+import { ErrorPopUp } from '../../../../components/utils/error/ErrorPopUp';
 export const ProjectDetails = () => {
 	const project = {
 		id: 1,
@@ -27,17 +28,14 @@ export const ProjectDetails = () => {
 
 	const { projectId } = useParams();
 
-	// const Project = useQuery({
+	// const { isError, error, data} = useQuery({
 	// 	queryKey: ['project', { projectId }],
 	// 	queryFn: getProjectRequest(projectId),
 	// });
-
-	// useEffect(() => {
-	// console.log(projectId);
-	// 	Project();
-	// }, []);
+	
 	return (
 		<>
+			{/* {isError && <ErrorPopUp message={error.message} />} */}
 			<main>
 				{role === 2 ? (
 					<StudentNav />

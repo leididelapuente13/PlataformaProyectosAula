@@ -1,18 +1,17 @@
 //Styles
 import styles from './IndexStudent.module.scss';
 // Dependencies
-
+import { Link } from 'react-router-dom';
+import PacmanLoader from 'react-spinners/PacmanLoader';
+import { useQuery } from 'react-query';
 // Request
-
+import { getTrendingProjectsRequest } from '../../../api/projectsApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
 import Number from '../../../components/project/trendnumber/Number';
-import { Link } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { getTrendingProjectsRequest } from '../../../api/projectsApi';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
-import PacmanLoader from 'react-spinners/PacmanLoader';
+import { TrendingIndex } from '../../../components/project/trending/trendingindex/TrendingIndex';
 
 export const IndexStudent = () => {
 	const projects = [
@@ -82,12 +81,7 @@ export const IndexStudent = () => {
 		},
 	];
 
-	const trend = projects.slice(0, 3);
-
-	const { isLoading, data, isError, error } = useQuery({
-		queryKey: ['trending-projects'],
-		queryFn: getTrendingProjectsRequest,
-	});
+	const projectsinterest = projects.slice(0, 10);
 
 	return (
 		<>
@@ -97,8 +91,11 @@ export const IndexStudent = () => {
 				<section className={styles.section}>
 					<h3 className={styles.section__title}>Anuncios</h3>
 				</section>
+
+				<TrendingIndex />
+
 				<section className={styles.section}>
-					<h3 className={styles.section__title}>Tendencias</h3>
+					<h3 className={styles.section__title}>Para ti</h3>
 					{/* {isLoading ? (
 						<div className={styles.section__loaderContainer}>
 							<PacmanLoader
@@ -108,7 +105,7 @@ export const IndexStudent = () => {
 						</div>
 					) : (
 						<>
-							{trend.map((project) => (
+							{foryou.map((project) => (
 								<div>
 									<Number trendNumber={trend.indexOf(project) + 1} />
 									<ProjectCard project={project} key={project.id} />
@@ -117,9 +114,6 @@ export const IndexStudent = () => {
 							<Link className={styles.section__link}>Ver mas...</Link>
 						</>
 					)} */}
-				</section>
-				<section className={styles.section}>
-					<h3 className={styles.section__title}>Para ti</h3>
 				</section>
 			</main>
 		</>

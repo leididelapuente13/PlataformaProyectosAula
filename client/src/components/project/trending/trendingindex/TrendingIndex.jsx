@@ -1,17 +1,16 @@
-// Styles
-import styles from './MyProjects.module.scss';
-// Request
-import { getMyProjects } from '../../../api/profileApi';
+//Styles
+import styles from './TrendingIndex.module.scss';
 // Dependencies
-import PropTypes from 'prop-types';
-// Components
-import { ProjectCard } from '../projectcard/ProjectCard';
-import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
-import { ConfirmationPopUp } from '../../utils/confirmation/ConfirmationPopUp';
-
-export const MyProjects = ({ userId }) => {
+import { useQuery } from 'react-query';
+// Request
+import { getTrendingProjectsRequest } from '../../../../api/projectsApi';
+// Components
+import { ProjectCard } from '../../../../components/project/projectcard/ProjectCard';
+import Number from '../../../../components/project/trendnumber/Number';
+import { ErrorPopUp } from '../../../../components/utils/error/ErrorPopUp';
+export const TrendingIndex = () => {
 	const projects = [
 		{
 			id: 1,
@@ -79,28 +78,33 @@ export const MyProjects = ({ userId }) => {
 		},
 	];
 
-	const {isLoading, data} = useQuery({
-		queryKey: ['projects', { userId }],
-		queryFn: getMyProjects,
+	const trend = projects.slice(0, 3);
+
+	const { isLoading, data } = useQuery({
+		queryKey: ['trending-projects'],
+		queryFn: getTrendingProjectsRequest,
 	});
-
 	return (
-		<>
-			{/* {isLoading && (
-				<div className={styles.loaderContainer}>
-					<PacmanLoader color='#0A84F4' cssOverride={{ alignSelf: 'center' }}/>
-				</div>
-			)} */}
-			<section className={styles.section}>
-				{/* {data.length === 0 && <NothingToSee />} */}
-				{projects.map((project) => (
-					<ProjectCard project={project} key={project.id} />
-				))}
-			</section>
-		</>
+		<section className={styles.section}>
+			<h3 className={styles.section__title}>Tendencias</h3>
+			{/* {isLoading ? (
+        <div className={styles.section__loaderContainer}>
+            <PacmanLoader
+                color='#004D95'
+                cssOverride={{ alignSelf: 'center' }}
+            />
+        </div>
+    ) : (
+        <>
+            {trend.map((project) => (
+                <div>
+                    <Number trendNumber={trend.indexOf(project) + 1} />
+                    <ProjectCard project={project} key={project.id} />
+                </div>
+            ))}
+            <Link className={styles.section__link}>Ver mas...</Link>
+        </>
+    )} */}
+		</section>
 	);
-};
-
-MyProjects.propTypes = {
-	userId: PropTypes.number,
 };
