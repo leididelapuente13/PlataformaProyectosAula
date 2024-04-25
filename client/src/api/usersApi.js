@@ -16,7 +16,7 @@ axios.interceptors.request.use(
 
 const getUsers = async () => {
 	try {
-		const response = await axios.get(`${baseUrl}/user`, {headers: {
+		const response = await axios.get(`${baseUrl}user`, {headers: {
 			'ngrok-skip-browser-warning': true
 		}});
 		console.log(response);
@@ -28,7 +28,7 @@ const getUsers = async () => {
 
 const filterUsers = async (condition) => {
 	try {
-		const response = await axios.get(`${baseUrl}/filter`, {headers: {'ngrok-skip-browser-warning': true}}, { params: condition });
+		const response = await axios.get(`${baseUrl}filter`, {headers: {'ngrok-skip-browser-warning': true}}, { params: condition });
 		console.log(condition);
 		console.log(response.data);
 		return response.data;

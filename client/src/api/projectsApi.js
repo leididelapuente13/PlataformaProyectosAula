@@ -17,7 +17,7 @@ axios.interceptors.request.use(
 const createProjectRequest = async (data) => {
 	try {
 		const response = await axios.post(
-			`${baseUrl}/post`,
+			`${baseUrl}post`,
 			{ headers: { 'ngrok-skip-browser-warning': true } },
 			{ params: data },
 		);
@@ -30,7 +30,7 @@ const createProjectRequest = async (data) => {
 const getProjectRequest = async (projectId) => {
 	try {
 		const response = await axios.get(
-			`${baseUrl}/post`,
+			`${baseUrl}post`,
 			{ headers: { 'ngrok-skip-browser-warning': true } },
 			{ params: projectId },
 		);
@@ -40,4 +40,13 @@ const getProjectRequest = async (projectId) => {
 	}
 };
 
-export { createProjectRequest, getProjectRequest };
+const deleteProjectRequest = async (projectId) => {
+	try {
+		const response = await axios.delete(`${baseUrl}post`, { params: { projectId } });
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { createProjectRequest, getProjectRequest, deleteProjectRequest };

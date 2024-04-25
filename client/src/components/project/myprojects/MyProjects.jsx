@@ -1,14 +1,15 @@
 // Styles
 import styles from './MyProjects.module.scss';
 // Request
-import { getMyProjects } from '../../../../api/profileApi';
+import { getMyProjects } from '../../../api/profileApi';
 // Dependencies
 import PropTypes from 'prop-types';
 // Components
-import { ProjectCard } from '../../../../components/project/projectcard/ProjectCard';
+import { ProjectCard } from '../projectcard/ProjectCard';
 import { useQuery } from 'react-query';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import { NothingToSee } from '../../../../components/utils/NothingToSee/NothingToSee';
+import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
+import { ConfirmationPopUp } from '../../utils/confirmation/ConfirmationPopUp';
 
 export const MyProjects = ({ userId }) => {
 	const projects = [

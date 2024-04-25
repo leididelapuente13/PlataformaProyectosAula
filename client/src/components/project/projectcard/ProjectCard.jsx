@@ -9,7 +9,7 @@ import cover from '../../../assets/img/default/projectcover.jpg';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import Menu from '../projectmenu/Menu';
+import { Menu } from '../projectmenu/Menu';
 
 export const ProjectCard = ({ project }) => {
 	const [menu, setMenu] = useState();
@@ -30,7 +30,13 @@ export const ProjectCard = ({ project }) => {
 				>
 					<CiMenuKebab />
 				</button>
-				{menu && <Menu closeMenu={closeMenu} projectId={project.id} projectOwner={project.owner}/>}
+				{menu && (
+					<Menu
+						closeMenu={closeMenu}
+						projectId={project.id}
+						projectOwner={project.owner}
+					/>
+				)}
 			</div>
 			<div className={styles.card__contentContainer}>
 				<p className={styles.card__title}>{project.title}</p>

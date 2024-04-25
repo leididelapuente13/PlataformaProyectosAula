@@ -5,18 +5,19 @@ import { IoSettingsSharp } from 'react-icons/io5';
 import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
 import { useQuery } from 'react-query';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // Request
 import { getMyProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
-import { MyProjects } from '../Project/myprojects/MyProjects';
-
+import { MyProjects } from '../../../components/project/myprojects/MyProjects';
+import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import { WarningContext } from '../../../context/WarningContext';
+import { SuccessPopUp } from '../../../components/utils/success/SuccessPopUp';
 export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
-
 	const userId = localStorage.getItem('userId');
-
+	const { visible } = useContext(WarningContext);
 	// const profile = useQuery({
 	// 	queryKey: ['profile', { userId }],
 	// 	queryFn: getMyProfile(userId),
@@ -29,6 +30,8 @@ export const Profile = () => {
 
 	return (
 		<>
+			{visible.deleteMyProjectError && <ErrorPopUp />}
+			{visible.deleteMyProjectSuccess && <SuccessPopUp message="Proyecto Eliminado"/>}
 			<main>
 				<Nav />
 				<section className={styles.profile}>
