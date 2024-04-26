@@ -1,5 +1,9 @@
 // Components
-import { ProjectCard } from "../../../projectcard/ProjectCard";
+import { ProjectCard } from '../../../projectcard/ProjectCard';
+import { getProjectsForStudent } from '../../../../../api/projectsApi';
+import PacmanLoader from 'react-spinners/PacmanLoader';
+// Dependencies
+import { useQuery } from 'react-query';
 
 export const ForYouSection = () => {
 	const projects = [
@@ -68,8 +72,23 @@ export const ForYouSection = () => {
 			comments: 50,
 		},
 	];
+
+	const { isLoading, data } = useQuery({
+		queryKey: ['foryou'],
+		queryFn: getProjectsForStudent(localStorage.getItem('token')),
+	});
+
 	return (
 		<div style={sectionStyles}>
+			{/* {isLoading ? (
+				<div style={{ display: 'flex', justifyContent: 'center' }}>
+					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
+				</div>
+			) : (
+				projects.map((project) => (
+					<ProjectCard project={project} key={project.id} />
+				))
+			)} */}
 			{projects.map((project) => (
 				<ProjectCard project={project} key={project.id} />
 			))}
@@ -81,7 +100,7 @@ const sectionStyles = {
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
-    gap: '2rem',
+	gap: '2rem',
 	width: '80%',
 	margin: '2rem auto',
 };
