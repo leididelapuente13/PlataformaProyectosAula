@@ -4,13 +4,14 @@ import styles from './ProjectDetails.module.scss';
 import { FaHeart } from 'react-icons/fa';
 import { FaCommentAlt } from 'react-icons/fa';
 import cover from '../../../../assets/img/default/projectcover.jpg';
+// Dependencies
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getProjectRequest } from '../../../../api/projectsApi';
 // Components
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as AdminNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { getProjectRequest } from '../../../../api/projectsApi';
 import { useEffect } from 'react';
 export const ProjectDetails = () => {
 	const project = {
