@@ -1,5 +1,6 @@
 // Components
 import { ProjectCard } from '../../../projectcard/ProjectCard';
+import Number from '../../../trendnumber/Number';
 export const TrendingSection = () => {
 	const projects = [
 		{
@@ -69,10 +70,21 @@ export const TrendingSection = () => {
 	];
 
 	return (
-		<div style={{ padding: '2rem' }}>
+		<div style={sectionStyles}>
 			{projects.map((project) => (
-				<ProjectCard project={project} key={project.id} />
+				<div>
+					<Number trendNumber={projects.indexOf(project) + 1} />
+					<ProjectCard project={project} key={project.id} />
+				</div>
 			))}
 		</div>
 	);
+};
+
+const sectionStyles = {
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	width: '80%',
+	margin: '2rem auto',
 };

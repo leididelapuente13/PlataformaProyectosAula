@@ -6,15 +6,14 @@ import { LogIn } from './pages/public/LogIn/LogIn';
 import { Register } from './pages/public/Register/Register';
 import { Profile } from './pages/student/Profile/Profile';
 import { ProjectManagementForm } from './pages/student/Project/projectmanagementform/ProjectManagementForm';
+import { ProjectDetails } from './pages/shared/Project/projectdetails/ProjectDetails';
 import { UserManagement } from './pages/admin/Users/UserManagement';
-import { ProjectDetails } from './pages/student/Project/projectdetails/ProjectDetails';
 import { IndexStudent } from './pages/student/Start/IndexStudent';
 import { IndexProfessor } from './pages/professor/Start/IndexProfessor';
+import { Filter } from './pages/shared/Project/Filter/Filter';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
-import { ProjectDetails } from './pages/shared/Project/projectdetails/ProjectDetails';
-import { Filter } from './pages/shared/Project/Filter/Filter';
 
 const queryClient = new QueryClient();
 
@@ -41,7 +40,7 @@ function App() {
 							{/* <Route path='/indexProfessor' element={<IndexProfessor />} /> */}
 						</Route>
 						<Route path='/indexProfessor' element={<IndexProfessor />} />
-						<Route path='/filter' element={<h1>Filter</h1>} />
+						<Route path='/filter' element={<Filter />} />
 						<Route path='/report' element={<h1>Report</h1>} />
 						<Route
 							path='/project-details/:projectId'

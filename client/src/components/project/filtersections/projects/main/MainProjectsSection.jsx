@@ -1,6 +1,7 @@
 // Styles
 import { useState } from 'react';
 import styles from './MainProjectsSection.module.scss';
+import { TrendingSection } from '../trending/TrendingSection';
 // Components
 // Dependencies
 
@@ -58,10 +59,10 @@ export const MainProjectsSection = () => {
 				</button>
 			</div>
 			<>
-                {section.trending && <h2>Tendencias</h2>}
-                {section.foryou && <h2>For You</h2>}
-                {section.all && <h2>All</h2>}
-            </>
+				{section.trending && <TrendingSection />}
+				{section.foryou && <h2>For You</h2>}
+				{section.all && <h2>All</h2>}
+			</>
 		</section>
 	);
 };
