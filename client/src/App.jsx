@@ -9,6 +9,7 @@ import { ProjectManagementForm } from './pages/student/Project/projectmanagement
 import { UserManagement } from './pages/admin/Users/UserManagement';
 import { ProjectDetails } from './pages/student/Project/projectdetails/ProjectDetails';
 import { IndexStudent } from './pages/student/Start/IndexStudent';
+import { IndexProfessor } from './pages/professor/Start/IndexProfessor';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
@@ -35,8 +36,9 @@ function App() {
 							<Route path='/project-form' element={<ProjectManagementForm />} />
 						</Route>
 						<Route element={<ProtectedRoute role='3' />}>
-							<Route path='/indexProfessor' element={<h1>Professor</h1>} />
+							{/* <Route path='/indexProfessor' element={<IndexProfessor />} /> */}
 						</Route>
+						<Route path='/indexProfessor' element={<IndexProfessor />} />
 						<Route path='/filter' element={<h1>Filter</h1>} />
 						<Route path='/report' element={<h1>Report</h1>} />
 						<Route

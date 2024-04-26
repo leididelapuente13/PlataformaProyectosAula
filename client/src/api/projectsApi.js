@@ -71,6 +71,7 @@ const getProjectsForStudent = async (token) => {
 			},
 			{ params: { token } },
 		);
+		return response;
 	} catch (error) {
 		throw error;
 	}
