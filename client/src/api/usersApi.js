@@ -16,9 +16,11 @@ axios.interceptors.request.use(
 
 const getUsers = async () => {
 	try {
-		const response = await axios.get(`${baseUrl}user`, {headers: {
-			'ngrok-skip-browser-warning': true
-		}});
+		const response = await axios.get(`${baseUrl}user`, {
+			headers: {
+				'ngrok-skip-browser-warning': true,
+			},
+		});
 		console.log(response);
 		return response;
 	} catch (error) {
@@ -28,7 +30,11 @@ const getUsers = async () => {
 
 const filterUsers = async (condition) => {
 	try {
-		const response = await axios.get(`${baseUrl}filter`, {headers: {'ngrok-skip-browser-warning': true}}, { params: condition });
+		const response = await axios.get(
+			`${baseUrl}filter`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: condition },
+		);
 		console.log(condition);
 		console.log(response.data);
 		return response.data;
@@ -37,4 +43,22 @@ const filterUsers = async (condition) => {
 	}
 };
 
-export { getUsers, filterUsers };
+const deactivateUser = async (userId) => {
+	try {
+		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 0 });
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+const activateUser = async (userId) => {
+	try {
+		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 1 });
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { getUsers, filterUsers, activateUser, deactivateUser };

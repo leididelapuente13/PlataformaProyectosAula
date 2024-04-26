@@ -28,7 +28,7 @@ function App() {
 						<Route path='/register' element={<Register />} />
 						<Route path='/indexStudent' element={<IndexStudent />} />
 						<Route element={<ProtectedRoute role='1' />}>
-							<Route path='/user-management' element={<UserManagement />} />
+							{/* <Route path='/user-management' element={<UserManagement />} /> */}
 							<Route path='/reports' element={<h1>Admin</h1>} />
 							<Route path='/report-details' element={<h1>Admin</h1>} />
 							<Route path='/announcements' element={<h1>Admin</h1>} />
@@ -53,10 +53,8 @@ function App() {
 						/>
 						<Route path='/profile' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
-						<Route
-							path='projects-career/:id'
-							element={<ProjectsCareer />}
-						/>
+						<Route path='projects-career/:id' element={<ProjectsCareer />} />
+						<Route path='/user-management' element={<UserManagement />} />
 					</Routes>
 				</BrowserRouter>
 			</WarningContextProvider>

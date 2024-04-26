@@ -17,12 +17,12 @@ import { filterUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
-	const [filter, setFilter] = useState('');
+	// const [filter, setFilter] = useState('');
 
-	const fetchUsers = useQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
-	});
+	// const fetchUsers = useQuery({
+	// 	queryKey: ['users'],
+	// 	queryFn: getUsers,
+	// });
 
 	// const fetchUsersWithFilter = useQuery({
 	// 	queryKey: ['filter-users'],
@@ -39,18 +39,32 @@ export const UsersList = () => {
 		console.log(filter);
 	};
 
-	useEffect(() => {
-		if (fetchUsers.isError || fetchUsers.isSuccess) {
-			setVisible((prevVisibility) => ({
-				...prevVisibility,
-				listUsersError: isError,
-			}));
-		}
-	}, [fetchUsers.isError, fetchUsers.isSuccess]);
+	// useEffect(() => {
+	// 	if (fetchUsers.isError || fetchUsers.isSuccess) {
+	// 		setVisible((prevVisibility) => ({
+	// 			...prevVisibility,
+	// 			listUsersError: isError,
+	// 		}));
+	// 	}
+	// }, [fetchUsers.isError, fetchUsers.isSuccess]);
 
-	useEffect(() => {
-		fetchUsers;
-	}, [filter !== '']);
+	// useEffect(() => {
+	// 	fetchUsers;
+	// }, [filter !== '']);
+
+	const user = {
+		data: {
+			id: 1,
+			attributes: {
+				user_name: '@user',
+				code: 227272772,
+				email: 'user@gmail.com',
+				description: 'lorem',
+				role: 2,
+				state: 1,
+			},
+		},
+	};
 
 	return (
 		<section className={styles.section}>
@@ -70,7 +84,7 @@ export const UsersList = () => {
 					</button>
 				</form>
 			</div>
-			{fetchUsers.data && fetchUsers.data.length === 0 && <NothingToSee />}
+			{/* {fetchUsers.data && fetchUsers.data.length === 0 && <NothingToSee />}
 			{fetchUsers.isLoading && (
 				<div className={styles.section__loader}>
 					<ClipLoader
@@ -85,7 +99,9 @@ export const UsersList = () => {
 			{fetchUsers.data &&
 				fetchUsers.data.map((user) => (
 					<UserCard user={user} key={user.data.id} />
-				))}
+				))} */}
+
+			<UserCard user={user} />
 		</section>
 	);
 };

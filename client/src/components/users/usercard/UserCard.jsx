@@ -28,6 +28,14 @@ export const UserCard = ({ user }) => {
 		}));
 	};
 
+	const changeUserState = async ()=>{
+		if](user.data.attributes.state === 0){
+			//Call mutation to activate
+		}else id(user.data.attributes.state === 1){
+			//Call mutation to deactivate
+		}
+	}
+
 	return (
 		<>
 			<div className={styles.card}>
@@ -55,7 +63,7 @@ export const UserCard = ({ user }) => {
 				className={
 					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
 				}
-				onClick={setConfirmation}
+				onClick={()=>changeUserState}
 			>
 				{userData.state === 1 ? 'Desactivar' : 'Activar'}
 			</button>
