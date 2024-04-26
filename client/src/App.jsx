@@ -14,6 +14,7 @@ import { Filter } from './pages/shared/Project/Filter/Filter';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
+import { ProjectsCareer } from './pages/shared/projectscareer/ProjectsCareer';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,10 @@ function App() {
 						/>
 						<Route path='/profile' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
+						<Route
+							path='projects-career/:id'
+							element={<ProjectsCareer />}
+						/>
 					</Routes>
 				</BrowserRouter>
 			</WarningContextProvider>

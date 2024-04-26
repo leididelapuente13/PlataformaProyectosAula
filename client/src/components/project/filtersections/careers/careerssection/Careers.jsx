@@ -1,7 +1,7 @@
 // Dependencies
 import { useQuery } from 'react-query';
 // Component
-import CareerCard from '../../../../careers/card/CareerCard';
+import CareerCard from '../../../../careers/careercard/CareerCard';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 // Request
 import { getCareersRequest } from '../../../../../api/careersApi';

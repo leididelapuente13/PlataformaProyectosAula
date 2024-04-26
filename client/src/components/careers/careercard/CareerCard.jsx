@@ -8,7 +8,7 @@ const CareerCard = ({career}) => {
   return (
     <div className={styles.card}>
         <p className={styles.card__text}>{career.name}</p>
-        <Link to={`../{projects-career}/${career.id}`} className={styles.card__link}>Ver</Link>
+        <Link to={`../projects-career/${career.id}`} className={styles.card__link}>Ver</Link>
     </div>
   )
 }
