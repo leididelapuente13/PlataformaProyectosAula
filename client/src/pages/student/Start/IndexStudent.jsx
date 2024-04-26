@@ -9,7 +9,6 @@ import { getTrendingProjectsRequest } from '../../../api/projectsApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
-import Number from '../../../components/project/trendnumber/Number';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import { TrendingIndex } from '../../../components/project/trending/trendingindex/TrendingIndex';
 
@@ -107,7 +106,6 @@ export const IndexStudent = () => {
 						<>
 							{foryou.map((project) => (
 								<div>
-									<Number trendNumber={trend.indexOf(project) + 1} />
 									<ProjectCard project={project} key={project.id} />
 								</div>
 							))}

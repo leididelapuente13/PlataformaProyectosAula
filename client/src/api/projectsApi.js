@@ -62,4 +62,24 @@ const getTrendingProjectsRequest = async () => {
 	}
 };
 
-export { createProjectRequest, getProjectRequest, deleteProjectRequest, getTrendingProjectsRequest };
+const getProjectsForStudent = async (token) => {
+	try {
+		const response = await axios.get(
+			`${baseUrl}post/trend`,
+			{
+				headers: { 'ngrok-skip-browser-warning': true },
+			},
+			{ params: { token } },
+		);
+	} catch (error) {
+		throw error;
+	}
+};
+
+export {
+	createProjectRequest,
+	getProjectRequest,
+	deleteProjectRequest,
+	getTrendingProjectsRequest,
+	getProjectsForStudent,
+};
