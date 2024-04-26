@@ -16,11 +16,26 @@ axios.interceptors.request.use(
 
 const getCareersRequest = async () => {
 	try {
-		const response = await axios.get(`${baseUrl}careers`);
+		const response = await axios.get(`${baseUrl}careers`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+		});
 		return response;
 	} catch (error) {
 		throw error;
 	}
 };
 
-export { getCareersRequest };
+const getCareerProjectsRequest = (careerId) => {
+	try {
+		const response = axios.get(
+			`${baseUrl}`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: { careerId } },
+		);
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { getCareersRequest, getCareerProjectsRequest };
