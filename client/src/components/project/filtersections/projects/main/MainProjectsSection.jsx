@@ -5,6 +5,7 @@ import { TrendingSection } from '../trending/TrendingSection';
 import { ForYouSection } from '../foryou/ForYouSection';
 // Dependencies
 import { useState } from 'react';
+import { AllSection } from '../all/AllSection';
 
 export const MainProjectsSection = () => {
 	const [section, setSection] = useState({
@@ -71,7 +72,7 @@ export const MainProjectsSection = () => {
 			<>
 				{section.trending && <TrendingSection />}
 				{section.foryou && <ForYouSection />}
-				{section.all && <h2>All</h2>}
+				{section.all && <AllSection/>}
 			</>
 		</section>
 	);
