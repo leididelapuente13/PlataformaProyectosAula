@@ -1,4 +1,10 @@
+// Dependencies
+import { useQuery } from 'react-query';
+// Component
 import CareerCard from '../../../../careers/card/CareerCard';
+import PacmanLoader from 'react-spinners/PacmanLoader';
+// Request
+import { getCareersRequest } from '../../../../../api/careersApi';
 
 export const Careers = () => {
 	const careers = [
@@ -19,8 +25,21 @@ export const Careers = () => {
 			name: 'carrera 1',
 		},
 	];
+
+	// const { isLoading, data } = useQuery({
+	// 	queryKey: ['careers'],
+	// 	queryFn: getCareersRequest(),
+	// });
+
 	return (
 		<section style={sectionStyle}>
+			{/* {isLoading ? (
+				<div style={{ display: 'flex', justifyContent: 'center' }}>
+					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
+				</div>
+			) : (
+				careers.map((career) => <CareerCard career={career} key={career.id} />)
+			)} */}
 			{careers.map((career) => (
 				<CareerCard career={career} key={career.id} />
 			))}
