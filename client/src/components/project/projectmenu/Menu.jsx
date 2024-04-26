@@ -23,7 +23,7 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 
 	const deleteProject = useMutation(deleteProjectRequest, {
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['post'] }),
+			queryClient.invalidateQueries({ queryKey: ['post', { authorId }] }),
 				setVisible((prev) => ({ ...prev, deleteMyProjectSuccess: true }));
 		},
 	});
@@ -49,7 +49,11 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 					<IoIosCloseCircle />
 				</button>
 				{(role === 1 || userId === authorId) && (
-					<button type='button' className={styles.menu__button} onClick={()=>handleDelete()}>
+					<button
+						type='button'
+						className={styles.menu__button}
+						onClick={() => handleDelete()}
+					>
 						<MdDelete />
 						<p>Eliminar</p>
 					</button>

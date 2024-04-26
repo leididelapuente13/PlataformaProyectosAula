@@ -1,17 +1,18 @@
-// Styles
-import styles from './MyProjects.module.scss';
-// Request
-import { getMyProjects } from '../../../api/profileApi';
+//Styles
+import styles from './IndexStudent.module.scss';
 // Dependencies
-import PropTypes from 'prop-types';
-// Components
-import { ProjectCard } from '../projectcard/ProjectCard';
-import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
-import { ConfirmationPopUp } from '../../utils/confirmation/ConfirmationPopUp';
+import { useQuery } from 'react-query';
+// Request
+import { getProjectsForStudent } from '../../../api/projectsApi';
+// Components
+import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
+import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
+import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import { TrendingIndex } from '../../../components/project/trending/trendingindex/TrendingIndex';
 
-export const MyProjects = ({ userId }) => {
+export const IndexStudent = () => {
 	const projects = [
 		{
 			id: 1,
@@ -79,28 +80,45 @@ export const MyProjects = ({ userId }) => {
 		},
 	];
 
-	const {isLoading, data} = useQuery({
-		queryKey: ['projects', { userId }],
-		queryFn: getMyProjects,
+	const { isLoading, isError, error, data } = useQuery({
+		queryKey: ['projectsInteres'], 
+		queryFn: getProjectsForStudent(localStorage.getItem('token')),
 	});
+
+	const projectsinterest = projects.slice(0, 10);
 
 	return (
 		<>
-			{/* {isLoading && (
-				<div className={styles.loaderContainer}>
-					<PacmanLoader color='#0A84F4' cssOverride={{ alignSelf: 'center' }}/>
-				</div>
-			)} */}
-			<section className={styles.section}>
-				{/* {data.length === 0 && <NothingToSee />} */}
-				{projects.map((project) => (
-					<ProjectCard project={project} key={project.id} />
-				))}
-			</section>
+			{/* {isError && <ErrorPopUp message={error.message}/>} */}
+			<main className={styles.main}>
+				<Nav />
+				<section className={styles.section}>
+					<h3 className={styles.section__title}>Anuncios</h3>
+				</section>
+
+				<TrendingIndex />
+
+				<section className={styles.section}>
+					<h3 className={styles.section__title}>Para ti</h3>
+					{/* {isLoading ? (
+						<div className={styles.section__loaderContainer}>
+							<PacmanLoader
+								color='#004D95'
+								cssOverride={{ alignSelf: 'center' }}
+							/>
+						</div>
+					) : (
+						<>
+							{foryou.map((project) => (
+								<div>
+									<ProjectCard project={project} key={project.id} />
+								</div>
+							))}
+							<Link className={styles.section__link}>Ver mas...</Link>
+						</>
+					)} */}
+				</section>
+			</main>
 		</>
 	);
-};
-
-MyProjects.propTypes = {
-	userId: PropTypes.number,
 };
