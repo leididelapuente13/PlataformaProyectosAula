@@ -9,10 +9,28 @@ import robotImg from '../../../../assets/img/icons/robot.png';
 import { Nav as AdmiNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
+import { useState } from 'react';
 // Dependencies
 
 export const Filter = () => {
 	const role = localStorage.getItem('role');
+	const [section, setSection] = useState({
+		projects: true,
+		groups: false,
+		careers: false,
+	});
+
+	const handleSetSection = (toUpdateSection) => {
+		const sectionsNewState = {
+			projects: false,
+			groups: false,
+			careers: false,
+		};
+
+		sectionsNewState[toUpdateSection] = true;
+
+		setSection(sectionsNewState);
+	};
 	return (
 		<>
 			<main>
@@ -41,13 +59,13 @@ export const Filter = () => {
 						</div>
 					</form>
 					<div className={styles.section__wrapper}>
-						<button type='button' className={styles.section__button}>
+						<button type='button' className={styles.section__button} onClick={()=>handleSetSection('projects')}>
 							Proyectos
 						</button>
-						<button type='button' className={styles.section__button}>
+						<button type='button' className={styles.section__button} onClick={()=>handleSetSection('groups')}>
 							Grupos
 						</button>
-						<button type='button' className={styles.section__button}>
+						<button type='button' className={styles.section__button} onClick={()=>handleSetSection('careers')}>
 							Carreras
 						</button>
 					</div>
@@ -59,6 +77,11 @@ export const Filter = () => {
 						/>
 					</div>
 				</section>
+                <>
+                    {section.projects && <h3>Proyectos</h3>}
+                    {section.groups && <h3>Groups</h3>}
+                    {section.careers && <h3>Careers</h3>}
+                </>
 			</main>
 		</>
 	);
