@@ -3,6 +3,13 @@ import { Nav as AdminNav } from '../../../components/layout/nav/AdminNav/Nav';
 import { Nav as StudentNav } from '../../../components/layout/nav/StudentNav/Nav';
 import { Nav as ProfessorNav } from '../../../components/layout/nav/ProfessorNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
+import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import PacmanLoader from 'react-spinners/PacmanLoader';
+// Dependencies
+import { useQuery } from 'react-query';
+// Request
+import { getCareerProjectsRequest } from '../../../api/careersApi';
+
 export const ProjectsCareer = () => {
 	const role = localStorage.getItem('role');
 
@@ -73,11 +80,17 @@ export const ProjectsCareer = () => {
 		},
 	];
 
+	// const { isLoading, isError, error, data } = useQuery({
+	// 	queryKey: ['projects-career'],
+	// 	queryFn: getCareerProjectsRequest(),
+	// });
+
 	return (
 		<>
+			{/* {isError && <ErrorPopUp message={error.message}/>} */}
 			<main>
 				{role === 1 ? (
-					<AdmiNav />
+					<AdminNav />
 				) : role === 2 ? (
 					<StudentNav />
 				) : role === 3 ? (
@@ -86,6 +99,18 @@ export const ProjectsCareer = () => {
 					<StudentNav />
 				)}
 				<section style={sectionStyles}>
+					{/* {isLoading ? (
+						<div style={{ display: 'flex', justifyContent: 'center' }}>
+							<PacmanLoader
+								color='#004D95'
+								cssOverride={{ alignSelf: 'center' }}
+							/>
+						</div>
+					) : (
+						projects.map((project) => (
+							<ProjectCard project={project} key={project.id} />
+						))
+					)} */}
 					{projects.map((project) => (
 						<ProjectCard project={project} key={project.id} />
 					))}
