@@ -1,7 +1,9 @@
 // Request
-import { getAllProjectsRequest } from "../../../../../api/projectsApi";
+import { useQuery } from 'react-query';
+import { getAllProjectsRequest } from '../../../../../api/projectsApi';
 // Component
-import { ProjectCard } from "../../../projectcard/ProjectCard";
+import { ProjectCard } from '../../../projectcard/ProjectCard';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 export const AllSection = () => {
 	const projects = [
@@ -70,8 +72,23 @@ export const AllSection = () => {
 			comments: 50,
 		},
 	];
+
+	const { isLoading, data } = useQuery({
+		queryKey: ['projects'],
+		queryFn: getAllProjectsRequest(),
+	});
+
 	return (
 		<div style={sectionStyles}>
+			{/* {isLoading ? (
+				<div style={{ display: 'flex', justifyContent: 'center' }}>
+					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
+				</div>
+			) : (
+				projects.map((project) => (
+					<ProjectCard project={project} key={project.id} />
+				))
+			)} */}
 			{projects.map((project) => (
 				<ProjectCard project={project} key={project.id} />
 			))}
