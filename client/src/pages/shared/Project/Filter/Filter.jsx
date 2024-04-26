@@ -12,6 +12,7 @@ import { Nav as ProfessorNav } from '../../../../components/layout/nav/Professor
 import { MainProjectsSection } from '../../../../components/project/filtersections/projects/main/MainProjectsSection';
 // Dependencies
 import { useState } from 'react';
+import { Careers } from '../../../../components/project/filtersections/careers/careerssection/Careers';
 
 export const Filter = () => {
 	const role = localStorage.getItem('role');
@@ -93,7 +94,7 @@ export const Filter = () => {
 				<>
 					{section.projects && <MainProjectsSection />}
 					{section.groups && <h3>Groups</h3>}
-					{section.careers && <h3>Careers</h3>}
+					{section.careers && <Careers />}
 				</>
 			</main>
 		</>
