@@ -77,10 +77,22 @@ const getProjectsForStudent = async (token) => {
 	}
 };
 
+const getAllProjectsRequest = async () => {
+	try {
+		const response = await axios.get(`${baseUrl}post`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+		});
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
 export {
 	createProjectRequest,
 	getProjectRequest,
 	deleteProjectRequest,
 	getTrendingProjectsRequest,
 	getProjectsForStudent,
+	getAllProjectsRequest,
 };

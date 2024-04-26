@@ -1,3 +1,6 @@
+// Request
+import { getAllProjectsRequest } from "../../../../../api/projectsApi";
+// Component
 import { ProjectCard } from "../../../projectcard/ProjectCard";
 
 export const AllSection = () => {
