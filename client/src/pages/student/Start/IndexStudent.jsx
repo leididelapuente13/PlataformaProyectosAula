@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 import { useQuery } from 'react-query';
 // Request
-import { getTrendingProjectsRequest } from '../../../api/projectsApi';
+import { getProjectsForStudent } from '../../../api/projectsApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
@@ -79,6 +79,11 @@ export const IndexStudent = () => {
 			comments: 50,
 		},
 	];
+
+	const { isLoading, isError, error, data } = useQuery({
+		queryKey: ['projectsInteres'], 
+		queryFn: getProjectsForStudent(localStorage.getItem('token')),
+	});
 
 	const projectsinterest = projects.slice(0, 10);
 
