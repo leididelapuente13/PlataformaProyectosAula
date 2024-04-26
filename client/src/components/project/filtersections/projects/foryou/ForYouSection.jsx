@@ -1,11 +1,7 @@
-// Request
-import PacmanLoader from 'react-spinners/PacmanLoader';
-import { getTrendingProjectsRequest } from '../../../../../api/projectsApi';
 // Components
-import { ProjectCard } from '../../../projectcard/ProjectCard';
-import Number from '../../../trendnumber/Number';
+import { ProjectCard } from "../../../projectcard/ProjectCard";
 
-export const TrendingSection = () => {
+export const ForYouSection = () => {
 	const projects = [
 		{
 			id: 1,
@@ -72,31 +68,10 @@ export const TrendingSection = () => {
 			comments: 50,
 		},
 	];
-
-	// const { isLoading, data } = useQuery({
-	// 	queryKey: ['trending-projects'],
-	// 	queryFn: getTrendingProjectsRequest,
-	// });
-
 	return (
 		<div style={sectionStyles}>
-			{/* {isLoading ? (
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
-				</div>
-			) : (
-				projects.map((project) => (
-					<div>
-						<Number trendNumber={projects.indexOf(project) + 1} />
-						<ProjectCard project={project} key={project.id} />
-					</div>
-				))
-			)} */}
 			{projects.map((project) => (
-				<div>
-					<Number trendNumber={projects.indexOf(project) + 1} />
-					<ProjectCard project={project} key={project.id} />
-				</div>
+				<ProjectCard project={project} key={project.id} />
 			))}
 		</div>
 	);
@@ -106,6 +81,7 @@ const sectionStyles = {
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
+    gap: '2rem',
 	width: '80%',
 	margin: '2rem auto',
 };
