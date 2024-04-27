@@ -24,7 +24,21 @@ class ListPostTest extends TestCase
             'role_id' => 2
         ])->first();
 
-        $this->posts = Post::factory(10)->create();
+        User::factory()
+            ->createFromApi(1)
+            ->state(function (array $attributes) {
+                return ['state' => '1'];
+            })
+            ->has(Post::factory()->count(2))
+            ->create();
+        User::factory()
+            ->count(3)
+            ->state(function (array $attributes) {
+                return ['state' => '1'];
+            })
+            ->has(Post::factory()->count(2))
+            ->create();
+        $this->posts = Post::all();
     }
 
     use RefreshDatabase;
@@ -38,9 +52,31 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
+    public function test_filter_posts_for_category_career()
+    {
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )
+            ->getJson(route('api.post.index') . '?filter[career]=Contabilidad');
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    }
+
+    public function test_filter_posts_for_category_semester()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )
+            ->getJson(route('api.post.index') . '?filter[semester]=4');
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    }
+
     public function test_filter_posts_for_title()
     {
-
         $this->posts->first()->title = 'title for my post';
         $this->posts->first()->save();
         $this->withoutExceptionHandling();
@@ -56,8 +92,6 @@ class ListPostTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->posts->first()->created_at = '2022-01-19 03:58:08';
-        $this->posts->skip(2)->first()->created_at = '2022-01-01 03:58:08';
-        $this->posts->skip(2)->first()->save();
         $this->posts->first()->save();
         $this->withoutExceptionHandling();
         $response = $this->withHeader(
@@ -70,12 +104,8 @@ class ListPostTest extends TestCase
 
     public function test_filter_posts_for_month_year()
     {
-        $this->withoutExceptionHandling();
         $this->posts->first()->created_at = '2022-01-02 03:58:08';
-        $this->posts->skip(2)->first()->created_at = '2022-01-01 03:58:08';
-        $this->posts->skip(2)->first()->save();
         $this->posts->first()->save();
-        $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -84,15 +114,13 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_filter_posts_for_career()
+    public function test_there_is_no_matched_in_the_filter()
     {
         $this->withoutExceptionHandling();
-        $response = $this->withHeader(
-            'Authorization',
-            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )
-            ->getJson(route('api.post.index').'?filter[career]=Ingenieria de Sistemas')->dump();
-        $postsResponse = $response->json()['data'];
-        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
+        ])->getJson(route('api.post.filter', 'Esto no existe'));
+        $response->assertStatus(204);
     }
+
 }
