@@ -19,12 +19,7 @@ class ListPostTest extends TestCase
         //Create roles
         Role::factory(3)->create();
         //Create a new user
-        $this->user = User::factory(1)->create([
-            'state' => '1',
-            'role_id' => 2
-        ])->first();
-
-        User::factory()
+        $this->user = User::factory()
             ->createFromApi(1)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
@@ -32,11 +27,11 @@ class ListPostTest extends TestCase
             ->has(Post::factory()->count(2))
             ->create();
         User::factory()
-            ->count(3)
+            ->count(5)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })
-            ->has(Post::factory()->count(2))
+            ->has(Post::factory()->count(1))
             ->create();
         $this->posts = Post::all();
     }
@@ -121,6 +116,16 @@ class ListPostTest extends TestCase
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.post.filter', 'Esto no existe'));
         $response->assertStatus(204);
+    }
+
+    public function test_student_see_relevant_content_in_my_home_page(){
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken' , ['student'])->plainTextToken
+        )->getJson(route('api.post.relevant'));
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
 }

@@ -34,9 +34,16 @@ class PostRepository
         return $this->post::find($id);
     }
 
-    function getByUsersIds($user_id)
+    function getByUsersIds($users_ids)
     {
-        return $this->post::whereIn('user_id', $user_id);
+        return $this->post::whereIn('user_id', $users_ids)->get();
+    }
+
+    function getByUsersCodes($codes){
+        return $this->post::select('posts.*')
+        ->join('users', 'users.id', '=', 'posts.user_id')
+        ->whereIn('users.code', $codes)
+        ->get();
     }
 
     function getByDate($year, $month, $day)

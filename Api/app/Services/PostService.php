@@ -22,9 +22,7 @@ class PostService
         if ($request->has('filter')) {
             foreach ($request->get('filter') as $key => $value) {
                 if ($key == 'career') {
-                    $users = $this->userService->getUsersApiByCareer($value);
-                    $user_ids = collect($users)->pluck('id')->toArray();
-                    $posts = $posts->merge($this->postRepository->getByUsersIds($user_ids)->get());
+                    $posts = $posts->merge($this->getPostsByCareer($value));
                 } else if ($key == 'semester') {
                     // Agrega lógica para filtrar por semestre si es necesario
                 } else {
@@ -37,6 +35,11 @@ class PostService
         return $posts->unique();
     }
 
+    function getRelevant($user){
+        $usersApi = $this->userService->getByApiCode($user->code); // Get the current user
+        return $this->getPostsByCareer($usersApi['carrera']);
+    }
+
     function getByDate($year, $month, $day)
     {
         return $this->postRepository->getByDate($year, $month, $day);
@@ -45,5 +48,11 @@ class PostService
     function getByFilter($filter)
     {
         return $this->postRepository->getByFilter($filter);
+    }
+
+    function getPostsByCareer($value){
+        $users = $this->userService->getUsersApiByCareer($value); //Get all users by career
+        $ids = $users->pluck('id')->toArray(); // Get users's ids
+        return $this->postRepository->getByUsersIds($ids);
     }
 }

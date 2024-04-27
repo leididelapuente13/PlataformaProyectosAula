@@ -8,6 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -51,6 +52,15 @@ class PostController extends Controller
         } catch (\Exception $e) {
             $posts = $this->postService->getByFilter($filter);
         }
+        if($posts->isEmpty()) {
+            return response()->json([] , 204);
+        }
+        return PostCollection::make($posts);
+    }
+
+    public function relevant(){
+        $user = Auth::user();
+        $posts = $this->postService->getRelevant($user);
         if($posts->isEmpty()) {
             return response()->json([] , 204);
         }
