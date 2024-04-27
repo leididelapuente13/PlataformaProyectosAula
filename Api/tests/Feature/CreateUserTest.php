@@ -18,18 +18,17 @@ class CreateUserTest extends TestCase
     }
 
     use RefreshDatabase;
-    public function test_can_create_user_student()
+    public function test_can_create_user()
     {
+        $this->withoutExceptionHandling();
         //Create roles before creating the user
         $response = $this->postJson(
             route('api.user.create'),
             [
                 'data' => [
                     'type' => 'user',
-                    'attributes' => [
-                        'code' =>  123456789,
-                        'password' => 'password',
-                    ]
+                    'attributes' =>
+                    [ 'code' =>  202499535, 'password' => 'password']
                 ]
             ]
         );
@@ -37,7 +36,7 @@ class CreateUserTest extends TestCase
         $response->assertCreated();
         $user = User::first();
         // Assert the user resource structure
-        $response->assertJsonApiUserResource($user, 201);
+        $response->assertJsonApiAuthResource($user, 201);
     }
 
     public function test_code_is_required()
@@ -67,7 +66,7 @@ class CreateUserTest extends TestCase
                 'data' => [
                     'type' => 'user',
                     'attributes' => [
-                        'code' =>  123456789,
+                        'code' =>  202499535,
                     ]
                 ]
             ]
@@ -85,7 +84,7 @@ class CreateUserTest extends TestCase
                 'data' => [
                     'type' => 'user',
                     'attributes' => [
-                        'code' =>  123456789,
+                        'code' =>  202499535,
                         'password' => 'passw',
                     ]
                 ]

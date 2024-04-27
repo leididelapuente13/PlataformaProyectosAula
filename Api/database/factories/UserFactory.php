@@ -25,10 +25,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
 
-        //Id random
-        $id =  $this->faker->unique()->numberBetween(50, 120);
-        //Get user with the id from external API
-        $user = Controller::apiUserId($id);
+        // Id random
+        $idNodelModelo =  $this->faker->unique()->numberBetween(40, 119);
+        // Get user with the id from external API
+        $user = Controller::apiUserId($idNodelModelo);
 
         //Return the user generated
         return [
@@ -52,4 +52,19 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function createFromApi($idFromApi = null)
+    {
+        if (!is_null($idFromApi)) {
+            $userData = Controller::apiUserId($idFromApi);
+
+            return $this->state(function (array $attributes) use ($userData) {
+                return [
+                    'user_name' => $userData['nombre'] . "_" . $userData['apellidos'],
+                    'code' => $userData['codigo'],
+                    'email' => $userData['email'],
+                    'role_id' => ($userData['tipo'] == 'Estudiante') ? 2 : 3,
+                ];
+            });
+        }
+    }
 }

@@ -102,30 +102,34 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiUserResource(): Closure
     {
-        return function ($user, $code = 200) {
+        return function ($user, $userResponse, $createUserTest, $code) {
             /**
                 @var TestResponse $this
              */
 
             $this->assertStatus($code);
-            $this->assertJson([
+            $this->assertJsonStructure([
                 'data' =>
                 [
-                    'type' => 'user',
-                    'id' => (string) $user->getRouteKey(),
+                    'type',
+                    'id',
                     'attributes' => [
-                        'user_name' => $user->user_name,
-                        'code' => $user->code,
-                        'email' => $user->email,
-                        'role_id' => $user->role_id,
-                        'description' => $user->description,
-                        'state' => $user->state
+                        'user_name', 'code', 'email', 'role_id', 'description',
+                        'state', 'semestre', 'carrera', 'departamento',
                     ],
-                    'links' => [
-                        'self' => route('api.user.show', $user->getRouteKey())
-                    ]
+                    'links' => ['self']
                 ]
             ]);
+
+            $createUserTest->assertEquals($userResponse['attributes']['email'], $user->email);
+            $createUserTest->assertEquals($userResponse['attributes']['user_name'], $user->user_name);
+            $createUserTest->assertEquals($userResponse['attributes']['role_id'], $user->role_id);
+            if ($user->role_id == 2) {
+                $createUserTest->assertEquals($userResponse['attributes']['departamento'], "");
+            } else if ($user->role_id == 3) {
+                $createUserTest->assertEquals($userResponse['attributes']['carrera'], "");
+                $createUserTest->assertEquals($userResponse['attributes']['semestre'], "");
+            }
         };
     }
 
@@ -213,7 +217,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiPostsResource(): Closure
     {
-        return function ($posts , $postsResponse , $listPostTest) {
+        return function ($posts, $postsResponse, $listPostTest) {
             /**
                 @var TestResponse $this
              */
@@ -242,9 +246,9 @@ trait MakesJsonApiRequests
                 ]
             ]);
 
-            foreach($posts as $post){
-                foreach($postsResponse as $postResponse){
-                    if($postResponse['id'] == $post->id){
+            foreach ($posts as $post) {
+                foreach ($postsResponse as $postResponse) {
+                    if ($postResponse['id'] == $post->id) {
                         $listPostTest->assertEquals($postResponse['attributes']['title'], $post->title);
                         $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
                         $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
