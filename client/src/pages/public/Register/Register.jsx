@@ -108,17 +108,16 @@ export const Register = () => {
 							Inicia sesion
 						</Link>
 					</p>
-
-					{registerMutation.isLoading && (
-						<div data-testid='loader-container' className={styles.form__loader}>
+					<div data-testid='loader-container' className={styles.form__loader}>
+						{registerMutation.isLoading && (
 							<BarLoader
 								color='#0A84F4'
 								height={7}
 								width={470}
 								loading={registerMutation.isLoading}
 							/>
-						</div>
-					)}
+						)}
+					</div>
 				</form>
 			</main>
 		</>

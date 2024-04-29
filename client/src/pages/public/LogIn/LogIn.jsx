@@ -142,16 +142,16 @@ export const LogIn = () => {
 						</Link>
 					</p>
 
-					{loginMutation.isLoading && 
-						<div data-testid='loader-container' className={styles.form__loader}>
+					<div data-testid='loader-container' className={styles.form__loader}>
+						{loginMutation.isLoading && (
 							<BarLoader
 								color='#0A84F4'
 								height={7}
 								width={470}
 								loading={loginMutation.isLoading}
 							/>
-						</div>
-					}
+						)}
+					</div>
 				</form>
 			</main>
 		</>

@@ -114,7 +114,7 @@ export const IndexStudent = () => {
 									<ProjectCard project={project} key={project.id} />
 								</div>
 							))}
-							<Link className={styles.section__link}>Ver mas...</Link>
+							<Link className={styles.section__link} to="../filter">Ver mas...</Link>
 						</>
 					)} */}
 				</section>
