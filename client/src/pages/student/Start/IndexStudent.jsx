@@ -90,7 +90,7 @@ export const IndexStudent = () => {
 	return (
 		<>
 			{/* {isError && <ErrorPopUp message={error.message}/>} */}
-			<main className={styles.main}>
+			<main className={styles.main} >
 				<Nav />
 				<section className={styles.section}>
 					<h3 className={styles.section__title}>Anuncios</h3>

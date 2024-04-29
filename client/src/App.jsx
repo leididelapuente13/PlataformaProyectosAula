@@ -29,7 +29,7 @@ function App() {
 						<Route path='/indexStudent' element={<IndexStudent />} />
 						<Route element={<ProtectedRoute role='1' />}>
 							{/* <Route path='/user-management' element={<UserManagement />} /> */}
-							<Route path='/reports' element={<h1>Admin</h1>} />
+							<Route path='/reports' element={<h1>Reportes</h1>} />
 							<Route path='/report-details' element={<h1>Admin</h1>} />
 							<Route path='/announcements' element={<h1>Admin</h1>} />
 						</Route>

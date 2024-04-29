@@ -14,7 +14,7 @@ export const Nav = () => {
 	const [nav, setNav] = useState(false);
 
 	return (
-		<nav className={styles.nav}>
+		<nav className={styles.nav} role='navigation'>
 			<div className={styles.nav__imgContainer}>
 				<img src={icon} alt='user icon' className={styles.nav__img} />
 			</div>
@@ -38,17 +38,17 @@ export const Nav = () => {
 				className={nav ? styles.nav__list : styles.nav__listHidden}
 			>
 				<li>
-					<Link to='/indexStudent' className={styles.nav__link}>
+					<Link role='link' to='/indexStudent' className={styles.nav__link}>
 						<FaHouseChimney /> Inicio
 					</Link>
 				</li>
 				<li>
-					<Link to='/filter' className={styles.nav__link}>
+					<Link role='link' to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
 				<li>
-					<Link to='/profile' className={styles.nav__link}>
+					<Link role='link' to='/profile' className={styles.nav__link}>
 						<CgProfile /> Mi Pefil
 					</Link>
 				</li>

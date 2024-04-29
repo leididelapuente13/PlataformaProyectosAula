@@ -2,7 +2,6 @@
 import styles from '../Nav.module.scss';
 // Icons
 import { FaHouseChimney, FaMagnifyingGlass } from 'react-icons/fa6';
-import { IoLogOut } from 'react-icons/io5';
 // Dependencies
 import { Link } from 'react-router-dom';
 import icon from '../../../../assets/img/default/icon.png';
@@ -13,7 +12,7 @@ export const Nav = () => {
 	const [nav, setNav] = useState(false);
 
 	return (
-		<nav className={styles.nav}>
+		<nav role='navigation' className={styles.nav}>
 			<div className={styles.nav__imgContainer}>
 				<img src={icon} alt='user icon' className={styles.nav__img} />
 			</div>
@@ -34,12 +33,12 @@ export const Nav = () => {
 				className={nav ? styles.nav__list : styles.nav__listHidden}
 			>
 				<li>
-					<Link to='/indexProfessor' className={styles.nav__link}>
+					<Link role='link' to='/indexProfessor' className={styles.nav__link}>
 						<FaHouseChimney /> Inicio
 					</Link>
 				</li>
 				<li>
-					<Link to='/filter' className={styles.nav__link}>
+					<Link role='link' to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>

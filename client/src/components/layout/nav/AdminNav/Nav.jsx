@@ -13,7 +13,7 @@ export const Nav = () => {
 	const [nav, setNav] = useState(false);
 
 	return (
-		<nav className={styles.nav}>
+		<nav role='navigation' className={styles.nav}>
 			<button
 				type='button'
 				role='button'
@@ -34,17 +34,17 @@ export const Nav = () => {
 					</button>
 				</li>
 				<li>
-					<Link className={styles.nav__link} to='user-management'>
+					<Link role='link' className={styles.nav__link} to='user-management'>
 						<FaUsers /> Usuarios
 					</Link>
 				</li>
 				<li>
-					<Link className={styles.nav__link} to='reports'>
+					<Link role='link' className={styles.nav__link} to='reports'>
 						<MdReport /> Reportes
 					</Link>
 				</li>
 				<li>
-					<Link to='/filter' className={styles.nav__link}>
+					<Link role='link' to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
