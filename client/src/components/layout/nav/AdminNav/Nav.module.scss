@@ -3,7 +3,6 @@
 .nav {
 	background-color: $primary-blue;
 	padding: 0.6rem 1rem;
-	position: fixed;
 	width: 100%;
 
 	&__button,
@@ -31,6 +30,7 @@
 	}
 
 	&__listHidden {
+		display: none;
 		background-color: $primary-blue;
 		color: #fff;
 		opacity: 0;

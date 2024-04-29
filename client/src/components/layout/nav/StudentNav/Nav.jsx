@@ -6,7 +6,7 @@ import { FaBell } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 // Dependencies
 import { Link } from 'react-router-dom';
-import icon from '../../../../assets/img/default/icon.png';
+import icon from '../../../../assets/img/default/profile-picture.jpg';
 import { useState } from 'react';
 import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
@@ -38,17 +38,17 @@ export const Nav = () => {
 				className={nav ? styles.nav__list : styles.nav__listHidden}
 			>
 				<li>
-					<Link to='/studentIndex' className={styles.nav__link}>
+					<Link to='/indexStudent' className={styles.nav__link}>
 						<FaHouseChimney /> Inicio
 					</Link>
 				</li>
 				<li>
-					<Link to='/buscador' className={styles.nav__link}>
+					<Link to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
 				<li>
-					<Link to='/perfil' className={styles.nav__link}>
+					<Link to='/profile' className={styles.nav__link}>
 						<CgProfile /> Mi Pefil
 					</Link>
 				</li>

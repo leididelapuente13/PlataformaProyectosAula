@@ -1,11 +1,10 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
-const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/'
+const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 const registerRequest = async (userData) =>{
     try {
-        const response = await axios.post(`${url}user`, userData);
+        const response = await axios.post(`${baseUrl}user`, userData);
         return response.data;
     } catch (error) {
         console.error('Error: ', error.response.data.errors);
@@ -15,7 +14,7 @@ const registerRequest = async (userData) =>{
 
 const loginRequest = async (userData)=>{
     try {
-        const response = await axios.post(`${url}login`, userData);
+        const response = await axios.post(`${baseUrl}login`, userData);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -26,7 +25,7 @@ const loginRequest = async (userData)=>{
 const logoutRequest = async ()=>{
     axios.interceptors.request.use(
         (config) => {
-            config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+            config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
             return config;
         },
     
@@ -36,7 +35,10 @@ const logoutRequest = async ()=>{
     );
 
     try {
-        const response = await axios.post(`${url}logout`);
+        const response = await axios.post(`${baseUrl}logout`);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
         return response.status;
     }catch(error){
         throw error;

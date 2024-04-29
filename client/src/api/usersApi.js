@@ -1,12 +1,11 @@
 // Dependencies
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
-const url = 'https://d72f-186-116-193-121.ngrok-free.app/api/';
+const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 axios.interceptors.request.use(
 	(config) => {
-		config.headers['Authorization'] = `Bearer ${Cookies.get('token')}`;
+		config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 		return config;
 	},
 
@@ -17,11 +16,49 @@ axios.interceptors.request.use(
 
 const getUsers = async () => {
 	try {
-		const response = axios.get(`${url}/users`);
+		const response = await axios.get(`${baseUrl}user`, {
+			headers: {
+				'ngrok-skip-browser-warning': true,
+			},
+		});
 		console.log(response);
+		return response;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
 	}
 };
 
-export { getUsers };
+const filterUsers = async (condition) => {
+	try {
+		const response = await axios.get(
+			`${baseUrl}filter`,
+			{ headers: { 'ngrok-skip-browser-warning': true } },
+			{ params: condition },
+		);
+		console.log(condition);
+		console.log(response.data);
+		return response.data;
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const deactivateUser = async (userId) => {
+	try {
+		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 0 });
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+const activateUser = async (userId) => {
+	try {
+		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 1 });
+		return response;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export { getUsers, filterUsers, activateUser, deactivateUser };
