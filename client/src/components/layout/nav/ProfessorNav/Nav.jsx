@@ -7,6 +7,7 @@ import { IoLogOut } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import icon from '../../../../assets/img/default/icon.png';
 import { useState } from 'react';
+import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
 export const Nav = () => {
 	const [nav, setNav] = useState(false);
@@ -33,23 +34,17 @@ export const Nav = () => {
 				className={nav ? styles.nav__list : styles.nav__listHidden}
 			>
 				<li>
-					<Link to='/studentIndex' className={styles.nav__link}>
+					<Link to='/indexProfessor' className={styles.nav__link}>
 						<FaHouseChimney /> Inicio
 					</Link>
 				</li>
 				<li>
-					<Link to='/buscador' className={styles.nav__link}>
+					<Link to='/filter' className={styles.nav__link}>
 						<FaMagnifyingGlass /> Buscar
 					</Link>
 				</li>
 				<li>
-					<button
-						type='button'
-						role='button'
-						className={styles.nav__buttonLogOut}
-					>
-						<IoLogOut /> Cerrar Sesion
-					</button>
+					<LogOutButon className={styles.nav__buttonLogOut}/>
 				</li>
 			</ul>
 		</nav>

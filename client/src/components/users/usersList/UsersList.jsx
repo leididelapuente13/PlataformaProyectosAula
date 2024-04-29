@@ -1,54 +1,205 @@
+// Styles
+import styles from './UsersList.module.scss';
+// Icons
+import { FaMagnifyingGlass } from 'react-icons/fa6';
 // Dependencies
 import { isError, useQuery } from 'react-query';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // Context
 import { WarningContext } from '../../../context/WarningContext';
 //Component
 import { UserCard } from '../usercard/UserCard';
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
-// Request
-import {getUsers} from '../../../api/usersApi'
+// Requests
+
+import { getUsers } from '../../../api/usersApi';
+import { filterUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
-	// const response = useQuery({ queryKey: ['users'], queryFn: getUsers() });
 	const { setVisible, visible } = useContext(WarningContext);
-	
-	const response = useQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
-	});
+	// const [filter, setFilter] = useState('');
 
-	useEffect(() => {
-		if (response.isError || response.isSuccess) {
-			setVisible((prevVisibility) => ({
-				...prevVisibility,
-				listUsersError: isError,
-			}));
-		}
-	}, [response.isError, response.isSuccess]);
+	// const fetchUsers = useQuery({
+	// 	queryKey: ['users'],
+	// 	queryFn: getUsers,
+	// });
+
+	// const fetchUsersWithFilter = useQuery({
+	// 	queryKey: ['filter-users'],
+	// 	queryFn: filterUsers(filter),
+	// 	onSuccess: {
+	// 		function() {
+	// 			console.log(fetchUsersWithFilter.data);
+	// 		},
+	// 	},
+	// });
+
+	const handleInputOnChange = (e) => {
+		setFilter(e.target.value);
+		console.log(filter);
+	};
+
+	// useEffect(() => {
+	// 	if (fetchUsers.isError || fetchUsers.isSuccess) {
+	// 		setVisible((prevVisibility) => ({
+	// 			...prevVisibility,
+	// 			listUsersError: isError,
+	// 		}));
+	// 	}
+	// }, [fetchUsers.isError, fetchUsers.isSuccess]);
+
+	// useEffect(() => {
+	// 	fetchUsers;
+	// }, [filter !== '']);
+
+	const user = {
+		data: {
+			id: 1,
+			attributes: {
+				user_name: '@user',
+				code: 227272772,
+				email: 'user@gmail.com',
+				description: 'lorem',
+				role: 2,
+				state: 1,
+			},
+		},
+	};
+
+	const users = [
+		{
+			data: {
+				id: 1,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 2,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 3,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 4,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 5,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 6,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 7,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 8,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+	];
 
 	return (
-		<section
-			style={{
-				width: '100%',
-				maxWidth: '500px',
-				padding: '1rem',
-				margin: 'auto',
-			}}
-		>
-			<h1 style={{ marginBlock: '6rem 1.7rem', color: '#' }}>Usuarios</h1>
-			{response.data && response.data.length === 0 && <NothingToSee />}
-			{response.isLoading && (
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						marginTop: '40%',
-					}}
-				>
+		<section className={styles.section}>
+			<h1 className={styles.section__title}>Usuarios</h1>
+			<div className={styles.section__filter}>
+				<form className={styles.form}>
+					<input
+						type='text'
+						name='filter'
+						className={styles.form__input}
+						onChange={(e) => {
+							handleInputOnChange(e);
+						}}
+					/>
+					<button type='submit' className={styles.form__button}>
+						<FaMagnifyingGlass />
+					</button>
+				</form>
+			</div>
+			{users.map((user) => (
+				<UserCard user={user} key={user.data.attributes.id} />
+			))}
+			{/* {fetchUsers.data && fetchUsers.data.length === 0 && <NothingToSee />}
+			{fetchUsers.isLoading && (
+				<div className={styles.section__loader}>
 					<ClipLoader
-						loading={response.isLoading}
+						loading={fetchUsers.isLoading}
 						color='#0A84F4'
 						size={40}
 						cssOverride={{ alignSelf: 'center' }}
@@ -56,9 +207,10 @@ export const UsersList = () => {
 				</div>
 			)}
 
-			{response.data && response.data.map((user) => (
-				<UserCard user={user} key={user.data.id} />
-			))}
+			{fetchUsers.data &&
+				fetchUsers.data.map((user) => (
+					<UserCard user={user} key={user.data.id} />
+				))} */}
 		</section>
 	);
 };
