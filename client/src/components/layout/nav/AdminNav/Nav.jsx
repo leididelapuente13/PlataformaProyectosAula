@@ -30,7 +30,7 @@ export const Nav = () => {
 			>
 				<li>
 					<button type='button' role='button' className={styles.nav__buttonNav}>
-					<FaBell /> Notificaciones		11111										11111	111	1
+						<FaBell /> Notificaciones
 					</button>
 				</li>
 				<li>

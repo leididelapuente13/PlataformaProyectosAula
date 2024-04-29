@@ -12,6 +12,7 @@ import { WarningContext } from '../../../context/WarningContext';
 import { UserCard } from '../usercard/UserCard';
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
 // Requests
+
 import { getUsers } from '../../../api/usersApi';
 import { filterUsers } from '../../../api/usersApi';
 
@@ -66,6 +67,113 @@ export const UsersList = () => {
 		},
 	};
 
+	const users = [
+		{
+			data: {
+				id: 1,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 2,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 3,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 4,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 5,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 6,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 7,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+		{
+			data: {
+				id: 8,
+				attributes: {
+					user_name: '@user',
+					code: 227272772,
+					email: 'user@gmail.com',
+					description: 'lorem',
+					role: 2,
+					state: 1,
+				},
+			},
+		},
+	];
+
 	return (
 		<section className={styles.section}>
 			<h1 className={styles.section__title}>Usuarios</h1>
@@ -84,6 +192,9 @@ export const UsersList = () => {
 					</button>
 				</form>
 			</div>
+			{users.map((user) => (
+				<UserCard user={user} key={user.data.attributes.id} />
+			))}
 			{/* {fetchUsers.data && fetchUsers.data.length === 0 && <NothingToSee />}
 			{fetchUsers.isLoading && (
 				<div className={styles.section__loader}>
@@ -100,8 +211,6 @@ export const UsersList = () => {
 				fetchUsers.data.map((user) => (
 					<UserCard user={user} key={user.data.id} />
 				))} */}
-
-			<UserCard user={user} />
 		</section>
 	);
 };

@@ -2,11 +2,12 @@
 import styles from './UserCard.module.scss';
 // Default image
 import icon from '../../../assets/img/default/icon.png';
+// Request
+import { activateUser } from '../../../api/usersApi';
+import { deactivateUser } from '../../../api/usersApi';
 // Dependencies
 import { PropTypes } from 'prop-types';
-import { useContext } from 'react';
-// Context
-import { WarningContext } from '../../../context/WarningContext';
+import { QueryClient, useMutation } from 'react-query';
 
 export const UserCard = ({ user }) => {
 	const userData = {
@@ -19,22 +20,27 @@ export const UserCard = ({ user }) => {
 		state: user.data.attributes.state,
 	};
 
-	const { setVisible } = useContext(WarningContext);
+	const queryClient = new QueryClient();
 
-	const setConfirmation = () => {
-		setVisible((prevVisible) => ({
-			...prevVisible,
-			deactivateUserWarning: true,
-		}));
-	};
+	const activateUserMutation = useMutation(activateUser, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(['users']);
+		},
+	});
 
-	const changeUserState = async ()=>{
-		if](user.data.attributes.state === 0){
-			//Call mutation to activate
-		}else id(user.data.attributes.state === 1){
-			//Call mutation to deactivate
+	const deactivateUserMutation = useMutation(deactivateUser, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(['users']);
+		},
+	});
+
+	const changeUserState = async () => {
+		if (user.data.attributes.state === 0) {
+			await activateUserMutation(user.data.id);
+		} else if (user.data.attributes.state === 1) {
+			await deactivateUserMutation(user.data.id);
 		}
-	}
+	};
 
 	return (
 		<>
@@ -63,7 +69,7 @@ export const UserCard = ({ user }) => {
 				className={
 					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
 				}
-				onClick={()=>changeUserState}
+				onClick={() => changeUserState}
 			>
 				{userData.state === 1 ? 'Desactivar' : 'Activar'}
 			</button>
