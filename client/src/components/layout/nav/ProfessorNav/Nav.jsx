@@ -4,7 +4,6 @@ import styles from '../Nav.module.scss';
 import { FaHouseChimney, FaMagnifyingGlass } from 'react-icons/fa6';
 // Dependencies
 import { Link } from 'react-router-dom';
-import icon from '../../../../assets/img/default/icon.png';
 import { useState } from 'react';
 import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
@@ -14,7 +13,7 @@ export const Nav = () => {
 	return (
 		<nav role='navigation' className={styles.nav}>
 			<div className={styles.nav__imgContainer}>
-				<img src={icon} alt='user icon' className={styles.nav__img} />
+				<img src='' alt='user icon' className={styles.nav__img} />
 			</div>
 			<div className={styles.nav__buttonContainer}>
 				<button

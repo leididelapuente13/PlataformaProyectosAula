@@ -4,6 +4,7 @@ import { Nav as StudentNav } from '../../../components/layout/nav/StudentNav/Nav
 import { Nav as ProfessorNav } from '../../../components/layout/nav/ProfessorNav/Nav';
 import { ProjectCard } from '../../../components/project/projectcard/ProjectCard';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
+import { NothingToSee } from '../../../components/utils/NothingToSee/NothingToSee';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 // Dependencies
 import { useQuery } from 'react-query';
@@ -80,15 +81,19 @@ export const ProjectsCareer = () => {
 		},
 	];
 
-	// const { isLoading, isError, error, data } = useQuery({
-	// 	queryKey: ['projects-career'],
-	// 	queryFn: getCareerProjectsRequest(),
-	// });
+	const { isLoading, isError, error, data } = useQuery({
+		queryKey: ['projects-career'],
+		queryFn: getCareerProjectsRequest(),
+	});
 
 	return (
 		<>
-			{/* {isError && <ErrorPopUp message={error.message}/>} */}
-			<main>
+			{isError && (
+				<div role='alert'>
+					<ErrorPopUp message={error.message} />{' '}
+				</div>
+			)}
+			<main role='main'>
 				{role === 1 ? (
 					<AdminNav />
 				) : role === 2 ? (
@@ -99,21 +104,33 @@ export const ProjectsCareer = () => {
 					<StudentNav />
 				)}
 				<section style={sectionStyles}>
-					{/* {isLoading ? (
-						<div style={{ display: 'flex', justifyContent: 'center' }}>
+					{isLoading && (
+						<div
+							style={{ display: 'flex', justifyContent: 'center' }}
+							role='progressbar'
+						>
 							<PacmanLoader
 								color='#004D95'
 								cssOverride={{ alignSelf: 'center' }}
 							/>
 						</div>
-					) : (
-						projects.map((project) => (
+					)}
+
+					<div role='status'>
+						{/* {data.length === 0 && <NothingToSee />} */}
+					</div>
+					<div>
+						{projects.map((project) => (
 							<ProjectCard project={project} key={project.id} />
-						))
-					)} */}
-					{projects.map((project) => (
-						<ProjectCard project={project} key={project.id} />
-					))}
+						))}
+					</div>
+					{
+						data > 0 && <div role='article'>
+							{data.map((project) => (
+								<ProjectCard project={project} key={project.id} />
+							))}
+						</div>
+					}
 				</section>
 			</main>
 		</>

@@ -6,7 +6,6 @@ import { FaBell } from 'react-icons/fa';
 import { CgProfile } from 'react-icons/cg';
 // Dependencies
 import { Link } from 'react-router-dom';
-import icon from '../../../../assets/img/default/profile-picture.jpg';
 import { useState } from 'react';
 import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
@@ -16,7 +15,7 @@ export const Nav = () => {
 	return (
 		<nav className={styles.nav} role='navigation'>
 			<div className={styles.nav__imgContainer}>
-				<img src={icon} alt='user icon' className={styles.nav__img} />
+				<img src='' alt='user icon' className={styles.nav__img} />
 			</div>
 			<div className={styles.nav__buttonContainer}>
 				<button type='button' role='button' className={styles.nav__button}>

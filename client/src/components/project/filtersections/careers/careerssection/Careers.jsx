@@ -2,6 +2,7 @@
 import { useQuery } from 'react-query';
 // Component
 import CareerCard from '../../../../careers/careercard/CareerCard';
+import {NothingToSee}  from '../../../../utils/NothingToSee/NothingToSee';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 // Request
 import { getCareersRequest } from '../../../../../api/careersApi';
@@ -26,20 +27,19 @@ export const Careers = () => {
 		},
 	];
 
-	// const { isLoading, data } = useQuery({
-	// 	queryKey: ['careers'],
-	// 	queryFn: getCareersRequest(),
-	// });
+	const { isLoading, data } = useQuery({
+		queryKey: ['careers'],
+		queryFn: getCareersRequest(),
+	});
 
 	return (
-		<section style={sectionStyle}>
-			{/* {isLoading ? (
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
-				</div>
-			) : (
-				careers.map((career) => <CareerCard career={career} key={career.id} />)
-			)} */}
+		<section style={sectionStyle} alt="section">
+			<div style={{ display: 'flex', justifyContent: 'center' }}>
+				<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
+			</div>
+			{data.length === 0 && <NothingToSee />}
+			{data.length > 0 &&
+				data.map((career) => <CareerCard career={career} key={career.id} />)}
 			{careers.map((career) => (
 				<CareerCard career={career} key={career.id} />
 			))}
