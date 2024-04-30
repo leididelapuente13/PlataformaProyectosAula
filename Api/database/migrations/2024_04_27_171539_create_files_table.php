@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_files', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('path');
             $table->unsignedBigInteger('post_id');
-            $table->enum('post_type' , ['cover_image', 'file']);
+            $table->enum('type' , ['cover_image', 'file']);
             $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
-            $table->unique(['post_type' , 'post_id']);
+            $table->unique(['type' , 'post_id']);
             $table->timestamps();
         });
     }
