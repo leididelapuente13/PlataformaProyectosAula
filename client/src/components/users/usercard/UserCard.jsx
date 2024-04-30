@@ -1,7 +1,5 @@
 // Styles
 import styles from './UserCard.module.scss';
-// Default image
-import icon from '../../../assets/img/default/icon.png';
 // Request
 import { activateUser } from '../../../api/usersApi';
 import { deactivateUser } from '../../../api/usersApi';
@@ -46,7 +44,6 @@ export const UserCard = ({ user }) => {
 		<>
 			<div className={styles.card}>
 				<img
-					src={icon}
 					alt='user icon'
 					role='img'
 					className={styles.card__img}
