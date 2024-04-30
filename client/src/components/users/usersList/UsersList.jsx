@@ -53,20 +53,6 @@ export const UsersList = () => {
 		fetchUsers;
 	}, [filter !== '']);
 
-	const user = {
-		data: {
-			id: 1,
-			attributes: {
-				user_name: '@user',
-				code: 227272772,
-				email: 'user@gmail.com',
-				description: 'lorem',
-				role: 2,
-				state: 1,
-			},
-		},
-	};
-
 	const users = [
 		{
 			data: {
@@ -192,9 +178,6 @@ export const UsersList = () => {
 					</button>
 				</form>
 			</div>
-			{users.map((user) => (
-				<UserCard user={user} key={user.data.attributes.id} />
-			))}
 			{fetchUsers.data && fetchUsers.data.length === 0 && (
 				<div role='status'>
 					<NothingToSee />

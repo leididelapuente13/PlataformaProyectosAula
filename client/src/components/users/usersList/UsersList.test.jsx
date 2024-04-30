@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 //component
 import { UsersList } from './UsersList';
 import { WarningContextProvider } from '../../../context/WarningContext';

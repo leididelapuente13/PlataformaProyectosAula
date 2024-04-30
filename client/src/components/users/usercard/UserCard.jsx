@@ -43,11 +43,7 @@ export const UserCard = ({ user }) => {
 	return (
 		<>
 			<div className={styles.card}>
-				<img
-					alt='user icon'
-					role='img'
-					className={styles.card__img}
-				/>
+				<img alt='user icon' role='img' className={styles.card__img} />
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
 					<p className={styles.card__textBold}>
@@ -62,6 +58,7 @@ export const UserCard = ({ user }) => {
 				</div>
 			</div>
 			<button
+				role='button'
 				type='button'
 				className={
 					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
@@ -81,7 +78,7 @@ UserCard.propTypes = {
 			id: PropTypes.number,
 			attributes: PropTypes.shape({
 				email: PropTypes.string.isRequired,
-				code: PropTypes.string.isRequired,
+				code: PropTypes.number.isRequired,
 				description: PropTypes.string.isRequired,
 				state: PropTypes.number.isRequired,
 				role_id: PropTypes.number.isRequired,
