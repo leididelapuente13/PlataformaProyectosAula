@@ -9,13 +9,13 @@ import { QueryClient, useMutation } from 'react-query';
 
 export const UserCard = ({ user }) => {
 	const userData = {
-		id: user.data.id,
-		user_name: user.data.attributes.user_name,
-		code: user.data.attributes.code,
-		email: user.data.attributes.email,
-		description: user.data.attributes.description,
-		role: user.data.attributes.role_id,
-		state: user.data.attributes.state,
+		id: user.id,
+		user_name: user.attributes.user_name,
+		code: user.attributes.code,
+		email: user.attributes.email,
+		description: user.attributes.description,
+		role: user.attributes.role_id,
+		state: user.attributes.state,
 	};
 
 	const queryClient = new QueryClient();

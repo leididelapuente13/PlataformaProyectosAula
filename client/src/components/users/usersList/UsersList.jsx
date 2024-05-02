@@ -3,7 +3,7 @@ import styles from './UsersList.module.scss';
 // Icons
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 // Dependencies
-import { isError, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useContext, useEffect, useState } from 'react';
 // Context
@@ -12,153 +12,25 @@ import { WarningContext } from '../../../context/WarningContext';
 import { UserCard } from '../usercard/UserCard';
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
 // Requests
-
-import { getUsers } from '../../../api/usersApi';
-import { filterUsers } from '../../../api/usersApi';
+import { getUsers, filterUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
 	const [filter, setFilter] = useState('');
-
-	const fetchUsers = useQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
-	});
-
-	// const fetchUsersWithFilter = useQuery({
-	// 	queryKey: ['filter-users'],
-	// 	queryFn: filterUsers(filter),
-	// 	onSuccess: {
-	// 		function() {
-	// 			console.log(fetchUsersWithFilter.data);
-	// 		},
-	// 	},
-	// });
 
 	const handleInputOnChange = (e) => {
 		setFilter(e.target.value);
 		console.log(filter);
 	};
 
-	// useEffect(() => {
-	// 	if (fetchUsers.isError || fetchUsers.isSuccess) {
-	// 		setVisible((prevVisibility) => ({
-	// 			...prevVisibility,
-	// 			listUsersError: isError,
-	// 		}));
-	// 	}
-	// }, [fetchUsers.isError, fetchUsers.isSuccess]);
+	const { isLoading, data, isError } = useQuery({
+		queryKey: ['users'],
+		queryFn: getUsers,
+	});
 
 	useEffect(() => {
-		fetchUsers;
-	}, [filter !== '']);
-
-	const users = [
-		{
-			data: {
-				id: 1,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 2,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 3,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 4,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 5,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 6,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 7,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-		{
-			data: {
-				id: 8,
-				attributes: {
-					user_name: '@user',
-					code: 227272772,
-					email: 'user@gmail.com',
-					description: 'lorem',
-					role: 2,
-					state: 1,
-				},
-			},
-		},
-	];
+		console.log(data);
+	}, [filter !== '', data]);
 
 	return (
 		<section className={styles.section} role='main'>
@@ -178,29 +50,25 @@ export const UsersList = () => {
 					</button>
 				</form>
 			</div>
-			{fetchUsers.data && fetchUsers.data.length === 0 && (
+			{data && data.length === 0 && (
 				<div role='status'>
 					<NothingToSee />
 				</div>
 			)}
-			{fetchUsers.isLoading && (
+			{isLoading && (
 				<div className={styles.section__loader} role='progressbar'>
 					<ClipLoader
-						loading={fetchUsers.isLoading}
+						loading={isLoading}
 						color='#0A84F4'
 						size={40}
 						cssOverride={{ alignSelf: 'center' }}
 					/>
 				</div>
 			)}
-
-			{fetchUsers.data > 0 && fetchUsers.data && (
-				<div role='article'>
-					{fetchUsers.data.map((user) => (
-						<UserCard user={user} key={user.data.id} />
-					))}
-				</div>
-			)}
+			<div role='article'>
+				{data &&
+					data.data.map((user) => <UserCard user={user} key={user.id} />)}
+			</div>
 		</section>
 	);
 };

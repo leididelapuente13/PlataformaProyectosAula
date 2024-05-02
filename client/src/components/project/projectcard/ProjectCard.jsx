@@ -4,7 +4,6 @@ import styles from './ProjectCard.module.scss';
 import { FaHeart } from 'react-icons/fa';
 import { FaCommentAlt } from 'react-icons/fa';
 import { CiMenuKebab } from 'react-icons/ci';
-import cover from '../../../assets/img/default/projectcover.jpg';
 // Dependencies
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -12,6 +11,14 @@ import { useState } from 'react';
 import { Menu } from '../projectmenu/Menu';
 
 export const ProjectCard = ({ project }) => {
+
+	const projectData = {
+		id: project.id,
+		title: project.attributes.title,
+		description: project.attributes.description,
+		img: '',
+	}
+
 	const [menu, setMenu] = useState();
 
 	const closeMenu = () => {
@@ -20,7 +27,7 @@ export const ProjectCard = ({ project }) => {
 	return (
 		<div className={styles.card}>
 			<div className={styles.card__imgContainer}>
-				<img src={cover} alt='project cover' className={styles.card__img} />
+				<img src={projectData.img} alt='project cover' className={styles.card__img} />
 			</div>
 			<div>
 				<button
@@ -34,16 +41,16 @@ export const ProjectCard = ({ project }) => {
 					<Menu
 						closeMenu={closeMenu}
 						projectId={project.id}
-						projectOwner={project.owner}
+						// projectOwner={project.owner}
 					/>
 				)}
 			</div>
 			<div className={styles.card__contentContainer}>
-				<p className={styles.card__title}>{project.title}</p>
+				<p className={styles.card__title}>{projectData.title}</p>
 				<p className={styles.card__text}>
-					{project.description.slice(0, 110)}...
+					{projectData.description.slice(0, 110)}...
 					<Link
-						to={`../project-details/${project.id}`}
+						to={`../project-details/${projectData.id}`}
 						className={styles.card__link}
 					>
 						ver mas
@@ -55,13 +62,13 @@ export const ProjectCard = ({ project }) => {
 					<button type='button' className={styles.card__buttonLike}>
 						<FaHeart />
 					</button>
-					<p className={styles.card__text__light}>{project.likes}</p>
+					{/* <p className={styles.card__text__light}>{project.likes}</p> */}
 				</div>
 				<div className={styles.card__wrapper}>
 					<button type='button' className={styles.card__buttonComment}>
 						<FaCommentAlt />
 					</button>
-					<p className={styles.card__text__light}>{project.comments}</p>
+					{/* <p className={styles.card__text__light}>{project.comments}</p> */}
 				</div>
 			</div>
 		</div>
@@ -70,11 +77,11 @@ export const ProjectCard = ({ project }) => {
 
 ProjectCard.propTypes = {
 	project: PropTypes.shape({
-		id: PropTypes.number,
-		// cover: PropTypes.string,
-		title: PropTypes.string,
-		description: PropTypes.string,
-		likes: PropTypes.number,
-		comments: PropTypes.number,
+		// id: PropTypes.number,
+		// // cover: PropTypes.string,
+		// title: PropTypes.string,
+		// description: PropTypes.string,
+		// likes: PropTypes.number,
+		// comments: PropTypes.number,
 	}),
 };

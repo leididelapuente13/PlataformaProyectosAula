@@ -6,7 +6,7 @@ import robotImg from '../../../../assets/img/icons/robot.png';
 // Request
 
 // Components
-import { Nav as AdmiNav } from '../../../../components/layout/nav/AdminNav/Nav';
+import { Nav as AdminNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
 import { MainProjectsSection } from '../../../../components/project/filtersections/projects/main/MainProjectsSection';
@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { Careers } from '../../../../components/project/filtersections/careers/careerssection/Careers';
 
 export const Filter = () => {
-	const role = localStorage.getItem('role');
+	const role = parseInt(localStorage.getItem('role'));
 	const [section, setSection] = useState({
 		projects: true,
 		groups: false,
@@ -36,15 +36,9 @@ export const Filter = () => {
 	return (
 		<>
 			<main>
-				{role === 1 ? (
-					<AdmiNav />
-				) : role === 2 ? (
-					<StudentNav />
-				) : role === 3 ? (
-					<ProfessorNav />
-				) : (
-					<StudentNav />
-				)}
+				{role === 1 && <AdminNav />}
+				{role === 2 && <StudentNav />}
+				{role === 3 && <ProfessorNav />}
 				<section className={styles.section}>
 					<h2 className={styles.section__title}>Buscador</h2>
 					<form className={styles.form}>

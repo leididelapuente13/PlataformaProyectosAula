@@ -23,31 +23,25 @@ export const ProjectDetails = () => {
 		comments: 50,
 	};
 
-	const role = localStorage.getItem('role');
+	const role = parseInt(localStorage.getItem('role'));
 
 	const { projectId } = useParams();
 
-	// const Project = useQuery({
-	// 	queryKey: ['project', { projectId }],
-	// 	queryFn: getProjectRequest(projectId),
-	// });
+	const { data, isLoading } = useQuery({
+		queryKey: ['project', { projectId }],
+		queryFn: getProjectRequest(projectId),
+	});
 
-	// useEffect(() => {
-	// console.log(projectId);
-	// 	Project();
-	// }, []);
+	useEffect(() => {
+		console.log(data);
+	}, [data]);
 	return (
 		<>
 			<main>
-				{role === 2 ? (
-					<StudentNav />
-				) : role === 3 ? (
-					<ProfessorNav />
-				) : role === 1 ? (
-					<AdminNav />
-				) : (
-					''
-				)}
+				{role === 1 && <AdminNav />}
+				{role === 2 && <StudentNav />}
+				{role === 3 && <ProfessorNav />}
+
 				<section className={styles.section}>
 					<div className={styles.card}>
 						<div className={styles.card__imgContainer}>

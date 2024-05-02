@@ -1,8 +1,8 @@
 // Dependencies
 import axios from 'axios';
 
-// const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
-const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
+const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
+// const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
 
 axios.interceptors.request.use(
@@ -24,7 +24,7 @@ const getUsers = async () => {
 			},
 		});
 		console.log(response);
-		return response;
+		return response.data;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
 	}

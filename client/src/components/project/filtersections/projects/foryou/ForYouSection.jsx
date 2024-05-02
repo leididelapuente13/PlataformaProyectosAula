@@ -80,7 +80,7 @@ export const ForYouSection = () => {
 
 	return (
 		<div style={sectionStyles}>
-			{/* {isLoading ? (
+			{isLoading ? (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
 					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
 				</div>
@@ -88,7 +88,7 @@ export const ForYouSection = () => {
 				projects.map((project) => (
 					<ProjectCard project={project} key={project.id} />
 				))
-			)} */}
+			)}
 			{projects.map((project) => (
 				<ProjectCard project={project} key={project.id} />
 			))}
