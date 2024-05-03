@@ -31,7 +31,7 @@ class PostRepository
 
     function getById($id)
     {
-        return $this->post::find($id);
+        return $this->post::where('id' , $id)->first();
     }
 
     function getByUsersIds($users_ids)

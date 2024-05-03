@@ -45,6 +45,17 @@ class ListPostTest extends TestCase
     }
 
     use RefreshDatabase;
+
+
+    public function test_show_post(){
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )->getJson(route('api.post.show', $this->posts->first()->getRouteKey()));
+        $postResponse = $response->json()['data'];
+        $response->assertJsonApiPostResource($this->posts->first(),  200);
+    }
     public function test_list_all_post(): void
     {
         $response = $this->withHeader(

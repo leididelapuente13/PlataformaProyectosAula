@@ -23,7 +23,7 @@ class PostController extends Controller
     function index(Request $request)
     {
         $posts = $this->postService->getAll($request);
-        if(!$posts){
+        if (!$posts) {
             return response()->json([], 204);
         }
         return PostCollection::make($posts);
@@ -33,6 +33,15 @@ class PostController extends Controller
     function create(CreatePostRequest $request)
     {
         $post = $this->postService->insert($request);
+        return PostResource::make($post);
+    }
+
+    function show($id)
+    {
+        $post = $this->postService->getById($id);
+        if (!$post) {
+            return response()->json([], 204);
+        }
         return PostResource::make($post);
     }
 
@@ -48,28 +57,29 @@ class PostController extends Controller
             if (count($dateComponents) >= 3 && is_numeric($dateComponents[1])) {
                 $day = $dateComponents[1];
             }
-            $posts = $this->postService->getByDate($year, $month , $day);
+            $posts = $this->postService->getByDate($year, $month, $day);
         } catch (\Exception $e) {
             $posts = $this->postService->getByFilter($filter);
         }
-        if($posts->isEmpty()) {
-            return response()->json([] , 204);
+        if ($posts->isEmpty()) {
+            return response()->json([], 204);
         }
         return PostCollection::make($posts);
     }
 
-    public function relevant(){
+    public function relevant()
+    {
         $user = Auth::user();
         $posts = $this->postService->getRelevant($user);
-        if($posts->isEmpty()) {
-            return response()->json([] , 204);
+        if ($posts->isEmpty()) {
+            return response()->json([], 204);
         }
         return PostCollection::make($posts);
     }
 
-    function filesPost($post_id){
+    function filesPost($post_id)
+    {
         $files = $this->postService->getFilesPost($post_id);
         return FileCollection::make($files);
     }
-
 }

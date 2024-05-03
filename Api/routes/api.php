@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(PostController::class)->group(function () {
         Route::post('post', 'create')->name('api.post.create')->middleware(['ability:admin,student']);
+        Route::get('post/{post}' , 'show')->name('api.post.show')->middleware(['ability:admin,student,teacher']);
         Route::get('post', 'index')->name('api.post.index');
         Route::get('post/relevant/students', 'relevant')->name('api.post.relevant')->middleware(['abilities:student']);
         Route::get('post/filter/{post}', 'filterPosts')->name('api.post.filter');
