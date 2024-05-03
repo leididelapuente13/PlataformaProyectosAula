@@ -31,10 +31,10 @@ const createProjectRequest = async (data) => {
 const getProjectRequest = async (projectId) => {
 	try {
 		const response = await axios.get(
-			`${baseUrl}post`,
-			{ headers: { 'ngrok-skip-browser-warning': true } },
-			{ params: projectId },
+			`${baseUrl}post/${projectId}`,
+			{ headers: { 'ngrok-skip-browser-warning': true }, Accept: 'application/json' },
 		);
+		console.log(response)
 		return response;
 	} catch (error) {
 		throw error;
@@ -78,30 +78,12 @@ const getProjectsForStudent = async (token) => {
 	// }
 };
 
-const getFiles = async (url) => {
-	try {
-		const fileResponse = await axios.get(url, {
-			headers: {
-				'ngrok-skip-browser-warning': true,
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${localStorage.getItem('token')}`,
-			},
-		});
-		console.log(files);
-		return fileResponse;
-	} catch (error) {
-		console.error('Error al obtener los archivos:', error);
-		throw error;
-	}
-
-};
-
 const getAllProjectsRequest = async () => {
 	try {
 		const response = await axios.get(`${baseUrl}post`, {
 			headers: {
 				'ngrok-skip-browser-warning': true,
-				'Content-Type': 'application/json',
+				Accept: 'application/json',
 			},
 		});
 		return response;
@@ -110,6 +92,23 @@ const getAllProjectsRequest = async () => {
 	}
 };
 
+const relatedRequest = async (url)=>{
+	try {
+		const response = await axios.get(url, {
+			headers: {
+				'ngrok-skip-browser-warning': true,
+				Accept: 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+			},
+		});
+		console.log(response);
+		return response;
+	} catch (error) {
+		console.error('Error:', error);
+		throw error;
+	}
+}
+
 export {
 	createProjectRequest,
 	getProjectRequest,
@@ -117,4 +116,5 @@ export {
 	getTrendingProjectsRequest,
 	getProjectsForStudent,
 	getAllProjectsRequest,
+	relatedRequest
 };

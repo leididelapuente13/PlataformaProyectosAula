@@ -8,12 +8,18 @@ import cover from '../../../../assets/img/default/projectcover.jpg';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { getProjectRequest } from '../../../../api/projectsApi';
+import { useState } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 // Components
 import { Nav as StudentNav } from '../../../../components/layout/nav/StudentNav/Nav';
 import { Nav as AdminNav } from '../../../../components/layout/nav/AdminNav/Nav';
 import { Nav as ProfessorNav } from '../../../../components/layout/nav/ProfessorNav/Nav';
-import { useEffect } from 'react';
+import { ErrorPopUp } from '../../../../components/utils/error/ErrorPopUp';
+
 export const ProjectDetails = () => {
+	const [user, setUser] = useState({});
+
 	const project = {
 		id: 1,
 		title: 'Lorem, ipsum dolor.',
@@ -27,21 +33,50 @@ export const ProjectDetails = () => {
 
 	const { projectId } = useParams();
 
-	const { data, isLoading } = useQuery({
-		queryKey: ['project', { projectId }],
-		queryFn: getProjectRequest(projectId),
-	});
+	const { data, isError, error } = useQuery(
+		['project', projectId],
+		() => getProjectRequest(projectId),
+		{
+			onSuccess: (data) => {
+				setUser(data.data.data.relationships.file.links.related);
+				getFiles(user);
+				getFiles(
+					'https://38ee-181-143-211-148.ngrok-free.app/api/post/files/5',
+				);
+			},
+		},
+	);
 
-	useEffect(() => {
-		console.log(data);
-	}, [data]);
+	const postData = {
+		title: data.data.data.attributes.title,
+		description: data.data.data.attributes.description,
+		publicationDate: moment(data.data.data.attributes.created_at).fromNow(),
+	};
+
+	const getFiles = async (url) => {
+		try {
+			const fileResponse = await axios.get(url, {
+				headers: {
+					'ngrok-skip-browser-warning': true,
+					Accept: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			});
+			console.log(fileResponse);
+			return fileResponse;
+		} catch (error) {
+			console.error('Error al obtener los archivos:', error);
+			throw error;
+		}
+	};
+
 	return (
 		<>
+			{isError && <ErrorPopUp message={error.message} />}
 			<main>
 				{role === 1 && <AdminNav />}
 				{role === 2 && <StudentNav />}
 				{role === 3 && <ProfessorNav />}
-
 				<section className={styles.section}>
 					<div className={styles.card}>
 						<div className={styles.card__imgContainer}>
@@ -52,8 +87,8 @@ export const ProjectDetails = () => {
 							/>
 						</div>
 						<div className={styles.card__contentContainer}>
-							<p className={styles.card__title}>{project.title}</p>
-							<p className={styles.card__text}>{project.description}</p>
+							<p className={styles.card__title}>{postData.title}</p>
+							<p className={styles.card__text}>{postData.description}</p>
 							<div>
 								<p className={styles.card__text__light}>Autor 1</p>
 							</div>
@@ -67,6 +102,7 @@ export const ProjectDetails = () => {
 									Archivo del proyecto
 								</button>
 							</div>
+							<p>{postData.publicationDate}</p>
 						</div>
 						<div className={styles.card__buttonContainer}>
 							<div className={styles.card__wrapper}>
