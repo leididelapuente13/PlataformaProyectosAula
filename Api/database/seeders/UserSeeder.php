@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -28,18 +29,25 @@ class UserSeeder extends Seeder
 
 
         User::factory()
-        ->count(10)
-        ->state(function (array $attributes) {
-            return ['state' => '0']; // Establecer el estado activo para los usuarios creados
-        })->create();
+        ->count(10)->create();
 
         User::factory()
-        ->count(40)
+        ->count(10)
         ->state(function (array $attributes) {
             return ['state' => '1'];
         })
-        ->has(Post::factory()->count(2))
+        ->has(Post::factory()->count(1))
         ->create();
+
+        $posts = Post::all();
+
+        $posts->each(function ($post) {
+            // Crear y asociar los archivos al post
+            $post->files()->saveMany([
+                File::factory()->type('cover_image')->make(),
+                File::factory()->type('file')->make(),
+            ]);
+        });
 
     }
 }
