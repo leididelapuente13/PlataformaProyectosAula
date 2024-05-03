@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\File;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ListPostTest extends TestCase
@@ -27,12 +27,20 @@ class ListPostTest extends TestCase
             ->has(Post::factory()->count(2))
             ->create();
         User::factory()
-            ->count(5)
+            ->count(2)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })
             ->has(Post::factory()->count(1))
             ->create();
+
+        $posts = Post::all();
+        $posts->each(function ($post) {
+            $post->files()->saveMany([
+                File::factory()->type('cover_image')->make(),
+                File::factory()->type('file')->make(),
+            ]);
+        });
         $this->posts = Post::all();
     }
 
@@ -118,11 +126,12 @@ class ListPostTest extends TestCase
         $response->assertStatus(204);
     }
 
-    public function test_student_see_relevant_content_in_my_home_page(){
+    public function test_student_see_relevant_content_in_my_home_page()
+    {
         $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
-            'Bearer ' . $this->user->createToken('TestToken' , ['student'])->plainTextToken
+            'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
         )->getJson(route('api.post.relevant'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);

@@ -24,6 +24,8 @@ class CreatePostRequest extends FormRequest
         return [
             "data.attributes.title" => "required|max:20",
             "data.attributes.description" => "required",
+            'data.attributes.file' => 'required|file|max:10240', // Max 10MB
+            'data.attributes.cover_image' => 'required|file|max:10240', // Max 10MB
         ];
     }
 }

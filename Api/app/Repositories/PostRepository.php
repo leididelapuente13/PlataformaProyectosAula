@@ -62,4 +62,5 @@ class PostRepository
     function getByFilter($filter){
         return $this->post::where('title', 'LIKE', '%' . $filter . '%')->get();
     }
+
 }

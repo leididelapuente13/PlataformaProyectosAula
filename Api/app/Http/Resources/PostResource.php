@@ -28,6 +28,11 @@ class PostResource extends JsonResource
                     'links' => [
                         'related' => route('api.user.show', $this->resource->user->getRouteKey())
                     ]
+                ],
+                'file' => [
+                    'links' => [
+                       'related' => route('api.post.files', $this->resource->getRouteKey())
+                    ]
                 ]
             ],
             'links' => [

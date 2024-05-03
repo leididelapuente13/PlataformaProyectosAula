@@ -205,6 +205,11 @@ trait MakesJsonApiRequests
                             'links' => [
                                 'related' => route('api.user.show', $post->user->getRouteKey())
                             ]
+                        ],
+                        'file' => [
+                            'links' => [
+                                'related' => route('api.post.files', $post->getRouteKey())
+                            ]
                         ]
                     ],
                     'links' => [
@@ -237,6 +242,11 @@ trait MakesJsonApiRequests
                                 'links' => [
                                     'related'
                                 ]
+                            ],
+                            'file' => [
+                                'links' => [
+                                    'related',
+                                ]
                             ]
                         ],
                         'links' => [
@@ -253,6 +263,7 @@ trait MakesJsonApiRequests
                         $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
                         $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
                         $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
+                        $listPostTest->assertEquals($postResponse['relationships']['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
                     }
                 }
             }

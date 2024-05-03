@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Http\Resources\FileCollection;
+use App\Http\Resources\FileResource;
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -29,10 +32,7 @@ class PostController extends Controller
 
     function create(CreatePostRequest $request)
     {
-        $title = $request->input('data.attributes.title');
-        $description = $request->input('data.attributes.description');
-        $user_id = $request->user()->id;
-        $post = $this->postService->insert($title, $description, $user_id);
+        $post = $this->postService->insert($request);
         return PostResource::make($post);
     }
 
@@ -66,4 +66,10 @@ class PostController extends Controller
         }
         return PostCollection::make($posts);
     }
+
+    function filesPost($post_id){
+        $files = $this->postService->getFilesPost($post_id);
+        return FileCollection::make($files);
+    }
+
 }
