@@ -45,6 +45,15 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
+
+    public function postsOfUser($userId){
+        $posts = $this->postService->getByUserId($userId);
+        if(!$posts){
+            return response()->json([], 204);
+        }
+        return PostCollection::make($posts);
+    }
+
     function filterPosts($filter)
     {
         $filter = SettingsController::transl_to_en_carbon($filter);

@@ -56,6 +56,16 @@ class ListPostTest extends TestCase
         $postResponse = $response->json()['data'];
         $response->assertJsonApiPostResource($this->posts->first(),  200);
     }
+
+    public function test_post_of_specific_user(){
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )->getJson(route('api.user.posts' , $this->user->getRouteKey()));
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this , $this->user);
+    }
+
     public function test_list_all_post(): void
     {
         $response = $this->withHeader(

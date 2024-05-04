@@ -34,6 +34,10 @@ class PostRepository
         return $this->post::where('id' , $id)->first();
     }
 
+    function getByUserId($user_id){
+        return $this->post::where('user_id' , $user_id)->get();
+    }
+
     function getByUsersIds($users_ids)
     {
         return $this->post::whereIn('user_id', $users_ids)->get();

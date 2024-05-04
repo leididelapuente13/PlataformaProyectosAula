@@ -199,6 +199,8 @@ trait MakesJsonApiRequests
                     'attributes' => [
                         'title' => $post->title,
                         'description' => $post->description,
+                        'created_at' => $post->created_at,
+                        'user_id' => $post->user_id,
                     ],
                     'relationships' => [
                         'user' => [
@@ -222,7 +224,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiPostsResource(): Closure
     {
-        return function ($posts, $postsResponse, $listPostTest) {
+        return function ($posts, $postsResponse, $listPostTest , $user = null) {
             /**
                 @var TestResponse $this
              */
@@ -235,7 +237,8 @@ trait MakesJsonApiRequests
                         'attributes' => [
                             'title',
                             'description',
-                            'created_at'
+                            'created_at',
+                            'user_id'
                         ],
                         'relationships' => [
                             'user' => [
@@ -264,6 +267,9 @@ trait MakesJsonApiRequests
                         $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
                         $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
                         $listPostTest->assertEquals($postResponse['relationships']['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
+                        if($user){
+                            $listPostTest->assertEquals($postResponse['attributes']['user_id'], $user->getRouteKey());
+                        }
                     }
                 }
             }

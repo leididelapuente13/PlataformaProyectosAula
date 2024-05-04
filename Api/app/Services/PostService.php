@@ -86,6 +86,10 @@ class PostService
         return $this->postRepository->getById($id);
     }
 
+    function getByUserId($userId){
+        return $this->postRepository->getByUserId($userId);
+    }
+
     function getRelevant($user)
     {
         $usersApi = $this->userService->getByApiCode($user->code); // Get the current user

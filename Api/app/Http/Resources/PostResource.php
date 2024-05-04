@@ -21,7 +21,8 @@ class PostResource extends JsonResource
             'attributes' => [
                 'title' => $this->title,
                 'description' => $this->description,
-                'created_at' => Carbon::parse($this->resource->created_at)->format('Y-m-d H:i:s')
+                'created_at' => Carbon::parse($this->resource->created_at)->format('Y-m-d H:i:s'),
+                'user_id' => $this->resource->user->getRouteKey()
             ],
             'relationships' => [
                 'user' => [
