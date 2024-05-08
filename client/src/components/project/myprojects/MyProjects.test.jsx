@@ -1,11 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
 //component
 import { MyProjects } from './MyProjects';
-//dependencies
+//Dependencies
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 
 const queryClient = new QueryClient();
 

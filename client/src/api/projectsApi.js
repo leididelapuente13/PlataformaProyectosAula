@@ -30,11 +30,11 @@ const createProjectRequest = async (data) => {
 
 const getProjectRequest = async (projectId) => {
 	try {
-		const response = await axios.get(
-			`${baseUrl}post/${projectId}`,
-			{ headers: { 'ngrok-skip-browser-warning': true }, Accept: 'application/json' },
-		);
-		console.log(response)
+		const response = await axios.get(`${baseUrl}post/${projectId}`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+			Accept: 'application/json',
+		});
+		console.log(response);
 		return response;
 	} catch (error) {
 		throw error;
@@ -92,7 +92,23 @@ const getAllProjectsRequest = async () => {
 	}
 };
 
-const relatedRequest = async (url)=>{
+const getFile = async (fileLink) => {
+	try {
+		const response = await axios.get(fileLink, {
+			headers: {
+				'ngrok-skip-browser-warning': true,
+				Accept: 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+			},
+		});
+		return response.data.data;
+	} catch (error) {
+		console.error('Error:', error);
+		throw error;
+	}
+};
+
+const getProjectAuthor = async (url) => {
 	try {
 		const response = await axios.get(url, {
 			headers: {
@@ -101,13 +117,12 @@ const relatedRequest = async (url)=>{
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		console.log(response);
-		return response;
+		const ownerData={id: response.data.data.id, user_name: response.data.data.attributes.user_name, carrera: response.data.data.attributes.carrera, semestre: response.data.data.attributes.semestre}
+		return ownerData;
 	} catch (error) {
-		console.error('Error:', error);
-		throw error;
+		console.error(error);
 	}
-}
+};
 
 export {
 	createProjectRequest,
@@ -116,5 +131,6 @@ export {
 	getTrendingProjectsRequest,
 	getProjectsForStudent,
 	getAllProjectsRequest,
-	relatedRequest
+	getFile,
+	getProjectAuthor,
 };

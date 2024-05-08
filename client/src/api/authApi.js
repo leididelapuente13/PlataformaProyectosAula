@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
-// const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';1
+// const baseUrl = 'https://b7a3-181-143-211-148.ngrok-free.app';
 
 
 const registerRequest = async (userData) =>{

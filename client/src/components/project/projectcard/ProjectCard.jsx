@@ -9,7 +9,9 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Menu } from '../projectmenu/Menu';
-import axios from 'axios';
+import { useQuery } from 'react-query';
+import { getFile } from '../../../api/projectsApi';
+import GridLoader from 'react-spinners/GridLoader';
 
 export const ProjectCard = ({ project }) => {
 	const projectData = {
@@ -19,28 +21,12 @@ export const ProjectCard = ({ project }) => {
 		files: project.relationships.file.links.related,
 	};
 
-	// const getFiles = async (url) => {
-	// 	const filesUrl = url;
-	// 	console.log(filesUrl);
-	// 	try {
-	// 		const fileResponse = await axios.get(filesUrl, {
-	// 			headers: {
-	// 				'ngrok-skip-browser-warning': true,
-	// 				Accept: 'application/json',
-	// 				Authorization: `Bearer ${localStorage.getItem('token')}`,
-	// 			},
-	// 		});
-	// 		console.log(fileResponse);
-	// 		return fileResponse;
-	// 	} catch (error) {
-	// 		console.error('Error al obtener los archivos:', error);
-	// 		throw error;
-	// 	}
-	// };
+	const baseUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
-	// setTimeout(()=>{
-	// 	getFiles(projectData.files);
-	// }, 10000)
+	const { isLoading, data } = useQuery(['projectFile', projectData.id], () =>
+		getFile(projectData.files),
+	);
+	console.log(data);
 
 	const [menu, setMenu] = useState();
 
@@ -50,11 +36,18 @@ export const ProjectCard = ({ project }) => {
 	return (
 		<div className={styles.card}>
 			<div className={styles.card__imgContainer}>
-				<img
-					src={projectData.img}
-					alt='project cover'
-					className={styles.card__img}
-				/>
+				{isLoading && (
+					<div className={styles.loaderContainer} role='progressbar'>
+						<GridLoader color='#0A84F4' />
+					</div>
+				)}
+				{data !== undefined && (
+					<img
+						src={data !== undefined && `${baseUrl}${data[0].links.file}`}
+						alt='project cover'
+						className={styles.card__img}
+					/>
+				)}
 			</div>
 			<div>
 				<button

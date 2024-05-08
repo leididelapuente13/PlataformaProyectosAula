@@ -1,4 +1,6 @@
 @import '../../../assets/styles/partials/variables';
+@import '../../../assets/styles/mixins/mixins';
+
 .card {
 	width: 90%;
 	max-width: 330px;
@@ -15,7 +17,7 @@
 	&__img {
 		width: 100%;
 	}
-	&__buttonMenu{
+	&__buttonMenu {
 		background-color: inherit;
 		padding: 0.2rem;
 		float: right;
@@ -27,7 +29,7 @@
 	&__title {
 		color: $secondary-yellow;
 		font-weight: 600;
-		font-size: 1.1rem;	
+		font-size: 1.1rem;
 	}
 	&__text {
 		font-weight: 300;
@@ -85,4 +87,9 @@
 		color: #432e2e;
 		font-weight: 200;
 	}
+}
+
+.loaderContainer {
+	@include loaderContainer;
+	padding: 5rem;
 }

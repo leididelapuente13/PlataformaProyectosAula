@@ -19,6 +19,7 @@ export const ErrorPopUp = ({ message }) => {
 	}, []);
 
 	if (message !== undefined && message.includes) {
+		console.log(message);
 		if (message.includes('403')) {
 			message = 'Su cuenta ha sido suspendida';
 		} else if (message.includes('401')) {

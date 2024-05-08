@@ -24,7 +24,17 @@
 		"transformIgnorePatterns": [
 			"/node_modules/",
 			"\\.svg$"
-		]
+		],
+		"globals": {
+			"ts-jest": {
+			"useESM": true
+		}
+		},
+		"transform": {
+			"^.+\\.jsx?$": "babel-jest",
+			"^.+\\.js?$": "babel-jest",
+			"^.+\\.mjs$": "babel-jest"
+		}		
 	},
 	"dependencies": {
 		"axios": "^1.6.8",

@@ -13,21 +13,21 @@ jest.mock('react-query', () => ({
 	useMutation: jest.fn(),
 }));
 
-describe('User card', () => {
-	const user = {
-		data: {
-			id: 123456,
-			attributes: {
-				user_name: '@user',
-				code: 171771717,
-				email: 'user@gmail.com',
-				description: '',
-				role_id: 2,
-				state: 1,
-			},
+const user = {
+	data: {
+		id: 123456,
+		attributes: {
+			user_name: '@user',
+			code: 171771717,
+			email: 'user@gmail.com',
+			description: '',
+			role_id: 2,
+			state: 1,
 		},
-	};
+	},
+};
 
+describe('User card Tests', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
@@ -62,22 +62,22 @@ describe('User card', () => {
 			</QueryClientProvider>,
 		);
 
-        const deactivateUserMutation = jest.fn();
-        const activateUserMutation = jest.fn();
-        useMutation.mockReturnValueOnce([deactivateUserMutation]);
-        useMutation.mockReturnValueOnce([activateUserMutation]);
+		const deactivateUserMutation = jest.fn();
+		const activateUserMutation = jest.fn();
+		useMutation.mockReturnValueOnce([deactivateUserMutation]);
+		useMutation.mockReturnValueOnce([activateUserMutation]);
 		const button = screen.getByRole('button');
 		expect(button).toBeInTheDocument();
 
-        userEvent.click(button);
-        if(user.data.attributes.state === 1){
-            deactivateUserMutation(user.data.id);
-            expect(deactivateUserMutation).toHaveBeenCalledWith(user.data.id);
-            expect(activateUserMutation).toHaveBeenCalledTimes(0);
-        }else{
-            activateUserMutation(user.data.id);
-            expect(activateUserMutation).toHaveBeenCalledWith(user.data.id);
-            expect(deactivateUserMutation).toHaveBeenCalledTimes(0);
-        }
+		userEvent.click(button);
+		if (user.data.attributes.state === 1) {
+			deactivateUserMutation(user.data.id);
+			expect(deactivateUserMutation).toHaveBeenCalledWith(user.data.id);
+			expect(activateUserMutation).toHaveBeenCalledTimes(0);
+		} else {
+			activateUserMutation(user.data.id);
+			expect(activateUserMutation).toHaveBeenCalledWith(user.data.id);
+			expect(deactivateUserMutation).toHaveBeenCalledTimes(0);
+		}
 	});
 });

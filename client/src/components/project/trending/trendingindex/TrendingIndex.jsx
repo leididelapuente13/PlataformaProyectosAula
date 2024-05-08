@@ -9,108 +9,40 @@ import { getTrendingProjectsRequest } from '../../../../api/projectsApi';
 // Components
 import { ProjectCard } from '../../../../components/project/projectcard/ProjectCard';
 import Number from '../../../../components/project/trendnumber/Number';
+import { NothingToSee } from '../../../utils/NothingToSee/NothingToSee';
+
 export const TrendingIndex = () => {
-	const projects = [
-		{
-			id: 1,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 2,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 3,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 4,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 5,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 6,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 7,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 8,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-	];
-
-	const trend = projects.slice(0, 3);
-
 	const { isLoading, data } = useQuery({
 		queryKey: ['trending-projects'],
 		queryFn: getTrendingProjectsRequest,
 	});
+
+	const trends = data ? data.slice(0, 3) : [];
+
 	return (
 		<section className={styles.section}>
-			<h3 className={styles.section__title}>Tendencias</h3>
-			{/* {isLoading ? (
-        <div className={styles.section__loaderContainer}>
-            <PacmanLoader
-                color='#004D95'
-                cssOverride={{ alignSelf: 'center' }}
-            />
-        </div>
-    ) : (
-        <>
-            {trend.map((project) => (
-                <div>
-                    <Number trendNumber={trend.indexOf(project) + 1} />
-                    <ProjectCard project={project} key={project.id} />
-                </div>
-            ))}
-            <Link className={styles.section__link}>Ver mas...</Link>
-        </>
-    )} */}
-			{trend.map((project) => (
-				<div>
-					<Number trendNumber={trend.indexOf(project) + 1} />
-					<ProjectCard project={project} key={project.id} />
+			<h3 className={styles.section__title}>Top Tendencias</h3>
+			{trends.length === 0 && <NothingToSee />}
+			{isLoading && (
+				<div className={styles.section__loaderContainer} role='progressbar'>
+					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
 				</div>
-			))}
-			<Link className={styles.section__link} to="../filter">Ver mas...</Link>
+			)}
+			{trends.length > 0 && (
+				<div className='trending-project'>
+					{trends.map((project) => (
+						<div>
+							<Number trendNumber={trend.indexOf(project) + 1} />
+							<ProjectCard project={project} key={project.id} />
+						</div>
+					))}
+					<div>
+						<Link className={styles.section__link} to='../filter' role='link'>
+							Ver mas...
+						</Link>
+					</div>
+				</div>
+			)}
 		</section>
 	);
 };
