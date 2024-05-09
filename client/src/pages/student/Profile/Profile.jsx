@@ -6,6 +6,7 @@ import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
 import { isError, useQuery } from 'react-query';
 import { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 // Request
 import { getMyProfile } from '../../../api/profileApi';
 // Components
@@ -18,10 +19,16 @@ export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
 	const userId = localStorage.getItem('userId');
 	const { visible } = useContext(WarningContext);
-	// const {isError, error, data} = useQuery({
-	// 	queryKey: ['profile', { userId }],
-	// 	queryFn: getMyProfile(userId),
-	// });
+
+	const { idProfile } = useParams();
+
+	const {isError, error, data} = useQuery({
+		queryKey: ['profile', { idProfile }],
+		queryFn: getMyProfile(idProfile),
+		onSuccess: (data)=>{
+			console.log(data);
+		}
+	});
 
 	return (
 		<>

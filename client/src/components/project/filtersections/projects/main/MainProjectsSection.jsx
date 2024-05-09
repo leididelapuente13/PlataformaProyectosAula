@@ -14,8 +14,7 @@ export const MainProjectsSection = () => {
 		all: false,
 	});
 
-	// const role = localStorage.getItem('role');
-	const role = 2;
+	const role = localStorage.getItem('role');
 
 	const handleSetSection = (toUpdateSection) => {
 		const sectionsNewState = {
@@ -42,37 +41,33 @@ export const MainProjectsSection = () => {
 				>
 					Tendencias
 				</button>
-				{role === 2 && (
-					<>
-						<button
-							onClick={() => handleSetSection('foryou')}
-							type='button'
-							className={
-								section.foryou
-									? styles.section__buttonActive
-									: styles.section__button
-							}
-						>
-							Para ti
-						</button>
-						<button
-							onClick={() => handleSetSection('all')}
-							type='button'
-							className={
-								section.all
-									? styles.section__buttonActive
-									: styles.section__button
-							}
-						>
-							Todos
-						</button>
-					</>
+				{role === '2' && (
+					<button
+						onClick={() => handleSetSection('foryou')}
+						type='button'
+						className={
+							section.foryou
+								? styles.section__buttonActive
+								: styles.section__button
+						}
+					>
+						Para ti
+					</button>
 				)}
+				<button
+					onClick={() => handleSetSection('all')}
+					type='button'
+					className={
+						section.all ? styles.section__buttonActive : styles.section__button
+					}
+				>
+					Todos
+				</button>
 			</div>
 			<>
 				{section.trending && <TrendingSection />}
 				{section.foryou && <ForYouSection />}
-				{section.all && <AllSection/>}
+				{section.all && <AllSection />}
 			</>
 		</section>
 	);

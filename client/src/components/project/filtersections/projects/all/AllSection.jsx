@@ -4,10 +4,9 @@ import { getAllProjectsRequest } from '../../../../../api/projectsApi';
 // Component
 import { ProjectCard } from '../../../projectcard/ProjectCard';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import { useEffect } from 'react';
 
 export const AllSection = () => {
-	const { isLoading, data } = useQuery({
+	const { isLoading, data: projects } = useQuery({
 		queryKey: ['projects'],
 		queryFn: getAllProjectsRequest,
 	});
@@ -20,8 +19,8 @@ export const AllSection = () => {
 				</div>
 			)}
 
-			{data &&
-				data.data.data.map((project) => (
+			{projects &&
+				projects.map((project) => (
 					<ProjectCard project={project} key={project.id} />
 				))}
 		</div>

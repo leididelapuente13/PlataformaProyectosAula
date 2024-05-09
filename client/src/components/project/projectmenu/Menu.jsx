@@ -15,8 +15,7 @@ import { WarningContext } from '../../../context/WarningContext';
 
 export const Menu = ({ closeMenu, projectId, authorId }) => {
 	const role = localStorage.getItem('role');
-	const userId = localStorage.getItem('role');
-
+	const userId = localStorage.getItem('userId');
 	const { setVisible, visible } = useContext(WarningContext);
 
 	const queryClient = useQueryClient();
@@ -34,7 +33,6 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 		} catch (error) {
 			console.error(error);
 			setVisible((prev) => ({ ...prev, deleteMyProjectError: true }));
-			console.log(visible.deleteMyProjectError);
 		}
 	};
 
@@ -48,7 +46,7 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 				>
 					<IoIosCloseCircle />
 				</button>
-				{(role === 1 || userId === authorId) && (
+				{(role === '1' || userId === authorId) && (
 					<button
 						type='button'
 						className={styles.menu__button}
@@ -64,7 +62,7 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 						<p>Editar</p>
 					</button>
 				)}
-				{(role === 2 || role === 3) && (
+				{(role === '2' || role === '3') && (
 					<button type='button' className={styles.menu__button}>
 						<MdReport />
 						<p>Reportar</p>
@@ -77,6 +75,6 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 
 Menu.propTypes = {
 	closeMenu: PropTypes.func,
-	projectId: PropTypes.number,
-	authorId: PropTypes.number,
+	projectId: PropTypes.string,
+	authorId: PropTypes.string,
 };

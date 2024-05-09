@@ -47,7 +47,7 @@ export const Nav = () => {
 					</Link>
 				</li>
 				<li>
-					<Link role='link' to='/profile' className={styles.nav__link}>
+					<Link role='link' to={`profile/${localStorage.getItem('userId')}`} className={styles.nav__link}>
 						<CgProfile /> Mi Pefil
 					</Link>
 				</li>

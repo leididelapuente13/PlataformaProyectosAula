@@ -14,73 +14,6 @@ import { getCareerProjectsRequest } from '../../../api/careersApi';
 export const ProjectsCareer = () => {
 	const role = localStorage.getItem('role');
 
-	const projects = [
-		{
-			id: 1,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 2,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 3,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 4,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 5,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 6,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 7,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-		{
-			id: 8,
-			title: 'Lorem, ipsum dolor.',
-			description:
-				'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit fugiat libero eius esse officiis ipsum. FLor...ver mas',
-			likes: 40,
-			comments: 50,
-		},
-	];
-
 	const { isLoading, isError, error, data } = useQuery({
 		queryKey: ['projects-career'],
 		queryFn: getCareerProjectsRequest(),
@@ -117,16 +50,11 @@ export const ProjectsCareer = () => {
 					)}
 
 					<div role='status'>
-						{/* {data.length === 0 && <NothingToSee />} */}
-					</div>
-					<div>
-						{projects.map((project) => (
-							<ProjectCard project={project} key={project.id} />
-						))}
+						{data && data.length === 0 && <NothingToSee />}
 					</div>
 					{
-						data > 0 && <div role='article'>
-							{data.map((project) => (
+						data && data > 0 && <div role='article'>
+							{data.data.data.map((project) => (
 								<ProjectCard project={project} key={project.id} />
 							))}
 						</div>

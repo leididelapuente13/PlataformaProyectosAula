@@ -26,19 +26,19 @@ function App() {
 					<Routes>
 						<Route path='/' element={<LogIn />} />
 						<Route path='/register' element={<Register />} />
-						<Route path='/indexStudent' element={<IndexStudent />} />
+						{/* <Route path='/indexStudent' element={<IndexStudent />} /> */}
 						<Route element={<ProtectedRoute role='1' />}>
-							{/* <Route path='/user-management' element={<UserManagement />} /> */}
+							<Route path='/user-management' element={<UserManagement />} />
 							<Route path='/reports' element={<h1>Reportes</h1>} />
 							<Route path='/report-details' element={<h1>Admin</h1>} />
 							<Route path='/announcements' element={<h1>Admin</h1>} />
 						</Route>
 						<Route element={<ProtectedRoute role='2' />}>
-							{/* <Route path='/indexStudent' element={<h1>Index Student</h1>} /> */}
+							<Route path='/indexStudent' element={<IndexStudent />}/>
 							<Route path='/project-form' element={<ProjectManagementForm />} />
 						</Route>
 						<Route element={<ProtectedRoute role='3' />}>
-							{/* <Route path='/indexProfessor' element={<IndexProfessor />} /> */}
+							<Route path='/indexProfessor' element={<IndexProfessor />} />
 						</Route>
 						<Route path='/indexProfessor' element={<IndexProfessor />} />
 						<Route path='/filter' element={<Filter />} />
@@ -47,14 +47,10 @@ function App() {
 							path='/project-details/:projectId'
 							element={<ProjectDetails />}
 						/>
-						<Route
-							path='/project-details/:projectId'
-							element={<ProjectDetails />}
-						/>
-						<Route path='/profile' element={<Profile />} />
+						<Route path='/profile/:id' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
 						<Route path='projects-career/:id' element={<ProjectsCareer />} />
-						<Route path='/user-management' element={<UserManagement />} />
+						{/* <Route path='/user-management' element={<UserManagement />} /> */}
 					</Routes>
 				</BrowserRouter>
 			</WarningContextProvider>

@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
+const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 // const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
 axios.interceptors.request.use(
@@ -34,7 +35,6 @@ const getProjectRequest = async (projectId) => {
 			headers: { 'ngrok-skip-browser-warning': true },
 			Accept: 'application/json',
 		});
-		console.log(response);
 		return response;
 	} catch (error) {
 		throw error;
@@ -64,18 +64,22 @@ const getTrendingProjectsRequest = async () => {
 };
 
 const getProjectsForStudent = async (token) => {
-	// try {
-	// 	const response = await axios.get(
-	// 		`${baseUrl}post/trend`,
-	// 		{
-	// 			headers: { 'ngrok-skip-browser-warning': true },
-	// 		},
-	// 		{ params: { token } },
-	// 	);
-	// 	return response;
-	// } catch (error) {
-	// 	throw error;
-	// }
+	try {
+		const response = await axios.get(
+			`${baseUrl}post/relevant/students`,
+			{
+				headers: { 'ngrok-skip-browser-warning': true },
+				Accept: 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('token')}`,
+			},
+		);
+		if(response.status === 204){
+			return response.status;
+		}
+		return response.data.data;
+	} catch (error) {
+		throw error;
+	}
 };
 
 const getAllProjectsRequest = async () => {
@@ -86,7 +90,7 @@ const getAllProjectsRequest = async () => {
 				Accept: 'application/json',
 			},
 		});
-		return response;
+		return response.data.data;
 	} catch (error) {
 		throw error;
 	}
@@ -101,9 +105,9 @@ const getFile = async (fileLink) => {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		return response.data.data;
+		const files = {cover: `${apiUrl}${response.data.data[0].links.file}`, file: `${apiUrl}/${response.data.data[1].links.file}`}
+		return files;
 	} catch (error) {
-		console.error('Error:', error);
 		throw error;
 	}
 };
@@ -120,7 +124,7 @@ const getProjectAuthor = async (url) => {
 		const ownerData={id: response.data.data.id, user_name: response.data.data.attributes.user_name, carrera: response.data.data.attributes.carrera, semestre: response.data.data.attributes.semestre}
 		return ownerData;
 	} catch (error) {
-		console.error(error);
+		throw error;
 	}
 };
 

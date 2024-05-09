@@ -10,12 +10,12 @@ import { QueryClient, useMutation } from 'react-query';
 export const UserCard = ({ user }) => {
 	const userData = {
 		id: user.id,
-		user_name: user.attributes.user_name,
-		code: user.attributes.code,
-		email: user.attributes.email,
-		description: user.attributes.description,
-		role: user.attributes.role_id,
-		state: user.attributes.state,
+		user_name: user.attributes && user.attributes.user_name,
+		code: user.attributes && user.attributes.code,
+		email: user.attributes && user.attributes.email,
+		description: user.attributes && user.attributes.description,
+		role: user.attributes && user.attributes.role_id,
+		state: user.attributes && user.attributes.state,
 	};
 
 	const queryClient = new QueryClient();
@@ -42,7 +42,7 @@ export const UserCard = ({ user }) => {
 
 	return (
 		<>
-			<div className={styles.card}>
+			<div data-testid="user-card" className={styles.card}>
 				<img alt='user icon' role='img' className={styles.card__img} />
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
@@ -63,7 +63,7 @@ export const UserCard = ({ user }) => {
 				className={
 					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
 				}
-				onClick={() => changeUserState}
+				onClick={() => changeUserState()}
 			>
 				{userData.state === 1 ? 'Desactivar' : 'Activar'}
 			</button>

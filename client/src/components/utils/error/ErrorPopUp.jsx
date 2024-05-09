@@ -20,10 +20,10 @@ export const ErrorPopUp = ({ message }) => {
 
 	if (message !== undefined && message.includes) {
 		console.log(message);
-		if (message.includes('403')) {
+		if (message.includes('401')) {
 			message = 'Su cuenta ha sido suspendida';
-		} else if (message.includes('401')) {
-			message = 'Esta cuenta no existe';
+		} else if (message.includes('403')) {
+			message = 'Esta Codigo no es valido';
 		} else if (message.includes('409')) {
 			message = 'Esta cuenta ya existe';
 		} else {

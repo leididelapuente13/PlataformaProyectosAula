@@ -3,14 +3,15 @@ import styles from './ProjectDetails.module.scss';
 // Icons
 import { FaHeart } from 'react-icons/fa';
 import { FaCommentAlt } from 'react-icons/fa';
-// Dependencies
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+// Request
 import {
 	getFile,
 	getProjectAuthor,
 	getProjectRequest,
 } from '../../../../api/projectsApi';
+// Dependencies
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { useState } from 'react';
 import moment from 'moment';
 // Components
@@ -31,8 +32,6 @@ export const ProjectDetails = () => {
 	});
 	const role = parseInt(localStorage.getItem('role'));
 	const { projectId } = useParams();
-
-	const baseUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
 	const { data, isError, error, isLoading } = useQuery(
 		['project', projectId],
@@ -66,8 +65,8 @@ export const ProjectDetails = () => {
 		console.log('response', respose);
 		setFiles((prev) => ({
 			...prev,
-			cover: `${baseUrl}${respose[0].links.file}`,
-			file: `${baseUrl}${respose[1].links.file}`,
+			cover: respose.cover,
+			file: respose.file,
 		}));
 	};
 
@@ -81,10 +80,7 @@ export const ProjectDetails = () => {
 				<section className={styles.section}>
 					{isLoading && (
 						<div className={styles.loaderContainer} role='progressbar'>
-							<PacmanLoader
-								color='#0A84F4'
-								isLoading={isLoading}
-							/>
+							<PacmanLoader color='#0A84F4' />
 						</div>
 					)}
 					{data && (
