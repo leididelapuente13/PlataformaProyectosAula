@@ -4,6 +4,7 @@ import axios from 'axios';
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 // const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
+// const apiUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
 axios.interceptors.request.use(
 	(config) => {
@@ -63,7 +64,7 @@ const getTrendingProjectsRequest = async () => {
 	// }
 };
 
-const getProjectsForStudent = async (token) => {
+const getProjectsForStudent = async () => {
 	try {
 		const response = await axios.get(
 			`${baseUrl}post/relevant/students`,
@@ -84,7 +85,7 @@ const getProjectsForStudent = async (token) => {
 
 const getAllProjectsRequest = async () => {
 	try {
-		const response = await axios.get(`${baseUrl}post`, {
+		const response = await axios.get(`${baseUrl}post/?page=1`, {
 			headers: {
 				'ngrok-skip-browser-warning': true,
 				Accept: 'application/json',

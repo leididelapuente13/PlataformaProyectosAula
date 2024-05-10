@@ -208,6 +208,9 @@ describe('Register Page Tests', () => {
 		waitFor(async () => {
 			await expect(screen.getByRole('alert')).toBeInTheDocument();
 		});
+		waitFor(async () => {
+			await expect(console.error).value.toBe('Internal Server Error');
+		});
 	});
 	test('Should redirect to login page when "LogIn" link is clicked', () => {
 		const logInLink = screen.getByRole('link');

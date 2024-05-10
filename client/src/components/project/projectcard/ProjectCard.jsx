@@ -40,7 +40,7 @@ export const ProjectCard = ({ project }) => {
 		setMenu(false);
 	};
 	return (
-		<div className={styles.card}>
+		<article className={styles.card}>
 			<div className={styles.card__imgContainer}>
 				{isLoading && (
 					<div className={styles.loaderContainer} role='progressbar'>
@@ -49,7 +49,7 @@ export const ProjectCard = ({ project }) => {
 				)}
 				{data !== undefined && (
 					<img
-						src={data !== undefined && data.cover}
+						src={data.cover}
 						alt='project cover'
 						className={styles.card__img}
 					/>
@@ -97,7 +97,7 @@ export const ProjectCard = ({ project }) => {
 					{/* <p className={styles.card__text__light}>{project.comments}</p> */}
 				</div>
 			</div>
-		</div>
+		</article>
 	);
 };
 

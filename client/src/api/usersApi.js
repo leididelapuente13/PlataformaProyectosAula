@@ -23,8 +23,8 @@ const getUsers = async () => {
 				'ngrok-skip-browser-warning': true,
 			},
 		});
-		console.log(response);
-		return response.data;
+		console.log(response.data.data);
+		return response.data.data;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
 	}
@@ -33,13 +33,10 @@ const getUsers = async () => {
 const filterUsers = async (condition) => {
 	try {
 		const response = await axios.get(
-			`${baseUrl}filter`,
+			`${baseUrl}user/filter/${condition}`,
 			{ headers: { 'ngrok-skip-browser-warning': true } },
-			{ params: condition },
 		);
-		console.log(condition);
-		console.log(response.data);
-		return response.data;
+		return response.data.data;
 	} catch (error) {
 		console.error(error);
 	}

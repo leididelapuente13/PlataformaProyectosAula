@@ -11,7 +11,7 @@ import { LogOutButon } from '../../logoutbutton/LogOutButon';
 
 export const Nav = () => {
 	const [nav, setNav] = useState(false);
-
+	
 	return (
 		<nav className={styles.nav} role='navigation'>
 			<div className={styles.nav__imgContainer}>
@@ -47,7 +47,7 @@ export const Nav = () => {
 					</Link>
 				</li>
 				<li>
-					<Link role='link' to={`profile/${localStorage.getItem('userId')}`} className={styles.nav__link}>
+					<Link role='link' to={`/profile/${localStorage.getItem('userId')}`} className={styles.nav__link}>
 						<CgProfile /> Mi Pefil
 					</Link>
 				</li>

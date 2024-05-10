@@ -4,11 +4,11 @@ import styles from './Profile.module.scss';
 import { IoSettingsSharp } from 'react-icons/io5';
 import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
-import { isError, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 // Request
-import { getMyProfile } from '../../../api/profileApi';
+import { getProfile } from '../../../api/profileApi';
 // Components
 import { Nav } from '../../../components/layout/nav/StudentNav/Nav';
 import { MyProjects } from '../../../components/project/myprojects/MyProjects';
@@ -17,17 +17,16 @@ import { WarningContext } from '../../../context/WarningContext';
 import { SuccessPopUp } from '../../../components/utils/success/SuccessPopUp';
 export const Profile = () => {
 	const [section, setSection] = useState({ projects: true, groups: false });
-	const userId = localStorage.getItem('userId');
 	const { visible } = useContext(WarningContext);
 
-	const { idProfile } = useParams();
+	const { userId } = useParams();
 
-	const {isError, error, data} = useQuery({
-		queryKey: ['profile', { idProfile }],
-		queryFn: getMyProfile(idProfile),
-		onSuccess: (data)=>{
-			console.log(data);
-		}
+	const {
+		isError,
+		error,
+		data: userProfile,
+	} = useQuery(['profile', userId], () => getProfile(userId), {
+		onSuccess: (data) => console.log(data),
 	});
 
 	return (
@@ -36,32 +35,44 @@ export const Profile = () => {
 			{visible.deleteMyProjectSuccess && (
 				<SuccessPopUp message='Proyecto Eliminado' />
 			)}
-			{/* {isError && <ErrorPopUp message={error.message} />} */}
+			{isError && <ErrorPopUp message={error.message} />}
 			<main>
 				<Nav />
-				<section className={styles.profile}>
-					<button className={styles.profile__button}>
-						<IoSettingsSharp />
-					</button>
-					<div className={styles.section__img__container}>
-						<img
-							src={icon}
-							alt='profile picture'
-							className={styles.profile__img}
-						/>
-					</div>
-					<div>
-						<p className={styles.profile__text__bold}>@user_name</p>
-						<p className={styles.profile__text__light}>nombre y apellido</p>
-					</div>
-					<p className={styles.profile__text__regular}>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, facere?
-					</p>
-					<div className={styles.profile__container}>
-						<div className={styles.profile__rectangle}>Carrera</div>
-						<div className={styles.profile__rectangle}>Semestre</div>
-					</div>
-				</section>
+				{userProfile !== undefined && (
+					<section className={styles.profile}>
+						{userProfile.id && userId === userProfile.id && (
+							<button className={styles.profile__button}>
+								<IoSettingsSharp />
+							</button>
+						)}
+						<div className={styles.section__img__container}>
+							<img
+								src={icon}
+								alt='profile picture'
+								className={styles.profile__img}
+							/>
+						</div>
+						<div>
+							<p className={styles.profile__text__bold}>
+								{userProfile?.user_name}
+							</p>
+						</div>
+						<p className={styles.profile__text__regular}>
+							{userProfile?.description !== null
+								? userProfile.description
+								: 'Descrpción No Disponible'}
+						</p>
+
+						<div className={styles.profile__container}>
+							<div className={styles.profile__rectangle}>
+								{userProfile?.carrera}
+							</div>
+							<div className={styles.profile__rectangle}>
+								{userProfile?.semestre}
+							</div>
+						</div>
+					</section>
+				)}
 				<section className={styles.section}>
 					<div className={styles.section__button__container}>
 						<button

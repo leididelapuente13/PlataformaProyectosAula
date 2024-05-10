@@ -34,12 +34,12 @@ export const Nav = () => {
 					</button>
 				</li>
 				<li>
-					<Link role='link' className={styles.nav__link} to='user-management'>
+					<Link role='link' className={styles.nav__link} to='/user-management'>
 						<FaUsers /> Usuarios
 					</Link>
 				</li>
 				<li>
-					<Link role='link' className={styles.nav__link} to='reports'>
+					<Link role='link' className={styles.nav__link} to='/reports'>
 						<MdReport /> Reportes
 					</Link>
 				</li>

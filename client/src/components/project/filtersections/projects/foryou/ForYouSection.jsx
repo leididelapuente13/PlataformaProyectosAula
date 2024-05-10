@@ -1,7 +1,7 @@
 // Components
 import { ProjectCard } from '../../../projectcard/ProjectCard';
 import PacmanLoader from 'react-spinners/PacmanLoader';
-import {NothingToSee} from '../../../../utils/NothingToSee/NothingToSee';
+import { NothingToSee } from '../../../../utils/NothingToSee/NothingToSee';
 // Request
 import { getProjectsForStudent } from '../../../../../api/projectsApi';
 // Dependencies
@@ -11,21 +11,23 @@ export const ForYouSection = () => {
 	const { isLoading, data } = useQuery(
 		['foryou'],
 		() => getProjectsForStudent(localStorage.getItem('token')),
-		{
-			onSuccess: (data) => {
-				console.log(data);
-			},
-		},
 	);
 
 	return (
-		<div style={sectionStyles}>
+		<div data-testid='foryou-section' style={sectionStyles}>
 			{isLoading && (
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
+				<div
+					role='progressbar'
+					style={{ display: 'flex', justifyContent: 'center' }}
+				>
 					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
 				</div>
 			)}
-			{data && data === 204 && <NothingToSee />}
+			{data && data === 204 && (
+				<div role='status'>
+					<NothingToSee />
+				</div>
+			)}
 			{data &&
 				data.map((project) => (
 					<ProjectCard project={project} key={project.id} />

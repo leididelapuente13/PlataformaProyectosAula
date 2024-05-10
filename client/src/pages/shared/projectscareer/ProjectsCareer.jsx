@@ -52,13 +52,13 @@ export const ProjectsCareer = () => {
 					<div role='status'>
 						{data && data.length === 0 && <NothingToSee />}
 					</div>
-					{
-						data && data > 0 && <div role='article'>
+					{data && data > 0 && (
+						<div role='article'>
 							{data.data.data.map((project) => (
 								<ProjectCard project={project} key={project.id} />
 							))}
 						</div>
-					}
+					)}
 				</section>
 			</main>
 		</>

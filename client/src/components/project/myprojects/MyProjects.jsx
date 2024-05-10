@@ -11,10 +11,11 @@ import PacmanLoader from 'react-spinners/PacmanLoader';
 import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
 
 export const MyProjects = ({ userId }) => {
-	const { isLoading, data } = useQuery({
-		queryKey: ['projects', { userId }],
-		queryFn: getMyProjects(userId),
-	});
+	const { isLoading, data: projects } = useQuery(
+		['projects', { userId }],
+		() => getMyProjects(userId),
+		{ onSuccess: (data) => console.log(data) },
+	);
 
 	return (
 		<>
@@ -24,13 +25,13 @@ export const MyProjects = ({ userId }) => {
 				</div>
 			)}
 			<section role='main' className={styles.section}>
-				{data && data.length === 0 && (
+				{projects && projects.length === 0 && (
 					<div role='status'>
 						<NothingToSee />
 					</div>
 				)}
-				{data &&
-					data.map((project) => (
+				{projects &&
+					projects.map((project) => (
 						<ProjectCard project={project} key={project.id} />
 					))}
 			</section>
@@ -39,5 +40,5 @@ export const MyProjects = ({ userId }) => {
 };
 
 MyProjects.propTypes = {
-	userId: PropTypes.number,
+	userId: PropTypes.string,
 };

@@ -47,7 +47,7 @@ function App() {
 							path='/project-details/:projectId'
 							element={<ProjectDetails />}
 						/>
-						<Route path='/profile/:id' element={<Profile />} />
+						<Route path='/profile/:userId' element={<Profile />} />
 						<Route path='*' element={<h1>404</h1>} />
 						<Route path='projects-career/:id' element={<ProjectsCareer />} />
 						{/* <Route path='/user-management' element={<UserManagement />} /> */}

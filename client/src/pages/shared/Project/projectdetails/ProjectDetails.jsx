@@ -55,11 +55,9 @@ export const ProjectDetails = () => {
 					carrera: author.carrera,
 					semestre: author.semestre,
 				}));
-				console.log(author);
 			},
 		},
 	);
-
 	const getFiles = async (url) => {
 		const respose = await getFile(url);
 		console.log('response', respose);

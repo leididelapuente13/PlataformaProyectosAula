@@ -10,13 +10,15 @@ const queryClient = new QueryClient();
 const getTrendingProjects = jest.fn();
 
 describe('Trending Projects index section tests', () => {
-	render(
-		<BrowserRouter>
-			<QueryClientProvider client={queryClient}>
-				<TrendingIndex />
-			</QueryClientProvider>
-		</BrowserRouter>,
-	);
+	beforeEach(() => {
+		render(
+			<BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<TrendingIndex />
+				</QueryClientProvider>
+			</BrowserRouter>,
+		);
+	});
 	test('Should render title', () => {
 		expect(screen.getByText('Top Tendencias')).toBeInTheDocument();
 	});

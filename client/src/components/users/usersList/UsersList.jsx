@@ -16,21 +16,37 @@ import { getUsers, filterUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
-	const [filter, setFilter] = useState('');
+	const [filter, setFilter] = useState({ input: '', select: '' });
 
 	const handleInputOnChange = (e) => {
-		setFilter(e.target.value);
-		console.log(filter);
+		const { name, value } = e.target;
+		setFilter({ [name]: value });
 	};
 
-	const { isLoading, data, isError } = useQuery({
+	const userFilter = useQuery(
+		['filter', filter.input, filter.select],
+		() => filterUsers(filter.input, filter.select),
+		{
+			onSuccess: (data) => {
+				console.log(data);
+			},
+		},
+	);
+
+	const {
+		isLoading,
+		data: users,
+		isError,
+	} = useQuery({
 		queryKey: ['users'],
 		queryFn: getUsers,
 	});
 
 	useEffect(() => {
-		console.log(data);
-	}, [filter !== '', data]);
+		if (filter.input !== '' || filter.select !== '') {
+			userFilter.refetch();
+		}
+	}, [filter.input, filter.select]);
 
 	return (
 		<section className={styles.section} role='main'>
@@ -39,23 +55,33 @@ export const UsersList = () => {
 				<form className={styles.form}>
 					<input
 						type='text'
-						name='filter'
+						name='input'
 						className={styles.form__input}
 						onChange={(e) => {
 							handleInputOnChange(e);
 						}}
 					/>
+					<select
+						className={styles.form__input}
+						name='select'
+						onChange={(e) => {
+							handleInputOnChange(e);
+						}}
+					>
+						<option value='1'>Activos</option>
+						<option value='2'>Desactivos</option>
+					</select>
 					<button type='submit' className={styles.form__button}>
 						<FaMagnifyingGlass />
 					</button>
 				</form>
 			</div>
-			{data && data.length === 0 && (
+			{users && users.length === 0 && (
 				<div role='status'>
 					<NothingToSee />
 				</div>
 			)}
-			{isLoading && (
+			{(isLoading || userFilter.isLoading) && (
 				<div className={styles.section__loader} role='progressbar'>
 					<ClipLoader
 						loading={isLoading}
@@ -66,8 +92,10 @@ export const UsersList = () => {
 				</div>
 			)}
 			<div role='article'>
-				{data &&
-					data.data.map((user) => <UserCard user={user} key={user.id} />)}
+				{(filter.input === '' && users !== undefined) &&
+					users.map((user) => <UserCard user={user} key={user.id} />)}
+				{userFilter.data !== undefined &&
+				userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
 			</div>
 		</section>
 	);

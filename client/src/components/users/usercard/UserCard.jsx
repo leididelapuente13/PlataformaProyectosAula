@@ -33,9 +33,9 @@ export const UserCard = ({ user }) => {
 	});
 
 	const changeUserState = async () => {
-		if (user.data.attributes.state === 0) {
+		if (user.data.attributes.state === '0') {
 			await activateUserMutation(user.data.id);
-		} else if (user.data.attributes.state === 1) {
+		} else if (user.data.attributes.state === '1') {
 			await deactivateUserMutation(user.data.id);
 		}
 	};
@@ -61,11 +61,11 @@ export const UserCard = ({ user }) => {
 				role='button'
 				type='button'
 				className={
-					userData.state === 1 ? styles.buttonDeactivate : styles.buttonActivate
+					userData.state === '1' ? styles.buttonDeactivate : styles.buttonActivate
 				}
 				onClick={() => changeUserState()}
 			>
-				{userData.state === 1 ? 'Desactivar' : 'Activar'}
+				{userData.state === '1' ? 'Desactivar' : 'Activar'}
 			</button>
 			<hr className={styles.card__hr} />
 		</>
