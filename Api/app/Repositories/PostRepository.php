@@ -67,4 +67,8 @@ class PostRepository
         return $this->post::where('title', 'LIKE', '%' . $filter . '%')->get();
     }
 
+    function delete($post){
+        $exist = $this->post::find($post);
+        return $exist->delete() ? true : false;
+    }
 }

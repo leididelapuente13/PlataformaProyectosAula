@@ -91,4 +91,11 @@ class PostController extends Controller
         $files = $this->postService->getFilesPost($post_id);
         return FileCollection::make($files);
     }
+
+    function destroy($post){
+        if($this->postService->delete($post)){
+            return response()->json([], 204);
+        }
+        return response()->json([], 500);
+    }
 }

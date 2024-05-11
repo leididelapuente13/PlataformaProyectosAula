@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Http\Requests\CreatePostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 
 class PostService
 {
@@ -117,5 +119,25 @@ class PostService
     {
         $post = $this->postRepository->getById($id);
         return $post->files;
+    }
+
+    function delete($post)
+    {
+        $files = $this->getFilesPost($post);
+        if ($this->postRepository->delete($post)) {
+            foreach ($files as $file) {
+                $this->deleteFile($file->path);
+            }
+            return true;
+        };
+        return false;
+    }
+
+    function deleteFile($path)
+    {
+        if (Storage::delete($path)) {
+            return true;
+        }
+        return false;
     }
 }

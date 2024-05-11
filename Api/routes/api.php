@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('post/filter/{post}', 'filterPosts')->name('api.post.filter');
         Route::get('post/files/{post}', 'filesPost')->name('api.post.files');
         Route::get('post/user/posts/{user}', 'postsOfUser')->name('api.user.posts')->middleware(['ability:admin,student,teacher']);
+        Route::get('post/destroy/{post}', 'destroy')->name('api.post.destroy')->middleware(['ability:student']);
     });
 });
 
