@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -43,7 +44,13 @@ class UserService
             $userApi = $this->getByApiCode($user->code);
             $merge[] = array_merge($userApi, $user->toArray());;
         }
-        return $merge;
+
+        $mergeCollection = collect($merge);
+        $perPage = ($request->has('perPage') ? $request->get('perPage') : 20);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $mergeCollection->forPage($currentPage, $perPage);
+        $paginatedUsers = new LengthAwarePaginator($currentPageItems, $mergeCollection->count(), $perPage, $currentPage);
+        return $paginatedUsers;
     }
 
     public function insert(CreateUserRequest $request)

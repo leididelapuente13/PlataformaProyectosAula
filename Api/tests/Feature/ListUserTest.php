@@ -60,6 +60,17 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
+    public function test_paginate()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        )->getJson(route('api.user.index') . '?page=1&perPage=2');
+        $usersResponse = $response->json()['data'];
+        $response->assertJsonUsersFilterResource($this->users, $usersResponse, $this);
+    }
+
     public function test_can_list_category_users_for_state()
     {
         $response = $this->withHeaders([
