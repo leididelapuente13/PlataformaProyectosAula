@@ -23,7 +23,7 @@ class PostController extends Controller
     function index(Request $request)
     {
         $posts = $this->postService->getAll($request);
-        if (!$posts) {
+        if ($posts == null) {
             return response()->json([], 204);
         }
         return PostCollection::make($posts);

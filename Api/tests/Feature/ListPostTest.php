@@ -54,8 +54,19 @@ class ListPostTest extends TestCase
 
     use RefreshDatabase;
 
+    public function test_paginate()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+        )->getJson(route('api.post.index') . '?page=1');
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    }
 
-    public function test_show_post(){
+    public function test_show_post()
+    {
         $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
@@ -65,13 +76,14 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostResource($this->posts->first(),  200);
     }
 
-    public function test_post_of_specific_user(){
+    public function test_post_of_specific_user()
+    {
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.user.posts' , $this->user->getRouteKey()));
+        )->getJson(route('api.user.posts', $this->user->getRouteKey()));
         $postsResponse = $response->json()['data'];
-        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this , $this->user);
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this, $this->user);
     }
 
     public function test_list_all_post(): void
@@ -165,5 +177,4 @@ class ListPostTest extends TestCase
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
-
 }

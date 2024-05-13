@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\CreatePostRequest;
 use App\Repositories\PostRepository;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -73,7 +74,6 @@ class PostService
                 if ($key == 'career') {
                     $posts = $posts->merge($this->getPostsByCareer($value));
                 } else if ($key == 'semester') {
-                    // Agrega lógica para filtrar por semestre si es necesario
                 } else {
                     $posts = $posts->merge($this->postRepository->getByQuery($key, $value)->get());
                 }
@@ -81,14 +81,25 @@ class PostService
         } else {
             $posts = $this->postRepository->getAll();
         }
-        return $posts->unique();
+
+        if (!$posts) {
+            return null;
+        }
+
+        $perPage = ($request->has('perPage')) ? $request->get('perPage') : 10;//Check perPage value
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $posts->forPage($currentPage, $perPage); //only elements from the current page
+        $paginatedPosts = new LengthAwarePaginator($currentPageItems, $posts->count(), $perPage, $currentPage); //Create instance of pagination
+        return $paginatedPosts;
     }
 
-    function getById($id){
+    function getById($id)
+    {
         return $this->postRepository->getById($id);
     }
 
-    function getByUserId($userId){
+    function getByUserId($userId)
+    {
         return $this->postRepository->getByUserId($userId);
     }
 
