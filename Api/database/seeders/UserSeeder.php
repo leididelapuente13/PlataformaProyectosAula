@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,18 +30,17 @@ class UserSeeder extends Seeder
 
 
         User::factory()
-        ->count(10)->create();
-
+            ->count(3)->create();
         User::factory()
-        ->count(50)
-        ->state(function (array $attributes) {
-            return ['state' => '1'];
-        })->create();
+            ->count(40)
+            ->state(function (array $attributes) {
+                return ['state' => '1'];
+            })->create();
 
         $users = User::all();
         $users->each(function ($user) {
-            // Crear y asociar los archivos al post
-            if($user->role_id == 2){
+            //create and associate the users with the post
+            if ($user->role_id == 2) {
                 $user->posts()->saveMany([
                     Post::factory()->make(),
                     Post::factory()->make()
@@ -51,13 +51,20 @@ class UserSeeder extends Seeder
 
         $posts = Post::all();
 
-        $posts->each(function ($post) {
-            // Crear y asociar los archivos al post
+        $posts->each(function ($post) use ($users) {
+            //Create and associate the files with the post
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
                 File::factory()->type('file')->make(),
             ]);
-        });
 
+            //Iterate over users
+            $users->each(function ($user) use ($post) {
+                if ($user->role_id != 1) {
+                    $like = new Like(['user_id' => $user->id]);
+                    $post->likes()->save($like);
+                }
+            });
+        });
     }
 }
