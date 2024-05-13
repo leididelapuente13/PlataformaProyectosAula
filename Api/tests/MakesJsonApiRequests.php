@@ -201,6 +201,7 @@ trait MakesJsonApiRequests
                         'description' => $post->description,
                         'created_at' => $post->created_at,
                         'user_id' => $post->user_id,
+                        'likes_count' => $post->likes_count,
                     ],
                     'relationships' => [
                         'user' => [
@@ -215,7 +216,7 @@ trait MakesJsonApiRequests
                         ]
                     ],
                     'links' => [
-                        //'self' => route('api.post.show', $post->getRouteKey())
+                        'self' => route('api.post.show', $post->getRouteKey())
                     ]
                 ]
             ]);
@@ -238,7 +239,8 @@ trait MakesJsonApiRequests
                             'title',
                             'description',
                             'created_at',
-                            'user_id'
+                            'user_id',
+                            'likes_count',
                         ],
                         'relationships' => [
                             'user' => [
@@ -253,7 +255,7 @@ trait MakesJsonApiRequests
                             ]
                         ],
                         'links' => [
-                            //'self' => route('api.post.show', $post->getRouteKey())
+                            'self',
                         ]
                     ]
                 ]
@@ -265,6 +267,7 @@ trait MakesJsonApiRequests
                         $listPostTest->assertEquals($postResponse['attributes']['title'], $post->title);
                         $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
                         $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
+                        $listPostTest->assertEquals($postResponse['attributes']['likes_count'], $post->likes_count);
                         $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
                         $listPostTest->assertEquals($postResponse['relationships']['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
                         if($user){

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\File;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
@@ -43,13 +44,19 @@ class ListPostTest extends TestCase
         });
 
         $posts = Post::all();
-        $posts->each(function ($post) {
+        $posts->each(function ($post) use ($users) {
+            // Crear y asociar los archivos al post
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
                 File::factory()->type('file')->make(),
             ]);
+
+            $users->each(function ($user) use ($post) {
+                $like = new Like(['user_id' => $user->id]);
+                $post->likes()->save($like);
+            });
         });
-        $this->posts = Post::all();
+        $this->posts = Post::withCount('likes')->get();
     }
 
     use RefreshDatabase;

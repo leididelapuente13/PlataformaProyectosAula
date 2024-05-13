@@ -22,7 +22,8 @@ class PostResource extends JsonResource
                 'title' => $this->title,
                 'description' => $this->description,
                 'created_at' => Carbon::parse($this->resource->created_at)->format('Y-m-d H:i:s'),
-                'user_id' => $this->resource->user->getRouteKey()
+                'user_id' => $this->resource->user->getRouteKey(),
+                'likes_count' => $this->resource->likes_count
             ],
             'relationships' => [
                 'user' => [
@@ -37,7 +38,7 @@ class PostResource extends JsonResource
                 ]
             ],
             'links' => [
-                //'self' => route('api.post.show', $this->resource->getRouteKey())
+                'self' => route('api.post.show', $this->resource->getRouteKey())
             ]
         ];
     }

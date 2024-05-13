@@ -21,30 +21,30 @@ class PostRepository
 
     function getAll()
     {
-        return $this->post::all();
+        return $this->post::withCount('likes')->get();
     }
 
     function getByQuery($key, $value)
     {
-        return $this->post::where($key, $value);
+        return $this->post::withCount('likes')->where($key, $value);
     }
 
     function getById($id)
     {
-        return $this->post::where('id' , $id)->first();
+        return $this->post::withCount('likes')->where('id' , $id)->first();
     }
 
     function getByUserId($user_id){
-        return $this->post::where('user_id' , $user_id)->get();
+        return $this->post::withCount('likes')->where('user_id' , $user_id)->get();
     }
 
     function getByUsersIds($users_ids)
     {
-        return $this->post::whereIn('user_id', $users_ids)->get();
+        return $this->post::withCount('likes')->whereIn('user_id', $users_ids)->get();
     }
 
     function getByUsersCodes($codes){
-        return $this->post::select('posts.*')
+        return $this->post::withCount('likes')->select('posts.*')
         ->join('users', 'users.id', '=', 'posts.user_id')
         ->whereIn('users.code', $codes)
         ->get();
@@ -60,11 +60,12 @@ class PostRepository
         if ($day !== null) {
             $query->whereDay('created_at', $day);
         }
+        $query->withCount('likes');
         return $query->get();
     }
 
     function getByFilter($filter){
-        return $this->post::where('title', 'LIKE', '%' . $filter . '%')->get();
+        return $this->post::withCount('likes')->where('title', 'LIKE', '%' . $filter . '%')->get();
     }
 
     function delete($post){
