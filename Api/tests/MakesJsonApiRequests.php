@@ -241,6 +241,7 @@ trait MakesJsonApiRequests
                             'created_at',
                             'user_id',
                             'likes_count',
+                            'dio_like'
                         ],
                         'relationships' => [
                             'user' => [

@@ -28,7 +28,7 @@ class ListPostTest extends TestCase
             ->has(Post::factory()->count(2))
             ->create();
         User::factory()
-            ->count(5)
+            ->count(3)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })->create();
@@ -57,6 +57,7 @@ class ListPostTest extends TestCase
             });
         });
         $this->posts = Post::withCount('likes')->get();
+        $this->withoutExceptionHandling();
     }
 
     use RefreshDatabase;
@@ -170,7 +171,7 @@ class ListPostTest extends TestCase
         $this->withoutExceptionHandling();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.post.filter', 'Esto no existe'));
+        ])->getJson(route('api.post.filter', 'Esto no existe'))->dump();
         $response->assertStatus(204);
     }
 
