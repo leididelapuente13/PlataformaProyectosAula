@@ -137,4 +137,19 @@ class UserService
         $codes = collect($usersApi)->pluck('codigo')->toArray();
         return $this->userRepository->getByCodes($codes);
     }
+
+    public function userState($id){
+        $user = $this->userRepository->getById($id);
+        if (!$user) {
+            return null;
+        }
+
+        $oldState = $user->state;
+        //Change user state
+        $user->state = ($user->state == 1) ? 0 : 1;
+        $user->save();
+
+        //Verify if it was changed
+        return  $user->state != $oldState;
+    }
 }

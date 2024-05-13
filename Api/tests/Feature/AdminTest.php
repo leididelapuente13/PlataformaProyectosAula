@@ -12,6 +12,7 @@ class AdminTest extends TestCase
 {
 
     private $admin;
+    private $user;
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,16 +26,23 @@ class AdminTest extends TestCase
             'role_id' => 1,
             'remember_token' => Str::random(10),
         ]);
+        $this->user = User::factory(1)->create([
+            'state' => '1',
+        ]);
     }
 
     use RefreshDatabase;
     public function test_estado_usuario(): void
     {
+        $this->withoutExceptionHandling();
+        //dd($this->user->first()->state);
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         )
-            ->getJson(route('api.user.admin.user.state'));
-        $response->assertStatus(200);
+            ->getJson(route('api.user.admin.user.state', $this->user->first()->getRouteKey()));
+        $user = User::skip(1)->first();
+        $this->assertEquals($user->state, '0');
+        $response->assertStatus(204);
     }
 }

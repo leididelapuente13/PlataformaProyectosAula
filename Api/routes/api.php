@@ -34,7 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(AdminController::class)->group(function (){
-        Route::get('user/admin/user-state', 'userState')->name('api.user.admin.user.state')->middleware(['abilities:admin']);
+        Route::get('user/admin/user-state/{user}', 'userState')->name('api.user.admin.user.state')->middleware(['abilities:admin']);
     });
 });
 
