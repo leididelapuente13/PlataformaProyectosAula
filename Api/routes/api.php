@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\sessionController;
 use App\Http\Controllers\UserController;
@@ -31,7 +32,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [SessionController::class, 'logout'])->name('api.user.logout');
 });
 
-
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::controller(AdminController::class)->group(function (){
+        Route::get('user/admin/user-state', 'userState')->name('api.user.admin.user.state')->middleware(['abilities:admin']);
+    });
+});
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(PostController::class)->group(function () {
