@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(LikeController::class)->group(function (){
         Route::get('like/{post}', 'like')->name('api.like.post')->middleware(['ability:admin,student,teacher']);
+        Route::get('like/{post}/unlike', 'unlike')->name('api.unlike.post')->middleware(['ability:admin,student,teacher']);
     });
 });
 

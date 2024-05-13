@@ -8,7 +8,6 @@ use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LikePostTest extends TestCase
@@ -33,6 +32,7 @@ class LikePostTest extends TestCase
             File::factory()->type('cover_image')->make(),
             File::factory()->type('file')->make(),
         ]);
+
         $this->post = Post::all();
         $this->withoutExceptionHandling();
     }
@@ -47,5 +47,21 @@ class LikePostTest extends TestCase
         $like = Like::where('post_id', $this->post->first()->getRouteKey())
         ->where('user_id', $this->user->getRouteKey())->first();
         $this->assertNotNull($like);
+    }
+
+    public function test_user_can_unlike_post(): void
+    {
+        Like::create([
+            'user_id' => $this->user->id,
+            'post_id' => $this->post->first()->getRouteKey()
+        ]);
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
+        )->getJson(Route('api.unlike.post', $this->post->first()->getRouteKey()));
+        $response->assertStatus(204);
+        $like = Like::where('post_id', $this->post->first()->getRouteKey())
+        ->where('user_id', $this->user->getRouteKey())->first();
+        $this->assertNull($like);
     }
 }

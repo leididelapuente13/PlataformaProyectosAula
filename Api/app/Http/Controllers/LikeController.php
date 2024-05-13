@@ -18,4 +18,12 @@ class LikeController extends Controller
         }
         return response()->json([] , 204);
     }
+
+    public function unlike(Request $request, $post_id){
+        $like = $this->likeService->delete($request, $post_id);
+        if($like = false){
+            return response()->json([], 500);
+        }
+        return response()->json([] , 204);
+    }
 }

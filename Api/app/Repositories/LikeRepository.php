@@ -14,4 +14,8 @@ class LikeRepository{
             'user_id' => $user_id
         ]);
     }
+
+    public function delete($post_id, $user_id){
+        return $this->like::where('post_id', $post_id)->where('user_id', $user_id)->delete();
+    }
 }

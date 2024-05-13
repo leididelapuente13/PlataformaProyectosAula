@@ -14,4 +14,10 @@ class LikeService{
         $like = $this->likeRepository->insert($post_id, $user_id);
         return ($like) ? true : false;
     }
+
+    public function delete(Request $request, $post_id){
+        $user_id = $request->user()->id;
+        $like = $this->likeRepository->delete($post_id, $user_id);
+        return ($like) ? true : false;
+    }
 }
