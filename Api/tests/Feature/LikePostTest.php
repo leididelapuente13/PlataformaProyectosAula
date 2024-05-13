@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\File;
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
@@ -42,6 +43,9 @@ class LikePostTest extends TestCase
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
         )->getJson(Route('api.like.post', $this->post->first()->getRouteKey()));
-        $response->assertStatus(200);
+        $response->assertStatus(204);
+        $like = Like::where('post_id', $this->post->first()->getRouteKey())
+        ->where('user_id', $this->user->getRouteKey())->first();
+        $this->assertNotNull($like);
     }
 }
