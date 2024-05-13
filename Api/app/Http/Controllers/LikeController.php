@@ -7,5 +7,7 @@ use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    //
+    public function like($post_id){
+        return response()->json([] , 200);
+    }
 }

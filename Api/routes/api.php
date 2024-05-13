@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\sessionController;
 use App\Http\Controllers\UserController;
@@ -51,6 +52,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 });
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::controller(LikeController::class)->group(function (){
+        Route::get('like/{post}', 'like')->name('api.like.post')->middleware(['ability:admin,student,teacher']);
+    });
+});
 
 Route::post('user', [UserController::class, 'create'])->name('api.user.create');
 Route::post('login', [SessionController::class, 'login'])->name('api.user.login');
