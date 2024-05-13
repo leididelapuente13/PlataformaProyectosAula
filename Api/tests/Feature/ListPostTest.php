@@ -19,16 +19,8 @@ class ListPostTest extends TestCase
         parent::setUp();
         //Create roles
         Role::factory(3)->create();
-        //Create a new user
-        $this->user = User::factory()
-            ->createFromApi(1)
-            ->state(function (array $attributes) {
-                return ['state' => '1'];
-            })
-            ->has(Post::factory()->count(2))
-            ->create();
         User::factory()
-            ->count(3)
+            ->count(5)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })->create();
@@ -56,6 +48,18 @@ class ListPostTest extends TestCase
                 $post->likes()->save($like);
             });
         });
+
+        //Create a new user
+        $this->user = User::factory()
+            ->createFromApi(1)
+            ->state(function (array $attributes) {
+                return ['state' => '1'];
+            })
+            ->has(Post::factory()->count(2))
+            ->create();
+        $like = new Like(['user_id' => $this->user->id]);
+        $posts->first()->likes()->save($like);
+        $users = User::all();
         $this->posts = Post::withCount('likes')->get();
         $this->withoutExceptionHandling();
     }
@@ -184,5 +188,14 @@ class ListPostTest extends TestCase
         )->getJson(route('api.post.relevant'));
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    }
+
+    public function test_see_trending_post(){
+        $this->withoutExceptionHandling();
+        $response = $this->withHeader(
+            'Authorization',
+            'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
+        )->getJson(route('api.post.trending'))->dump();
+        $response->assertStatus(204);
     }
 }

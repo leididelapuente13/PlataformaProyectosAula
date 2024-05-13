@@ -98,4 +98,8 @@ class PostController extends Controller
         }
         return response()->json([], 500);
     }
+
+    function trending(){
+        return response()->json([] , 200);
+    }
 }
