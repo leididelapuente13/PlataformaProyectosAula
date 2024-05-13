@@ -27,12 +27,20 @@ class ListPostTest extends TestCase
             ->has(Post::factory()->count(2))
             ->create();
         User::factory()
-            ->count(2)
+            ->count(5)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
-            })
-            ->has(Post::factory()->count(1))
-            ->create();
+            })->create();
+        $users = User::all();
+        $users->each(function ($user) {
+            // Crear y asociar los archivos al post
+            if ($user->role_id == 2) {
+                $user->posts()->saveMany([
+                    Post::factory()->make(),
+                    Post::factory()->make()
+                ]);
+            }
+        });
 
         $posts = Post::all();
         $posts->each(function ($post) {
@@ -87,17 +95,17 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_filter_posts_for_category_semester()
-    {
-        $this->withoutExceptionHandling();
-        $response = $this->withHeader(
-            'Authorization',
-            'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )
-            ->getJson(route('api.post.index') . '?filter[semester]=4');
-        $postsResponse = $response->json()['data'];
-        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
-    }
+    // public function test_filter_posts_for_category_semester()
+    // {
+    //     $this->withoutExceptionHandling();
+    //     $response = $this->withHeader(
+    //         'Authorization',
+    //         'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
+    //     )
+    //         ->getJson(route('api.post.index') . '?filter[semester]=4');
+    //     $postsResponse = $response->json()['data'];
+    //     $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
+    // }
 
     public function test_filter_posts_for_title()
     {

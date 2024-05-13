@@ -32,12 +32,22 @@ class UserSeeder extends Seeder
         ->count(10)->create();
 
         User::factory()
-        ->count(10)
+        ->count(50)
         ->state(function (array $attributes) {
             return ['state' => '1'];
-        })
-        ->has(Post::factory()->count(1))
-        ->create();
+        })->create();
+
+        $users = User::all();
+        $users->each(function ($user) {
+            // Crear y asociar los archivos al post
+            if($user->role_id == 2){
+                $user->posts()->saveMany([
+                    Post::factory()->make(),
+                    Post::factory()->make()
+                ]);
+            }
+        });
+
 
         $posts = Post::all();
 
