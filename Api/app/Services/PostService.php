@@ -151,4 +151,12 @@ class PostService
         }
         return false;
     }
+
+    function getTrending(){
+        $posts = $this->postRepository->getTrending();
+        if(!$posts){
+            return null;
+        }
+        return $posts;
+    }
 }

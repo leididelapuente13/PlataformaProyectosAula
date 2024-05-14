@@ -196,6 +196,8 @@ class ListPostTest extends TestCase
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
         )->getJson(route('api.post.trending'))->dump();
-        $response->assertStatus(204);
+        $response->assertStatus(200);
+        $postsResponse = $response->json()['data'];
+        $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 }

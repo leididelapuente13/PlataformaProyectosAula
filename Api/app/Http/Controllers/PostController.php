@@ -99,7 +99,11 @@ class PostController extends Controller
         return response()->json([], 500);
     }
 
-    function trending(){
-        return response()->json([] , 200);
+    public function trending(){
+        $posts = $this->postService->getTrending();
+        if ($posts === null) {
+            return response()->json([], 204);
+        }
+        return PostCollection::make($posts);
     }
 }

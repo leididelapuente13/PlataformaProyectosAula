@@ -117,4 +117,17 @@ class PostRepository
         $exist = $this->post::find($post);
         return $exist->delete() ? true : false;
     }
+
+    function getTrending()
+    {
+        return $this->post::withCount('likes')
+            ->with(['likes' => function ($query) {
+                // Filtrar los likes por el usuario autenticado
+                $query->where('user_id', auth()->id());
+            }])
+            ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()])
+            ->orderBy('likes_count', 'DESC')
+            ->limit(10)
+            ->get();
+    }
 }
