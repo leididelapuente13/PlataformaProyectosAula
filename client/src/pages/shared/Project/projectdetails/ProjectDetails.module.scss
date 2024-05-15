@@ -1,9 +1,13 @@
 @import '../../../../assets/styles/partials/variables';
 @import '../../../../assets/styles/mixins/mixins';
 
+.main{
+	background-color: $primary-white;
+	height: 100vh;
+}
+
 .section {
 	padding: 3rem 1.5rem;
-	background-color: $primary-white;
 }
 
 .card {

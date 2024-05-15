@@ -16,21 +16,22 @@ import { getUsers, filterUsers } from '../../../api/usersApi';
 
 export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
-	const [filter, setFilter] = useState({ input: '', select: '' });
+	const [filter, setFilter] = useState({ input: '', userState: '', role: '' });
 
 	const handleInputOnChange = (e) => {
 		const { name, value } = e.target;
-		setFilter({ [name]: value });
+		setFilter((prev) => ({ ...prev, [name]: value }));
 	};
 
 	const userFilter = useQuery(
-		['filter', filter.input, filter.select],
-		() => filterUsers(filter.input, filter.select),
+		['filter', filter.input, filter.userState, filter.role],
+		() => filterUsers(filter),
 		{
-			onSuccess: (data) => {
-				console.log(data);
+			onSuccess: () => {
+				console.log(filter.input, filter.userState, filter.role);
 			},
 		},
+		{refetchInterval: 10000, staleTime: 30000,}
 	);
 
 	const {
@@ -42,15 +43,22 @@ export const UsersList = () => {
 		queryFn: getUsers,
 	});
 
+	// Filtro por role y estado
+	// Filtro por coincidencia
+	// Fetch de usuarios
+
 	useEffect(() => {
-		if (filter.input !== '' || filter.select !== '') {
+		if (
+			filter.input !== '' ||
+			filter.userState !== '' ||
+			filter.userState !== ''
+		) {
 			userFilter.refetch();
 		}
-	}, [filter.input, filter.select]);
+	}, [filter.input, filter.userState, filter.role]);
 
 	return (
 		<section className={styles.section} role='main'>
-			<h1 className={styles.section__title}>Usuarios</h1>
 			<div className={styles.section__filter}>
 				<form className={styles.form}>
 					<input
@@ -63,13 +71,25 @@ export const UsersList = () => {
 					/>
 					<select
 						className={styles.form__input}
-						name='select'
+						name='role'
 						onChange={(e) => {
 							handleInputOnChange(e);
 						}}
 					>
+						<option value='*'>Todos</option>
+						<option value='2'>Estudiante</option>
+						<option value='3'>Profesor</option>
+					</select>
+					<select
+						className={styles.form__input}
+						name='userState'
+						onChange={(e) => {
+							handleInputOnChange(e);
+						}}
+					>
+						<option value='*'>Todos</option>
 						<option value='1'>Activos</option>
-						<option value='2'>Desactivos</option>
+						<option value='0'>Desactivos</option>
 					</select>
 					<button type='submit' className={styles.form__button}>
 						<FaMagnifyingGlass />
@@ -81,7 +101,7 @@ export const UsersList = () => {
 					<NothingToSee />
 				</div>
 			)}
-			{(isLoading || userFilter.isLoading) && (
+			{userFilter.isLoading && (
 				<div className={styles.section__loader} role='progressbar'>
 					<ClipLoader
 						loading={isLoading}
@@ -91,11 +111,12 @@ export const UsersList = () => {
 					/>
 				</div>
 			)}
-			<div role='article'>
-				{(filter.input === '' && users !== undefined) &&
+			<div role='article' className={styles.section__cardContainer}>
+				{filter.input === '' &&
+					users !== undefined &&
 					users.map((user) => <UserCard user={user} key={user.id} />)}
 				{userFilter.data !== undefined &&
-				userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
+					userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
 			</div>
 		</section>
 	);

@@ -42,7 +42,7 @@ export const UserCard = ({ user }) => {
 
 	return (
 		<>
-			<div data-testid="user-card" className={styles.card}>
+			<div data-testid='user-card' className={styles.card}>
 				<img alt='user icon' role='img' className={styles.card__img} />
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
@@ -61,7 +61,9 @@ export const UserCard = ({ user }) => {
 				role='button'
 				type='button'
 				className={
-					userData.state === '1' ? styles.buttonDeactivate : styles.buttonActivate
+					userData.state === '1'
+						? styles.buttonDeactivate
+						: styles.buttonActivate
 				}
 				onClick={() => changeUserState()}
 			>
@@ -82,7 +84,7 @@ UserCard.propTypes = {
 				description: PropTypes.string.isRequired,
 				state: PropTypes.number.isRequired,
 				role_id: PropTypes.number.isRequired,
-			}).isRequired,
-		}).isRequired,
+			}),
+		}),
 	}).isRequired,
 };

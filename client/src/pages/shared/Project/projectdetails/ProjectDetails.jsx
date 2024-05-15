@@ -71,7 +71,7 @@ export const ProjectDetails = () => {
 	return (
 		<>
 			{isError && <ErrorPopUp message={error.message} />}
-			<main>
+			<main className={styles.main}>
 				{role === 1 && <AdminNav />}
 				{role === 2 && <StudentNav />}
 				{role === 3 && <ProfessorNav />}

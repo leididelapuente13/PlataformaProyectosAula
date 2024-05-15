@@ -11,7 +11,8 @@ body {
 	max-width: 800px;
 	display: flex;
 	padding-top: 3rem;
-	height: fit-content;
+	height: 85vh;
+	min-height: fit-content;
 	@media (min-width: 1400px) {
 		width: 50vw;
 		max-width: 1000px;
@@ -32,7 +33,6 @@ body {
 	justify-content: center;
 	gap: 0.8rem;
 	width: 50%;
-
 	@media (max-width: 767px) {
 		display: none;
 	}
@@ -48,12 +48,10 @@ body {
 
 .form {
 	background-color: #fff;
-	padding: 1.5rem;
+	padding: 2rem 1.5rem;
 	width: 50%;
-	// min-height: 85vh;
 	@media (max-width: 767px) {
 		width: 100%;
-		padding: 1.5rem;
 	}
 	@media (min-width: 1400px) {
 		display: flex;

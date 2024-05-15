@@ -5,10 +5,6 @@
 .section {
 	@include sectionStyles;
 
-	&__title {
-		margin-bottom: 1.7rem;
-	}
-
 	&__loader {
 		@include loaderContainer;
 	}
@@ -17,15 +13,17 @@
         margin: 2.5rem auto 4rem auto;
         width: 90%;
     }
+    &__cardContainer{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
 }
 
 .form{
-    width: 80%;
-    margin: auto;
     display:  flex;
-    justify-content: center;
     &__input{
-        width: 85%;
+        width: 20%;
         border: none;
         padding: 0.7rem;
         font-size: 0.9rem;
@@ -33,6 +31,10 @@
         outline: none;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
+
+        &:first-child{
+            width: 60%;
+        }
         
         &:focus{
             box-shadow:
@@ -42,7 +44,7 @@
     }
         
     &__button{
-        width: 15%;
+        width: 10%;
         padding: 0.3rem;
         border-radius: 0;
         border-top-right-radius: 5px;

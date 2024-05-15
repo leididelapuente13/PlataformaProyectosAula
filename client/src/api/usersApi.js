@@ -4,7 +4,6 @@ import axios from 'axios';
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 // const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
-
 axios.interceptors.request.use(
 	(config) => {
 		config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
@@ -23,7 +22,7 @@ const getUsers = async () => {
 				'ngrok-skip-browser-warning': true,
 			},
 		});
-		console.log(response.data.data);
+		console.log('Full query');
 		return response.data.data;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
@@ -31,14 +30,31 @@ const getUsers = async () => {
 };
 
 const filterUsers = async (condition) => {
-	try {
-		const response = await axios.get(
-			`${baseUrl}user/filter/${condition}`,
-			{ headers: { 'ngrok-skip-browser-warning': true } },
-		);
-		return response.data.data;
-	} catch (error) {
-		console.error(error);
+	console.log('Request: ', condition);
+	if (condition !== '') {
+		if(condition.userState !== '' || condition.role !== ''){
+			const state = condition.userState === '*' ? '' : condition.userState;
+			const role = condition.role === '*' ? '' : condition.role;
+			try {
+				const response = await axios.get(`${baseUrl}user?filter/[role_id]=${role}&filter[state]=${state}`, {
+					headers: { 'ngrok-skip-browser-warning': true },
+				});
+				console.log('Filter');
+				return response.data.data;
+			} catch (error) {
+				console.error(error);
+			}
+		}else {
+			try {
+				const response = await axios.get(`${baseUrl}user/filter/${condition}`, {
+					headers: { 'ngrok-skip-browser-warning': true },
+				});
+				console.log('Filter');
+				return response.data.data;
+			} catch (error) {
+				console.error(error);
+			}
+		}
 	}
 };
 

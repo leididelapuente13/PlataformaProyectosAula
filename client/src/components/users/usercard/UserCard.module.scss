@@ -13,7 +13,7 @@
 	}
 
 	&__textBold {
-		font-size: 0.8rem;
+		font-size: 0.89rem;
 		font-weight: 500;
 		&:nth-child(2) {
 			margin-bottom: 0.4rem;
@@ -21,23 +21,25 @@
 	}
 
 	&__textLight {
-		font-size: 0.77rem;
+		font-size: 0.82rem;
 		color: $text-grey;
 	}
 
 	&__hr {
-		margin-bottom: 3rem;
-		opacity: 0.4;
+		margin-bottom: 2rem;
+		height: 2px;
+		background-color: rgba($light-grey, 0.9);
+		border: none;
 	}
 }
 
 .button {
 	margin-block: 1rem;
-	font-size: 0.7rem;
+	font-size: 0.77rem;
 	color: #fff;
-	padding: 0.6rem 0.9rem;
+	padding: 0.7rem 0.9rem;
 	font-weight: 600;
-
+	width: 25%;
 	&:hover {
 		transition: background-color 0.3s 0.3s ease-in;
 	}
