@@ -116,8 +116,7 @@ class UserService
             foreach ($usersApi as $userApi) {
                 $user = $this->userRepository->getByCode($userApi['codigo']);
                 if ($user) {
-                    unset($userApi['id']);
-                    $merge[] = array_merge($userApi, $user->toArray());;
+                    $merge[] = array_merge($userApi, $user->toArray());
                 }
             }
         }

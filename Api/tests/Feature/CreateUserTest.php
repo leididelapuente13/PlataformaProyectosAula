@@ -28,7 +28,7 @@ class CreateUserTest extends TestCase
                 'data' => [
                     'type' => 'user',
                     'attributes' =>
-                    [ 'code' =>  202499535, 'password' => 'password']
+                    [ 'code' =>  2023001, 'password' => 'password']
                 ]
             ]
         );

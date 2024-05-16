@@ -175,7 +175,7 @@ class ListPostTest extends TestCase
         $this->withoutExceptionHandling();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.post.filter', 'Esto no existe'))->dump();
+        ])->getJson(route('api.post.filter', 'Esto no existe'));
         $response->assertStatus(204);
     }
 
@@ -195,7 +195,7 @@ class ListPostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
-        )->getJson(route('api.post.trending'))->dump();
+        )->getJson(route('api.post.trending'));
         $response->assertStatus(200);
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);

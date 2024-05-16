@@ -128,8 +128,6 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-
-
     public function test_admin_can_filter_students_for_semester()
     {
         $this->withoutExceptionHandling();
