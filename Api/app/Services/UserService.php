@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 class UserService
 {
 
-
     public function __construct(protected UserRepository $userRepository)
     {
     }
@@ -38,18 +37,10 @@ class UserService
             $users = $users->merge($this->userRepository->getAll()); //There's not filter in the request
         }
         $users = $users->unique();
-        $merge = [];
-        foreach ($users as $user) {
-            //Join and prepare the full user information
-            $userApi = $this->getByApiCode($user->code);
-            $merge[] = array_merge($userApi, $user->toArray());;
-        }
-
-        $mergeCollection = collect($merge);
         $perPage = ($request->has('perPage') ? $request->get('perPage') : 20);
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentPageItems = $mergeCollection->forPage($currentPage, $perPage);
-        $paginatedUsers = new LengthAwarePaginator($currentPageItems, $mergeCollection->count(), $perPage, $currentPage);
+        $currentPageItems = $users->forPage($currentPage, $perPage);
+        $paginatedUsers = new LengthAwarePaginator($currentPageItems, $users->count(), $perPage, $currentPage);
         return $paginatedUsers;
     }
 
@@ -99,24 +90,35 @@ class UserService
         }
     }
 
+    public function userState($id)
+    {
+        $user = $this->userRepository->getById($id);
+        if (!$user) {
+            return null;
+        }
+        $oldState = $user->state;
+        //Change user state
+        $user->state = ($user->state == 1) ? 0 : 1;
+        $user->save();
+        //Verify if it was changed
+        return  $user->state != $oldState;
+    }
 
     public function filter($filter)
     {
         $merge = [];
         $usersApi = Controller::apiUsersFilter($filter)->json();
-        if ((isset($usersApi['message'])) && $usersApi['message'] === "No encontrado") { //Not maches in external api
-            $users = $this->userRepository->getByFilter($filter);
-            foreach ($users as $user) {
-                $userApi = $this->getByApiCode($user->code);
-                $merge[] = array_merge($userApi, $user->toArray());
-            }
-        } else {
-            //Matches was found in external api
-            foreach ($usersApi as $userApi) {
-                $user = $this->userRepository->getByCode($userApi['codigo']);
-                if ($user) {
-                    $merge[] = array_merge($userApi, $user->toArray());
-                }
+        // Determine if matches were found in the external API
+        $matchesFound = isset($usersApi['message']) && $usersApi['message'] === "No encontrado" ? false : true;
+        // Get users from the local bd on the filter
+        $users = $this->userRepository->getByFilter($filter);
+        // Process users based on whether matches were found in the external API
+        foreach ($matchesFound ? $usersApi : $users as $index => $userData) {
+            // Get user data based on where the data was obtained from
+            $user = $matchesFound ? $this->userRepository->getByCode($userData['codigo']) : $users[$index];
+            // Check if the user exists and merge user data with API data
+            if ($user) {
+                $merge[] = array_merge($matchesFound ? $userData : $this->getByApiCode($user->code), $user->toArray());
             }
         }
         return $merge;
@@ -125,29 +127,30 @@ class UserService
     public function getUsersApiByCareer($career)
     {
         $usersApi = Controller::apiUsersbyCarrera($career)->json();
-        $codes = collect($usersApi)->pluck('codigo')->toArray(); //Get all codes
-        return $this->userRepository->getByCodes($codes);
+        return $this->mixUserExternalApi($usersApi);
+    }
+
+    public function mixUserExternalApi($usersApi)
+    {
+        $codes = collect($usersApi)->pluck('codigo')->toArray();
+        $users = $this->userRepository->getByCodes($codes);
+        $merge = [];
+        // Create a lookup table of users by their code for efficient retrieval
+        $usersByCode = collect($users)->keyBy('code');
+        foreach ($usersApi as $userApi) {
+            // Retrieve the corresponding user from the repository based on the API code
+            $user = $usersByCode->get($userApi['codigo']);
+            // If a matching user is found
+            if ($user) {
+                $merge[] = array_merge($userApi, $user->toArray());
+            }
+        }
+        return $merge;
     }
 
     public function getUsersApiBySemester($semester)
     {
         $usersApi = Controller::apiUsersbySemestre($semester)->json();
-        $codes = collect($usersApi)->pluck('codigo')->toArray();
-        return $this->userRepository->getByCodes($codes);
-    }
-
-    public function userState($id){
-        $user = $this->userRepository->getById($id);
-        if (!$user) {
-            return null;
-        }
-
-        $oldState = $user->state;
-        //Change user state
-        $user->state = ($user->state == 1) ? 0 : 1;
-        $user->save();
-
-        //Verify if it was changed
-        return  $user->state != $oldState;
+        return $this->mixUserExternalApi($usersApi);
     }
 }

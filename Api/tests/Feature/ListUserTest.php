@@ -31,6 +31,7 @@ class ListUserTest extends TestCase
             'role_id' => 1,
             'remember_token' => Str::random(10),
         ]);
+        $this->withoutExceptionHandling();
     }
 
     // Setup specific for case 2
@@ -175,7 +176,7 @@ class ListUserTest extends TestCase
     /**
         @test
      */
-    public function admin_can_list_students_for_career()
+    public function admin_can_filter_students_for_career()
     {
         $this->setUpCase3();
         $response = $this->withHeaders([
@@ -188,7 +189,7 @@ class ListUserTest extends TestCase
     /**
         @test
      */
-    public function admin_can_list_teachers_for_department()
+    public function admin_can_filter_teachers_for_department()
     {
         $this->setUpCase3();
         $response = $this->withHeaders([

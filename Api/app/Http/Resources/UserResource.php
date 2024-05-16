@@ -15,27 +15,33 @@ class UserResource extends JsonResource
      */
 
 
-     //Permite formatear la respuesta JSON
+    //Permite formatear la respuesta JSON
     public function toArray(Request $request): array
     {
-        return  [
-                'type' => 'user',
-                'id' => (string) $this->resource['id'],
-                'attributes' => [
-                    'user_name' => $this->resource['user_name'],
-                    'code' => $this->resource['code'],
-                    'email' => $this->resource['email'],
-                    'role_id' => $this->resource['role_id'],
-                    'description' => $this->resource['description'],
-                    'state' => $this->resource['state'],
-                    'semestre' => $this->resource['semestre'],
-                    'carrera' => $this->resource['carrera'],
-                    'departamento' => $this->resource['departamento'],
-                    'created_at' => Carbon::parse($this->resource['created_at'])->format('Y-m-d H:i:s'),
-                ],
-                'links' => [
-                    'self' => route('api.user.show' , $this->resource['id'])
-                ]
+        $rol = $this->resource['role_id'];
+        $attributes = [
+            'type' => 'user',
+            'id' => (string) $this->resource['id'],
+            'attributes' => [
+                'user_name' => $this->resource['user_name'],
+                'code' => $this->resource['code'],
+                'email' => $this->resource['email'],
+                'role_id' => $this->resource['role_id'],
+                'description' => $this->resource['description'],
+                'state' => $this->resource['state'],
+                'created_at' => Carbon::parse($this->resource['created_at'])->format('Y-m-d H:i:s'),
+            ],
+            'links' => [
+                'self' => route('api.user.show', $this->resource['id'])
+            ]
         ];
+
+        if ($rol == 2) {
+            $attributes['attributes']['semestre'] = $this->resource['semestre'];
+            $attributes['attributes']['carrera'] = $this->resource['carrera'];
+        } elseif ($rol == 3) {
+            $attributes['attributes']['departamento'] = $this->resource['departamento'];
+        }
+        return $attributes;
     }
 }
