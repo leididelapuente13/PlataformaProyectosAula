@@ -161,22 +161,22 @@ trait MakesJsonApiRequests
                 ]
             ]);
 
-            // Loop through each user
+            // Map users by code for efficient lookup
+            $usersByCode = collect($users)->keyBy('code');
+
             foreach ($usersResponse as $userResponse) {
-                foreach ($users as $user) {
-                    //Only existing users
-                    if ($userResponse['attributes']['code'] == $user->code) {
-                        //Compare received values with actual
-                        $listUserTest->assertEquals($userResponse['attributes']['email'], $user->email);
-                        $listUserTest->assertEquals($userResponse['attributes']['user_name'], $user->user_name);
-                        $listUserTest->assertEquals($userResponse['attributes']['role_id'], $user->role_id);
-                        $listUserTest->assertEquals($userResponse['attributes']['state'], $user->state);
-                        if ($user->role_id == 2) {
-                            $listUserTest->assertEquals($userResponse['attributes']['departamento'], "");
-                        } else if ($user->role_id == 3) {
-                            $listUserTest->assertEquals($userResponse['attributes']['carrera'], "");
-                            $listUserTest->assertEquals($userResponse['attributes']['semestre'], "");
-                        }
+                $user = $usersByCode->get($userResponse['attributes']['code']);
+                // Only compare if user exists
+                if ($user) {
+                    $listUserTest->assertEquals($userResponse['attributes']['email'], $user->email);
+                    $listUserTest->assertEquals($userResponse['attributes']['user_name'], $user->user_name);
+                    $listUserTest->assertEquals($userResponse['attributes']['role_id'], $user->role_id);
+                    $listUserTest->assertEquals($userResponse['attributes']['state'], $user->state);
+                    if ($user->role_id == 2) {
+                        $listUserTest->assertEquals($userResponse['attributes']['departamento'], "");
+                    } elseif ($user->role_id == 3) {
+                        $listUserTest->assertEquals($userResponse['attributes']['carrera'], "");
+                        $listUserTest->assertEquals($userResponse['attributes']['semestre'], "");
                     }
                 }
             }
@@ -225,7 +225,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonApiPostsResource(): Closure
     {
-        return function ($posts, $postsResponse, $listPostTest , $user = null) {
+        return function ($posts, $postsResponse, $listPostTest, $user = null) {
             /**
                 @var TestResponse $this
              */
@@ -271,7 +271,7 @@ trait MakesJsonApiRequests
                         $listPostTest->assertEquals($postResponse['attributes']['likes_count'], $post->likes_count);
                         $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
                         $listPostTest->assertEquals($postResponse['relationships']['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
-                        if($user){
+                        if ($user) {
                             $listPostTest->assertEquals($postResponse['attributes']['user_id'], $user->getRouteKey());
                         }
                     }

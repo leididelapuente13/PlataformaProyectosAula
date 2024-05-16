@@ -72,7 +72,6 @@ class UserService
     {
         $user = $this->userRepository->getById($id);
         $userApi = Controller::apiUserCodigo($user->code)->json();
-        unset($userApi['id']);
         $fullUser = array_merge($userApi, $user->toArray()); // Join the users' informations
         return $fullUser;
     }

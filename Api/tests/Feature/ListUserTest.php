@@ -10,15 +10,18 @@ use Illuminate\Support\Str;
 
 class ListUserTest extends TestCase
 {
+    use RefreshDatabase;
 
     private $admin;
     private $users;
-    protected function setUp(): void
+
+    // Base setup for all tests
+    private function setUpBase(): void
     {
         parent::setUp();
-        //Create roles
+        // Create roles
         Role::factory(3)->create();
-        //Create a new admin
+        // Create a new admin
         $this->admin = User::create([
             'user_name' => 'Administrador',
             'email' => 'jimmisitho450@gmail.com',
@@ -28,41 +31,58 @@ class ListUserTest extends TestCase
             'role_id' => 1,
             'remember_token' => Str::random(10),
         ]);
+    }
+
+    // Setup specific for case 2
+    private function setUpCase2(): void
+    {
+        $this->setUpBase();
         $this->users = User::factory(5)->create();
-        // //create exact users for testing with external API
+    }
+
+    // Setup specific for case 3
+    private function setUpCase3(): void
+    {
+        $this->setUpBase();
         $this->users[] = User::factory()->createFromApi(120)->create();
         $this->users[] = User::factory()->createFromApi(1)->create();
     }
-    use RefreshDatabase;
 
-    public function test_show_user()
+    /**
+        @test
+     */
+    public function show_user()
     {
+        $this->setUpBase(); // Base setup
         $user = User::factory()->create();
         // Send a request with header 'Authorization'
-        $response = $this->withHeaders(
-            [
-                'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
-            ]
-        )->getJson(route('api.user.show', $user->getRouteKey()));
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        ])->getJson(route('api.user.show', $user->getRouteKey()));
         $userResponse = $response->json()['data'];
         $response->assertJsonApiUserResource($user, $userResponse, $this, 200);
     }
 
-    public function test_can_list_users()
+    /**
+        @test
+     */
+    public function can_list_users()
     {
+        $this->setUpCase2();
         // Send a request with header 'Authorization'
-        $response = $this->withHeaders(
-            [
-                'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
-            ]
-        )->getJson(route('api.user.index'));
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        ])->getJson(route('api.user.index'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_paginate()
+    /**
+        @test
+     */
+    public function paginate()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase2();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
@@ -71,8 +91,12 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $usersResponse, $this);
     }
 
-    public function test_can_list_category_users_for_state()
+    /**
+        @test
+     */
+    public function can_list_category_users_for_state()
     {
+        $this->setUpCase2();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.index') . '?filter[state]=0');
@@ -80,8 +104,12 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_category_users_for_role()
+    /**
+        @test
+     */
+    public function admin_can_list_category_users_for_role()
     {
+        $this->setUpCase2();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.index') . '?filter[role_id]=2');
@@ -89,67 +117,80 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_can_filter_user_by_category_rol_and_state()
+    /**
+        @test
+     */
+    public function can_filter_user_by_category_rol_and_state()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase2();
         // Send a request with header 'Authorization'
-        $response = $this->withHeaders(
-            [
-                'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
-            ]
-        )->getJson(route('api.user.index') . '?filter[role_id]=2&filter[state]=1');
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        ])->getJson(route('api.user.index') . '?filter[role_id]=2&filter[state]=1');
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_can_filter_user_by_category_semester()
+    /**
+        @test
+     */
+    public function can_filter_user_by_category_semester()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase3();
         // Send a request with header 'Authorization'
-        $response = $this->withHeaders(
-            [
-                'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
-            ]
-        )->getJson(route('api.user.index') . '?filter[semester]=4');
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        ])->getJson(route('api.user.index') . '?filter[semester]=4');
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_can_filter_user_by_category_career()
+    /**
+        @test
+     */
+    public function can_filter_user_by_category_career()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase3();
         // Send a request with header 'Authorization'
-        $response = $this->withHeaders(
-            [
-                'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
-            ]
-        )->getJson(route('api.user.index') . '?filter[career]=Contabilidad');
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
+        ])->getJson(route('api.user.index') . '?filter[career]=Contabilidad');
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_admin_can_filter_students_for_semester()
+    /**
+        @test
+     */
+    public function admin_can_filter_students_for_semester()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase3();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter' , 'Semestre 4'));
+        ])->getJson(route('api.user.filter', 'Semestre 4'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_students_for_career()
+    /**
+        @test
+     */
+    public function admin_can_list_students_for_career()
     {
+        $this->setUpCase3();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter' , 'Contabilidad'));
+        ])->getJson(route('api.user.filter', 'Contabilidad'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_admin_can_list_teachers_for_department()
+    /**
+        @test
+     */
+    public function admin_can_list_teachers_for_department()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase3();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'Departamento de Artes'));
@@ -157,20 +198,25 @@ class ListUserTest extends TestCase
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_admin_can_filter_users_for_user_name()
+    /**
+        @test
+     */
+    public function admin_can_filter_users_for_user_name()
     {
-        $this->users->first()->user_name = 'Juan_Pedro';
-        $this->users->first()->save();
+        $this->setUpCase3();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
-        ])->getJson(route('api.user.filter', 'Juan_P'));
+        ])->getJson(route('api.user.filter', 'Adrain'));
         $userResponse = $response->json()['data'];
         $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
     }
 
-    public function test_there_is_no_matched_in_the_filter()
+    /**
+        @test
+     */
+    public function there_is_no_matched_in_the_filter()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpBase(); // Base setup
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.filter', 'Esto no existe'));
