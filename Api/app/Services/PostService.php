@@ -122,7 +122,7 @@ class PostService
     function getPostsByCareer($value)
     {
         $users = $this->userService->getUsersApiByCareer($value); //Get all users by career
-        $ids = $users->pluck('id')->toArray(); // Get users's ids
+        $ids = collect($users)->pluck('id')->toArray(); // Get users's ids
         return $this->postRepository->getByUsersIds($ids);
     }
 

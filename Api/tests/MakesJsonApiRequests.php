@@ -231,7 +231,7 @@ trait MakesJsonApiRequests
             $this->assertOk();
             $this->assertJsonStructure([
                 'data' => [
-                    '*' => [ //Structure is the same for each user
+                    '*' => [
                         'type',
                         'id',
                         'attributes' => [
@@ -243,36 +243,32 @@ trait MakesJsonApiRequests
                             'dio_like'
                         ],
                         'relationships' => [
-                            'user' => [
-                                'links' => [
-                                    'related'
-                                ]
-                            ],
-                            'file' => [
-                                'links' => [
-                                    'related',
-                                ]
-                            ]
+                            'user' => [ 'links' => [ 'related'] ],
+                            'file' => [  'links' => [ 'related']]
                         ],
-                        'links' => [
-                            'self',
-                        ]
+                        'links' => [ 'self' ]
                     ]
                 ]
             ]);
 
-            foreach ($posts as $post) {
-                foreach ($postsResponse as $postResponse) {
-                    if ($postResponse['id'] == $post->id) {
-                        $listPostTest->assertEquals($postResponse['attributes']['title'], $post->title);
-                        $listPostTest->assertEquals($postResponse['attributes']['description'], $post->description);
-                        $listPostTest->assertEquals($postResponse['attributes']['created_at'], $post->created_at);
-                        $listPostTest->assertEquals($postResponse['attributes']['likes_count'], $post->likes_count);
-                        $listPostTest->assertEquals($postResponse['relationships']['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
-                        $listPostTest->assertEquals($postResponse['relationships']['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
-                        if ($user) {
-                            $listPostTest->assertEquals($postResponse['attributes']['user_id'], $user->getRouteKey());
-                        }
+            // Maps post by id
+            $postsMap = $posts->keyBy('id');
+            foreach ($postsResponse as $postResponse) {
+                $postId = $postResponse['id'];
+                if (isset($postsMap[$postId])) {
+                    $post = $postsMap[$postId];
+                    $attributes = $postResponse['attributes'];
+                    $relationships = $postResponse['relationships'];
+
+                    $listPostTest->assertEquals($attributes['title'], $post->title);
+                    $listPostTest->assertEquals($attributes['description'], $post->description);
+                    $listPostTest->assertEquals($attributes['created_at'], $post->created_at);
+                    $listPostTest->assertEquals($attributes['likes_count'], $post->likes_count);
+                    $listPostTest->assertEquals($relationships['user']['links']['related'], route('api.user.show', $post->user->getRouteKey()));
+                    $listPostTest->assertEquals($relationships['file']['links']['related'], route('api.post.files', $post->getRouteKey()));
+
+                    if ($user) {
+                        $listPostTest->assertEquals($attributes['user_id'], $user->getRouteKey());
                     }
                 }
             }

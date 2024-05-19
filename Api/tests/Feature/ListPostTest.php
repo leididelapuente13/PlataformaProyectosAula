@@ -14,61 +14,77 @@ class ListPostTest extends TestCase
 {
     private $user;
     private $posts;
-    protected function setUp(): void
+    private $post;
+
+    private function setUpBase(): void
     {
-        parent::setUp();
         //Create roles
         Role::factory(3)->create();
-        User::factory()
-            ->count(5)
+    }
+    private function setUpCase1(): void
+    {
+        $this->setUpBase();
+        //Create a specific user
+        $user = User::factory()
+            ->createFromApi(4)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
-            })->create();
-        $users = User::all();
-        $users->each(function ($user) {
-            // Crear y asociar los archivos al post
-            if ($user->role_id == 2) {
-                $user->posts()->saveMany([
-                    Post::factory()->make(),
-                    Post::factory()->make()
-                ]);
-            }
-        });
-
+            })
+            ->has(Post::factory()->count(1)) // Create 2 post for user
+            ->create();
+        //Create a specific user
+        $user = User::factory()
+            ->createFromApi(1)
+            ->state(function (array $attributes) {
+                return ['state' => '1'];
+            })
+            ->has(Post::factory()->count(2)) // Create 2 post for user
+            ->create();
         $posts = Post::all();
-        $posts->each(function ($post) use ($users) {
-            // Crear y asociar los archivos al post
+        $posts->each(function ($post) use ($user) {
+            // Crete and associate the files
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
                 File::factory()->type('file')->make(),
             ]);
-
-            $users->each(function ($user) use ($post) {
-                $like = new Like(['user_id' => $user->id]);
-                $post->likes()->save($like);
-            });
+            // Associate like to post
+            $like = new Like(['user_id' => $user->id]);
+            $post->likes()->save($like);
         });
+        $this->posts = Post::withCount('likes')->get();
+        $this->user = $user;
+        $this->withoutExceptionHandling();
+    }
 
+    private function setUpCase2(): void
+    {
+        $this->setUpBase();
         //Create a new user
         $this->user = User::factory()
             ->createFromApi(1)
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })
-            ->has(Post::factory()->count(2))
+            ->has(Post::factory()->count(1))
             ->create();
         $like = new Like(['user_id' => $this->user->id]);
-        $posts->first()->likes()->save($like);
-        $users = User::all();
-        $this->posts = Post::withCount('likes')->get();
-        $this->withoutExceptionHandling();
+        $post = Post::first();
+        $post->likes()->save($like);
+        $post->files()->saveMany([
+            File::factory()->type('cover_image')->make(),
+            File::factory()->type('file')->make(),
+        ]);
+        $this->post = Post::withCount('likes')->first();
     }
 
-    use RefreshDatabase;
 
+    use RefreshDatabase;
+    /**
+      @test
+     */
     public function test_paginate()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -77,19 +93,24 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_show_post()
+    /**
+      @test
+     */
+    public function show_post()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase2();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.show', $this->posts->first()->getRouteKey()));
-        $postResponse = $response->json()['data'];
-        $response->assertJsonApiPostResource($this->posts->first(),  200);
+        )->getJson(route('api.post.show', $this->post->getRouteKey()));
+        $response->assertJsonApiPostResource($this->post,  200);
     }
-
-    public function test_post_of_specific_user()
+    /**
+      @test
+     */
+    public function post_of_specific_user()
     {
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -100,6 +121,7 @@ class ListPostTest extends TestCase
 
     public function test_list_all_post(): void
     {
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -110,6 +132,7 @@ class ListPostTest extends TestCase
 
     public function test_filter_posts_for_category_career()
     {
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -130,26 +153,28 @@ class ListPostTest extends TestCase
     //     $postsResponse = $response->json()['data'];
     //     $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     // }
-
-    public function test_filter_posts_for_title()
+    /**
+      @test
+     */
+    public function filter_posts_for_title()
     {
+        $this->setUpCase1();
         $this->posts->first()->title = 'title for my post';
         $this->posts->first()->save();
-        $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
         )->getJson(route('api.post.filter', 'title'));
+
         $postsResponse = $response->json()['data'];
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
     public function test_filter_posts_for_month_day_year()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase1();
         $this->posts->first()->created_at = '2022-01-19 03:58:08';
         $this->posts->first()->save();
-        $this->withoutExceptionHandling();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
@@ -160,6 +185,7 @@ class ListPostTest extends TestCase
 
     public function test_filter_posts_for_month_year()
     {
+        $this->setUpCase1();
         $this->posts->first()->created_at = '2022-01-02 03:58:08';
         $this->posts->first()->save();
         $response = $this->withHeader(
@@ -172,7 +198,7 @@ class ListPostTest extends TestCase
 
     public function test_there_is_no_matched_in_the_filter()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase1();
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->user->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.post.filter', 'Esto no existe'));
@@ -181,7 +207,7 @@ class ListPostTest extends TestCase
 
     public function test_student_see_relevant_content_in_my_home_page()
     {
-        $this->withoutExceptionHandling();
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
@@ -190,8 +216,9 @@ class ListPostTest extends TestCase
         $response->assertJsonApiPostsResource($this->posts, $postsResponse, $this);
     }
 
-    public function test_see_trending_post(){
-        $this->withoutExceptionHandling();
+    public function test_see_trending_post()
+    {
+        $this->setUpCase1();
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
