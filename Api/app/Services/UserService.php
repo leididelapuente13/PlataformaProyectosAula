@@ -21,34 +21,29 @@ class UserService
     */
     public function getAll(Request $request)
     {
-        $users = collect();
+        $query = $this->userRepository->query();
+
         if ($request->has('filter')) {
             foreach ($request->filter as $key => $value) {
-                //Check the filters
                 if ($key == 'semester') {
-                    $users = $users->merge($this->getUsersApiBySemester($value));
+                    $query = $this->applySemesterFilter($query, $value);
                 } else if ($key == 'career') {
-                    $users = $users->merge($this->getUsersApiByCareer($value));
+                    $query = $this->applyCareerFilter($query, $value);
                 } else {
-                    $users = $users->merge($this->userRepository->getByQuery($key, $value));
+                    $query = $this->userRepository->applyFilter($query, $key, $value);
                 }
             }
-        } else {
-            $users = $users->merge($this->userRepository->getAll()); //There's not filter in the request
         }
-        $users = $users->unique();
+        $users = $query->get();
+        $users = $this->mixUserLocalWithExternal($users);
         $perPage = ($request->has('perPage') ? $request->get('perPage') : 20);
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentPageItems = $users->forPage($currentPage, $perPage);
-        $paginatedUsers = new LengthAwarePaginator($currentPageItems, $users->count(), $perPage, $currentPage);
-        return $paginatedUsers;
+        return $this->paginate($users, $perPage);
     }
 
     public function insert(CreateUserRequest $request)
     {
         $code = $request->input('data.attributes.code');
         $userApi = $this->getByApiCode($code);
-        // Code wasn't found in extern api
         if ($userApi == null) {
             return null;
         }
@@ -57,37 +52,6 @@ class UserService
         $userTipo = $userApi['tipo'];
         $role_id = ($userTipo == 'Estudiante') ? 2 : ($userTipo == 'Profesor' ?  3 : 1);
         return $this->userRepository->insert($userApi, $password, $role_id);
-    }
-
-    public function getById($id)
-    {
-        $user = $this->userRepository->getById($id);
-        $userApi = Controller::apiUserCodigo($user->code)->json();
-        $fullUser = array_merge($userApi, $user->toArray()); // Join the users' informations
-        return $fullUser;
-    }
-
-    public function getByCode($code)
-    {
-        return $this->userRepository->getByCode($code);
-    }
-    public function getByCodes($code)
-    {
-        return $this->userRepository->getByCodes($code);
-    }
-
-    public function getByApiCode($codigo)
-    {
-        $response = Controller::apiUserCodigo($codigo);
-        if ($response->status() == 200) {
-            $user = $response->json();
-            unset($user['id']);
-            return $user;
-        }
-
-        if ($response->status() == 404) {
-            return null;
-        }
     }
 
     public function userState($id)
@@ -124,33 +88,72 @@ class UserService
         return $merge;
     }
 
-    public function getUsersApiByCareer($career)
+    public function getByCode($code)
     {
-        $usersApi = Controller::apiUsersbyCarrera($career)->json();
-        return $this->mixUserExternalApi($usersApi);
+        return $this->userRepository->getByCode($code);
     }
 
-    public function mixUserExternalApi($usersApi)
+    public function getById($id)
     {
-        $codes = collect($usersApi)->pluck('codigo')->toArray();
-        $users = $this->userRepository->getByCodes($codes);
+        $user = $this->userRepository->getById($id);
+        $userApi = Controller::apiUserCodigo($user->code)->json();
+        $fullUser = array_merge($userApi, $user->toArray()); // Join the users' informations
+        return $fullUser;
+    }
+
+    //private local functions
+    public function mixUserLocalWithExternal($users)
+    {
         $merge = [];
-        // Create a lookup table of users by their code for efficient retrieval
-        $usersByCode = collect($users)->keyBy('code');
-        foreach ($usersApi as $userApi) {
-            // Retrieve the corresponding user from the repository based on the API code
-            $user = $usersByCode->get($userApi['codigo']);
-            // If a matching user is found
-            if ($user) {
+        foreach ($users as $user) {
+            $userApi = $this->getByApiCode($user->code);
+            if ($userApi) {
                 $merge[] = array_merge($userApi, $user->toArray());
             }
         }
-        return $merge;
+        return collect($merge);
+    }
+
+    private function paginate($users, $perPage)
+    {
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $users->forPage($currentPage, $perPage);
+        return new LengthAwarePaginator($currentPageItems, $users->count(), $perPage, $currentPage);
+    }
+
+    private function applySemesterFilter($query, $value)
+    {
+        $semesterUsers = $this->getUsersApiBySemester($value);
+        $userCodigos = collect($semesterUsers)->pluck('codigo');
+        return $query->whereIn('code', $userCodigos);
+    }
+
+    private function applyCareerFilter($query, $value)
+    {
+        $careerUsers = $this->getUsersApiByCareer($value);
+        $userCodigos = collect($careerUsers)->pluck('codigo');
+        return $query->whereIn('code', $userCodigos);
+    }
+
+    //External api functions
+    public function getUsersApiByCareer($career)
+    {
+        return Controller::apiUsersbyCarrera($career)->json();
     }
 
     public function getUsersApiBySemester($semester)
     {
-        $usersApi = Controller::apiUsersbySemestre($semester)->json();
-        return $this->mixUserExternalApi($usersApi);
+        return Controller::apiUsersbySemestre($semester)->json();
+    }
+
+    public function getByApiCode($codigo)
+    {
+        $response = Controller::apiUserCodigo($codigo);
+        if ($response->status() == 200) {
+            $user = $response->json();
+            unset($user['id']);
+            return $user;
+        }
+        return null;
     }
 }

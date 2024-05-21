@@ -29,7 +29,6 @@ class ListUserTest extends TestCase
             'password' => bcrypt('admin'),
             'state' => '1',
             'role_id' => 1,
-            'remember_token' => Str::random(10),
         ]);
         $this->withoutExceptionHandling();
     }
@@ -39,6 +38,9 @@ class ListUserTest extends TestCase
     {
         $this->setUpBase();
         $this->users = User::factory(5)->create();
+        $this->users[] = User::factory()->create([
+            'state' => '0'
+        ]);
     }
 
     // Setup specific for case 3
@@ -102,7 +104,7 @@ class ListUserTest extends TestCase
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.index') . '?filter[state]=0');
         $userResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
+        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this, ["state" => "0"]);
     }
 
     /**
@@ -115,7 +117,7 @@ class ListUserTest extends TestCase
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken', ['admin'])->plainTextToken
         ])->getJson(route('api.user.index') . '?filter[role_id]=2');
         $userResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
+        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this , ["role" => 2]);
     }
 
     /**
@@ -129,7 +131,7 @@ class ListUserTest extends TestCase
             'Authorization' => 'Bearer ' . $this->admin->createToken('TestToken')->plainTextToken
         ])->getJson(route('api.user.index') . '?filter[role_id]=2&filter[state]=1');
         $userResponse = $response->json()['data'];
-        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this);
+        $response->assertJsonUsersFilterResource($this->users, $userResponse, $this, ["role" => 2 , "state" => "1"]);
     }
 
     /**

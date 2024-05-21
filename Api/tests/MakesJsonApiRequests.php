@@ -136,7 +136,7 @@ trait MakesJsonApiRequests
 
     protected function assertJsonUsersFilterResource(): Closure
     {
-        return function ($users, $usersResponse, $listUserTest) {
+        return function ($users, $usersResponse, $listUserTest, $param = null) {
             /**
                 @var TestResponse $this
              */
@@ -176,6 +176,16 @@ trait MakesJsonApiRequests
                         $listUserTest->assertArrayHasKey('carrera', $userResponse['attributes']);
                     } elseif ($user->role_id == 3) {
                         $listUserTest->assertArrayHasKey('departamento', $userResponse['attributes']);
+                    }
+                    if ($param) {
+                        foreach ($param as $key => $value) {
+                            if ($key == 'role') {
+                                $listUserTest->assertEquals($value, $user->role_id);
+                            }
+                            if($key == 'state'){
+                                $listUserTest->assertEquals($value, $user->state);
+                            }
+                        }
                     }
                 }
             }
@@ -243,10 +253,10 @@ trait MakesJsonApiRequests
                             'dio_like'
                         ],
                         'relationships' => [
-                            'user' => [ 'links' => [ 'related'] ],
-                            'file' => [  'links' => [ 'related']]
+                            'user' => ['links' => ['related']],
+                            'file' => ['links' => ['related']]
                         ],
-                        'links' => [ 'self' ]
+                        'links' => ['self']
                     ]
                 ]
             ]);
