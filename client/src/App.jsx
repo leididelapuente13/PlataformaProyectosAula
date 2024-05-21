@@ -11,10 +11,11 @@ import { UserManagement } from './pages/admin/Users/UserManagement';
 import { IndexStudent } from './pages/student/Start/IndexStudent';
 import { IndexProfessor } from './pages/professor/Start/IndexProfessor';
 import { Filter } from './pages/shared/Project/Filter/Filter';
+import { Reports } from './pages/admin/Reports/Reports';
+import { ProjectsCareer } from './pages/shared/projectscareer/ProjectsCareer';
 // Components
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { WarningContextProvider } from './context/WarningContext';
-import { ProjectsCareer } from './pages/shared/projectscareer/ProjectsCareer';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,7 @@ function App() {
 						{/* <Route path='/indexStudent' element={<IndexStudent />} /> */}
 						<Route element={<ProtectedRoute role='1' />}>
 							<Route path='/user-management' element={<UserManagement />} />
-							<Route path='/reports' element={<h1>Reportes</h1>} />
+							<Route path='/reports' element={<Reports/>} />
 							<Route path='/report-details' element={<h1>Admin</h1>} />
 							<Route path='/announcements' element={<h1>Admin</h1>} />
 						</Route>
@@ -42,7 +43,7 @@ function App() {
 						</Route>
 						<Route path='/indexProfessor' element={<IndexProfessor />} />
 						<Route path='/filter' element={<Filter />} />
-						<Route path='/report' element={<h1>Report</h1>} />
+						<Route path='/reports' element={<Reports/>} />
 						<Route
 							path='/project-details/:projectId'
 							element={<ProjectDetails />}

@@ -28,10 +28,10 @@ export const UsersList = () => {
 		() => filterUsers(filter),
 		{
 			onSuccess: () => {
-				console.log(filter.input, filter.userState, filter.role);
+				// console.log(filter.input, filter.userState, filter.role);
 			},
 		},
-		{refetchInterval: 10000, staleTime: 30000,}
+		{ refetchInterval: 10000, staleTime: 30000 },
 	);
 
 	const {
@@ -91,20 +91,19 @@ export const UsersList = () => {
 						<option value='1'>Activos</option>
 						<option value='0'>Desactivos</option>
 					</select>
-					<button type='submit' className={styles.form__button}>
+					{/* <button type='submit' className={styles.form__button}>
 						<FaMagnifyingGlass />
-					</button>
+					</button> */}
 				</form>
 			</div>
-			{users && users.length === 0 && (
+			{/* {(users.data === 204) && (
 				<div role='status'>
 					<NothingToSee />
 				</div>
-			)}
+			)} */}
 			{userFilter.isLoading && (
 				<div className={styles.section__loader} role='progressbar'>
 					<ClipLoader
-						loading={isLoading}
 						color='#0A84F4'
 						size={40}
 						cssOverride={{ alignSelf: 'center' }}
@@ -112,12 +111,17 @@ export const UsersList = () => {
 				</div>
 			)}
 			<div role='article' className={styles.section__cardContainer}>
-				{filter.input === '' &&
+				{(filter.input === '' ||
+					filter.role === '' ||
+					filter.userState === '') &&
 					users !== undefined &&
+					userFilter.data === undefined &&
 					users.map((user) => <UserCard user={user} key={user.id} />)}
 				{userFilter.data !== undefined &&
+					userFilter.data !== 204 &&
 					userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
 			</div>
+			{userFilter.data === 204 && <NothingToSee />}
 		</section>
 	);
 };

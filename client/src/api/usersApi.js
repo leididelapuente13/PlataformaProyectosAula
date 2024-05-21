@@ -23,6 +23,7 @@ const getUsers = async () => {
 			},
 		});
 		console.log('Full query');
+		if(response.status === 204) return 204
 		return response.data.data;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
@@ -30,26 +31,36 @@ const getUsers = async () => {
 };
 
 const filterUsers = async (condition) => {
-	console.log('Request: ', condition);
-	if (condition !== '') {
-		if(condition.userState !== '' || condition.role !== ''){
-			const state = condition.userState === '*' ? '' : condition.userState;
-			const role = condition.role === '*' ? '' : condition.role;
+	const {input, userState, role} = condition;
+	if (condition !== null) {
+		console.log('Request: ', condition);
+		if((userState !== '' || role !== '') && input === ''){
+			console.log('by role or state')
+			const state = userState === '*' ? '' : userState;
+			const userRole = role === '*' ? '' : role;
+			let queryState = (state !== '' && userRole === '') && `filter[state]=${state}`;
+			let queryRole = (userRole !== '' && state === '') && `filter[role_id]=${userRole}`;
+			let dualQuery = (userRole !== '' && state !== '') && `${queryRole}&${queryState}`;
 			try {
-				const response = await axios.get(`${baseUrl}user?filter/[role_id]=${role}&filter[state]=${state}`, {
+				const response = await axios.get(`${baseUrl}user?${queryRole}${queryRole}${dualQuery}`, {
 					headers: { 'ngrok-skip-browser-warning': true },
 				});
-				console.log('Filter');
+				console.log('mixed filter: ', response.data.data);
+				console.log(response.status);
+				if(response.status === 204) return 204;
 				return response.data.data;
 			} catch (error) {
 				console.error(error);
 			}
-		}else {
+		}else if(input !== ''){
+			console.log('by coincidence')
 			try {
 				const response = await axios.get(`${baseUrl}user/filter/${condition}`, {
 					headers: { 'ngrok-skip-browser-warning': true },
 				});
-				console.log('Filter');
+				console.log('coincidence: ', response.data.data);
+				console.log(response.status === 204 && response.status);
+				if(response.status === 204) return 204;
 				return response.data.data;
 			} catch (error) {
 				console.error(error);
