@@ -24,32 +24,42 @@ class ListPostTest extends TestCase
     private function setUpCase1(): void
     {
         $this->setUpBase();
-        //Create a specific user
+        User::factory()
+            ->count(3)
+            ->create();
+
         $user = User::factory()
-            ->createFromApi(4)
+            ->createFromApi(1) //Create a specific user
             ->state(function (array $attributes) {
                 return ['state' => '1'];
             })
-            ->has(Post::factory()->count(1)) // Create 2 post for user
+            ->has(Post::factory()->count(2)) // Create 2 post
             ->create();
-        //Create a specific user
-        $user = User::factory()
-            ->createFromApi(1)
-            ->state(function (array $attributes) {
-                return ['state' => '1'];
-            })
-            ->has(Post::factory()->count(2)) // Create 2 post for user
-            ->create();
+
+        $users = User::all();
+        $users->each(function ($user) {
+            if ($user->role_id == 2 && $user->state == '1' && $user->id != 1) {
+                $user->posts()->saveMany([
+                    Post::factory()->make(),
+                ]);
+            }
+        });
+
         $posts = Post::all();
-        $posts->each(function ($post) use ($user) {
-            // Crete and associate the files
+        $posts->each(function ($post) use ($users) {
+            //Create and associate the files with the post
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
                 File::factory()->type('file')->make(),
             ]);
-            // Associate like to post
-            $like = new Like(['user_id' => $user->id]);
-            $post->likes()->save($like);
+
+            //Iterate over users
+            $users->each(function ($user) use ($post) {
+                if ($user->role_id != 1) {
+                    $like = new Like(['user_id' => $user->id]);
+                    $post->likes()->save($like);
+                }
+            });
         });
         $this->posts = Post::withCount('likes')->get();
         $this->user = $user;
@@ -205,7 +215,10 @@ class ListPostTest extends TestCase
         $response->assertStatus(204);
     }
 
-    public function test_student_see_relevant_content_in_my_home_page()
+    /**
+     @test
+     */
+    public function student_see_relevant_content_in_my_home_page()
     {
         $this->setUpCase1();
         $response = $this->withHeader(

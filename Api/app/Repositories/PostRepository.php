@@ -23,22 +23,9 @@ class PostRepository
     {
         return $this->post::withCount('likes')
             ->with(['likes' => function ($query) {
-                // Filtrar los likes por el usuario autenticado
                 $query->where('user_id', auth()->id());
             }])
             ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()])
-            ->get();
-    }
-
-
-    function getByQuery($key, $value)
-    {
-        return $this->post::withCount('likes')
-            ->with(['likes' => function ($query) {
-                $query->where('user_id', auth()->id());
-            }])
-            ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()])
-            ->where($key, $value)
             ->get();
     }
 
@@ -61,29 +48,21 @@ class PostRepository
             ->where('user_id', $user_id)->get();
     }
 
-    function getByUsersIds($users_ids)
-    {
-        return $this->post::withCount('likes')
-            ->with(['likes' => function ($query) {
-                $query->where('user_id', auth()->id());
-            }])
-            ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()])
-            ->where('user_id', auth()->id())
-            ->whereIn('user_id', $users_ids)
-            ->get();
-    }
-
     function getByUsersCodes($codes)
     {
         return $this->post::withCount('likes')
             ->with(['likes' => function ($query) {
                 $query->where('user_id', auth()->id());
             }])
-            ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()])
-            ->where('user_id', auth()->id())
+            ->selectRaw(
+                'posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like',
+                [auth()->id()]
+            )
+            ->join('users', 'users.id', '=', 'posts.user_id')
             ->whereIn('users.code', $codes)
             ->get();
     }
+
 
     function getByDate($year, $month, $day)
     {
@@ -129,5 +108,25 @@ class PostRepository
             ->orderBy('likes_count', 'DESC')
             ->limit(10)
             ->get();
+    }
+
+    public function query()
+    {
+        $query = $this->post::query();
+        return $query->withCount('likes')
+            ->with(['likes' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])
+            ->selectRaw('posts.*, EXISTS(SELECT 1 FROM likes WHERE likes.post_id = posts.id AND likes.user_id = ?) AS dio_like', [auth()->id()]);
+    }
+
+    function getByUsersIds($query, $users_ids)
+    {
+        return $query->whereIn('user_id', $users_ids);
+    }
+
+    function getByQuery($query, $key, $value)
+    {
+        return $query->where($key, $value);
     }
 }
