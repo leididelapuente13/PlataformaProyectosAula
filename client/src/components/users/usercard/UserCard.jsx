@@ -43,7 +43,7 @@ export const UserCard = ({ user }) => {
 	return (
 		<>
 			<div data-testid='user-card' className={styles.card}>
-				<img alt='user icon' role='img' className={styles.card__img} />
+				<img alt='user icon' role='img' className={styles.card__img} src={`https://i.pravatar.cc/150?u=${userData.id}`} />
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
 					<p className={styles.card__textBold}>

@@ -17,6 +17,13 @@ import { getUsers, filterUsers } from '../../../api/usersApi';
 export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
 	const [filter, setFilter] = useState({ input: '', userState: '', role: '' });
+	const [pages, setPages] = useState({
+		first: '/?page=1',
+		last: '',
+		next: '',
+		prev: null,
+	});
+	const [page, setPage] = useState('/?page=1');
 
 	const handleInputOnChange = (e) => {
 		const { name, value } = e.target;
@@ -26,6 +33,7 @@ export const UsersList = () => {
 	const userFilter = useQuery(
 		['filter', filter.input, filter.userState, filter.role],
 		() => filterUsers(filter),
+		{ refetchOnWindowFocus: false },
 		{
 			onSuccess: () => {
 				// console.log(filter.input, filter.userState, filter.role);
@@ -34,18 +42,15 @@ export const UsersList = () => {
 		{ refetchInterval: 10000, staleTime: 30000 },
 	);
 
-	const {
-		isLoading,
-		data: users,
-		isError,
-	} = useQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
+	const getUsersData = useQuery(['users'], () => getUsers(page), {
+		onSuccess: (data) =>
+			setPages((prevPages) => ({
+				...prevPages,
+				last: data.pages.last,
+				next: data.pages.next,
+				prev: data.pages.prev,
+			})),
 	});
-
-	// Filtro por role y estado
-	// Filtro por coincidencia
-	// Fetch de usuarios
 
 	useEffect(() => {
 		if (
@@ -56,6 +61,10 @@ export const UsersList = () => {
 			userFilter.refetch();
 		}
 	}, [filter.input, filter.userState, filter.role]);
+
+	useEffect(() => {
+		console.log(page);
+	}, [page]);
 
 	return (
 		<section className={styles.section} role='main'>
@@ -72,6 +81,7 @@ export const UsersList = () => {
 					<select
 						className={styles.form__input}
 						name='role'
+						value={filter.input === '' && ''}
 						onChange={(e) => {
 							handleInputOnChange(e);
 						}}
@@ -83,6 +93,7 @@ export const UsersList = () => {
 					<select
 						className={styles.form__input}
 						name='userState'
+						value={filter.input === '' && ''}
 						onChange={(e) => {
 							handleInputOnChange(e);
 						}}
@@ -101,7 +112,7 @@ export const UsersList = () => {
 					<NothingToSee />
 				</div>
 			)} */}
-			{userFilter.isLoading && (
+			{(userFilter.isLoading || getUsersData.isLoading) && (
 				<div className={styles.section__loader} role='progressbar'>
 					<ClipLoader
 						color='#0A84F4'
@@ -114,12 +125,26 @@ export const UsersList = () => {
 				{(filter.input === '' ||
 					filter.role === '' ||
 					filter.userState === '') &&
-					users !== undefined &&
+					getUsersData.data !== undefined &&
 					userFilter.data === undefined &&
-					users.map((user) => <UserCard user={user} key={user.id} />)}
+					getUsersData.data.data.map((user) => <UserCard user={user} key={user.id} />)}
 				{userFilter.data !== undefined &&
 					userFilter.data !== 204 &&
 					userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
+			</div>
+			<div className={styles.section__filter}>
+				<button type='button' onClick={() => setPage(pages.first)}>
+					Primera
+				</button>
+				<button type='button' onClick={() => setPage(pages.prev)}>
+					Previa
+				</button>
+				<button type='button' onClick={() => setPage(pages.next)}>
+					Siguiente
+				</button>
+				<button type='button' onClick={() => setPage(pages.last)}>
+					Ultima
+				</button>
 			</div>
 			{userFilter.data === 204 && <NothingToSee />}
 		</section>
