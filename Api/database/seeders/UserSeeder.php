@@ -30,41 +30,37 @@ class UserSeeder extends Seeder
 
 
         User::factory()
-            ->count(3)->create();
-        User::factory()
-            ->count(40)
-            ->state(function (array $attributes) {
-                return ['state' => '1'];
-            })->create();
+            ->count(30)
+            ->create();
 
-        $users = User::all();
-        $users->each(function ($user) {
-            //create and associate the users with the post
-            if ($user->role_id == 2) {
-                $user->posts()->saveMany([
-                    Post::factory()->make(),
-                    Post::factory()->make()
-                ]);
-            }
-        });
+        // $users = User::all();
+        // $users->each(function ($user) {
+        //     //create and associate the users with the post
+        //     if ($user->role_id == 2 && $user->state == '1') {
+        //         $user->posts()->saveMany([
+        //             Post::factory()->make(),
+        //             Post::factory()->make()
+        //         ]);
+        //     }
+        // });
 
 
-        $posts = Post::all();
+        // $posts = Post::all();
 
-        $posts->each(function ($post) use ($users) {
-            //Create and associate the files with the post
-            $post->files()->saveMany([
-                File::factory()->type('cover_image')->make(),
-                File::factory()->type('file')->make(),
-            ]);
+        // $posts->each(function ($post) use ($users) {
+        //     //Create and associate the files with the post
+        //     $post->files()->saveMany([
+        //         File::factory()->type('cover_image')->make(),
+        //         File::factory()->type('file')->make(),
+        //     ]);
 
-            //Iterate over users
-            $users->each(function ($user) use ($post) {
-                if ($user->role_id != 1) {
-                    $like = new Like(['user_id' => $user->id]);
-                    $post->likes()->save($like);
-                }
-            });
-        });
+        //     //Iterate over users
+        //     $users->each(function ($user) use ($post) {
+        //         if ($user->role_id != 1) {
+        //             $like = new Like(['user_id' => $user->id]);
+        //             $post->likes()->save($like);
+        //         }
+        //     });
+        // });
     }
 }

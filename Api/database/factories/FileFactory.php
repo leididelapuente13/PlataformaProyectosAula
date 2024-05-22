@@ -43,7 +43,7 @@ class FileFactory extends Factory
                 'name' => $title,
                 'path' => 'public/' . $path,
                 'type' => $type,
-                'post_id' => Post::factory()->create()->id
+                //'post_id' => Post::factory()->create()->id
             ];
         });
     }

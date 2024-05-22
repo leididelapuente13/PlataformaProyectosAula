@@ -21,7 +21,7 @@ class DeleteFileTest extends TestCase
     public function test_file_deletion()
     {
         // Mock del facade Storage para simular la eliminación de un archivo
-        Storage::shouldReceive('delete')->once()->with('public/file/example.jpg')->andReturn(true);
+        Storage::shouldReceive('delete')->once()->with('public/pdf/example.jpg')->andReturn(true);
 
         // Crear una instancia del servicio PostService
         $service = new PostService(
@@ -30,7 +30,7 @@ class DeleteFileTest extends TestCase
         );
 
         // Llamar al método deleteFile con un path de archivo ficticio
-        $result = $service->deleteFile('public/file/example.jpg');
+        $result = $service->deleteFile('public/pdf/example.jpg');
 
         // Verificar que el método retorna true cuando el archivo se elimina correctamente
         $this->assertTrue($result);

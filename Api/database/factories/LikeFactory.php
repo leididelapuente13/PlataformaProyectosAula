@@ -20,8 +20,8 @@ class LikeFactory extends Factory
     {
         $user = User::factory()->create([ 'state' => '1']);
         return [
-            'user_id' => $user->id,
-            'post_id' => Post::factory()->create(['user_id' => $user->id])->id
+            // 'user_id' => $user->id,
+            // 'post_id' => Post::factory()->create(['user_id' => $user->id])->id
         ];
     }
 }

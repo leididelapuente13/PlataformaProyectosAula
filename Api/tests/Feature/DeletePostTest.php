@@ -39,7 +39,7 @@ class DeletePostTest extends TestCase
         $posts->each(function ($post) {
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
-                File::factory()->type('file')->make(),
+                File::factory()->type('pdf')->make(),
             ]);
         });
         $this->posts = Post::all();

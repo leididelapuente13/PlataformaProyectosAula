@@ -50,7 +50,7 @@ class ListPostTest extends TestCase
             //Create and associate the files with the post
             $post->files()->saveMany([
                 File::factory()->type('cover_image')->make(),
-                File::factory()->type('file')->make(),
+                File::factory()->type('pdf')->make(),
             ]);
 
             //Iterate over users
@@ -82,7 +82,7 @@ class ListPostTest extends TestCase
         $post->likes()->save($like);
         $post->files()->saveMany([
             File::factory()->type('cover_image')->make(),
-            File::factory()->type('file')->make(),
+            File::factory()->type('pdf')->make(),
         ]);
         $this->post = Post::withCount('likes')->first();
     }

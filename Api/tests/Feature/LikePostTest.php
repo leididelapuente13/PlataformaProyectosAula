@@ -30,7 +30,7 @@ class LikePostTest extends TestCase
         $post = Post::first();
         $post->files()->saveMany([
             File::factory()->type('cover_image')->make(),
-            File::factory()->type('file')->make(),
+            File::factory()->type('pdf')->make(),
         ]);
 
         $this->post = Post::all();
