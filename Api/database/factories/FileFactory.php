@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
+use Dompdf\Dompdf;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -24,26 +25,77 @@ class FileFactory extends Factory
 
     public function type($type)
     {
-        $file = null;
-        $fileName = $type . '_' . Str::random(10);
-        if ($type === 'file') {
-            $file = UploadedFile::fake()->create($fileName.'.pdf', 1024);
-        } elseif ($type === 'cover_image') {
-            $file = UploadedFile::fake()->image($fileName.'.jpg', 640, 480);
-        }
-
-        return $this->state(function (array $attributes) use ($file, $type) {
-            // Almacenar el archivo en la carpeta correspondiente en el almacenamiento
-            if (app()->environment('testing')) {
-                $path = 'public/' . $type . '/' .$file;
-            } else {
-                $path = Storage::putFile('public/' . $type, $file);
+        $title = $this->faker->sentence(10);
+        $fileName = Str::slug($title) . '-' . Str::random(4);
+        $path = $type . '/' . $fileName;
+        // Generate the file based on its type
+        if (!app()->environment('testing')) {
+            if ($type === 'pdf') {
+                $fileName .= '.pdf';
+                $this->generatePdf($fileName);
+            } elseif ($type === 'cover_image') {
+                $path .= '.jpg';
+                $this->img($path);
             }
+        }
+        return $this->state(function (array $attributes) use ($title, $type, $path) {
             return [
-                'name' => $file->getClientOriginalName(),
-                'path' => $path,
+                'name' => $title,
+                'path' => 'public/' . $path,
                 'type' => $type,
+                'post_id' => Post::factory()->create()->id
             ];
         });
+    }
+
+    private function img($path)
+    {
+        // Download the image
+        $url = 'https://source.unsplash.com/random/400x200';
+        $content = @file_get_contents($url);
+        if ($content === false) {
+            throw new \Exception("Could not download image from $url");
+        }
+        // Save the image to storage
+        Storage::disk('public')->put($path, $content);
+    }
+
+    private function generatePdf($title)
+    {
+        // Generate content for the PDF
+        $title = $this->faker->sentence();
+        $paragraph = $this->faker->paragraph();
+        $html = '
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f0f0f0;
+                }
+                h1 {
+                    color: #333333;
+                    text-align: center;
+                }
+                p {
+                    color: #666666;
+                    text-align: justify;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>' . $title . '</h1>
+            <p>' . $paragraph . '</p>
+        </body>
+        </html>';
+
+        // Create a PDF using Dompdf
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $output = $dompdf->output();
+        // Save the PDF to storage
+        file_put_contents('public/storage/pdf/' . $title . '.pdf', $output);
     }
 }

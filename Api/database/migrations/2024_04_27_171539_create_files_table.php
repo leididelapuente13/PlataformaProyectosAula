@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('path');
             $table->unsignedBigInteger('post_id');
-            $table->enum('type' , ['cover_image', 'file']);
+            $table->enum('type' , ['cover_image', 'pdf']);
             $table->foreign('post_id')->references('id')->on('posts')->cascadeOnDelete();
             $table->unique(['type' , 'post_id']);
             $table->timestamps();
