@@ -1,13 +1,14 @@
+import { useMutation } from 'react-query';
 // Styles
 import styles from './UserCard.module.scss';
 // Request
-import { activateUser } from '../../../api/usersApi';
-import { deactivateUser } from '../../../api/usersApi';
+import { changeUserStateRequest } from '../../../api/usersApi';
 // Dependencies
 import { PropTypes } from 'prop-types';
-import { QueryClient, useMutation } from 'react-query';
-
-export const UserCard = ({ user }) => {
+import { QueryClient } from 'react-query';
+import { useEffect } from 'react';
+export const UserCard = ({ user, page }) => {
+	console.log(page);
 	const userData = {
 		id: user.id,
 		user_name: user.attributes && user.attributes.user_name,
@@ -16,41 +17,44 @@ export const UserCard = ({ user }) => {
 		description: user.attributes && user.attributes.description,
 		role: user.attributes && user.attributes.role_id,
 		state: user.attributes && user.attributes.state,
+		carrera: user.attributes.carrera,
+		departamento: user.attributes.departamento,
+		semestre: user.attributes.semestre,
 	};
 
 	const queryClient = new QueryClient();
 
-	const activateUserMutation = useMutation(activateUser, {
+	const changeStateMutation = useMutation((id) => changeUserStateRequest(id), {
 		onSuccess: () => {
-			queryClient.invalidateQueries(['users']);
+			queryClient.invalidateQueries(['users', page]);
 		},
 	});
 
-	const deactivateUserMutation = useMutation(deactivateUser, {
-		onSuccess: () => {
-			queryClient.invalidateQueries(['users']);
-		},
-	});
-
-	const changeUserState = async () => {
-		if (user.data.attributes.state === '0') {
-			await activateUserMutation(user.data.id);
-		} else if (user.data.attributes.state === '1') {
-			await deactivateUserMutation(user.data.id);
-		}
+	const changeUserState = async (id) => {
+		console.log(userData.id);
+		await changeStateMutation.mutateAsync(id);
+		console.log(userData.state);
 	};
-
 	return (
 		<>
 			<div data-testid='user-card' className={styles.card}>
-				<img alt='user icon' role='img' className={styles.card__img} src={`https://i.pravatar.cc/150?u=${userData.id}`} />
+				<img
+					alt='user icon'
+					role='img'
+					className={styles.card__img}
+					src={`https://i.pravatar.cc/150?u=${userData.id}`}
+				/>
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
 					<p className={styles.card__textBold}>
 						{userData.role === 2
-							? 'Estudiante'
+							? 'Estudiante de ' +
+								userData.carrera +
+								', ' +
+								'Semestre ' +
+								userData.semestre
 							: userData.role === 3
-								? 'Profesor'
+								? 'Profesor del ' + userData.departamento
 								: ''}
 					</p>
 					<p className={styles.card__textLight}>{userData.code}</p>
@@ -65,7 +69,7 @@ export const UserCard = ({ user }) => {
 						? styles.buttonDeactivate
 						: styles.buttonActivate
 				}
-				onClick={() => changeUserState()}
+				onClick={() => changeUserState(userData.id)}
 			>
 				{userData.state === '1' ? 'Desactivar' : 'Activar'}
 			</button>

@@ -21,7 +21,7 @@ export const UsersList = () => {
 		first: '/?page=1',
 		last: '',
 		next: '',
-		prev: null,
+		prev: '',
 	});
 	const [page, setPage] = useState('/?page=1');
 
@@ -34,22 +34,20 @@ export const UsersList = () => {
 		['filter', filter.input, filter.userState, filter.role],
 		() => filterUsers(filter),
 		{ refetchOnWindowFocus: false },
-		{
-			onSuccess: () => {
-				// console.log(filter.input, filter.userState, filter.role);
-			},
-		},
 		{ refetchInterval: 10000, staleTime: 30000 },
 	);
 
-	const getUsersData = useQuery(['users'], () => getUsers(page), {
-		onSuccess: (data) =>
-			setPages((prevPages) => ({
-				...prevPages,
-				last: data.pages.last,
-				next: data.pages.next,
-				prev: data.pages.prev,
-			})),
+	const getUsersData = useQuery(['users', page], () => getUsers(page), {
+		onSuccess: (data) => {
+			if (data && data.pages) {
+				setPages((prevPages) => ({
+					...prevPages,
+					last: data.pages.last,
+					next: data.pages.next,
+					prev: data.pages.prev,
+				}));
+			}
+		},
 	});
 
 	useEffect(() => {
@@ -63,8 +61,39 @@ export const UsersList = () => {
 	}, [filter.input, filter.userState, filter.role]);
 
 	useEffect(() => {
-		console.log(page);
-	}, [page]);
+		getUsersData.refetch();
+	}, [page || getUsersData.data]);
+
+	const renderData = () => {
+		if (userFilter.isLoading || getUsersData.isLoading) {
+			return (
+				<div className={styles.section__loader} role='progressbar'>
+					<ClipLoader
+						color='#0A84F4'
+						size={40}
+						cssOverride={{ alignSelf: 'center' }}
+					/>
+				</div>
+			);
+		}
+
+		if (filter.input !== '' || filter.role !== '' || filter.userState !== '') {
+			if (userFilter.data !== undefined && userFilter.data !== 204) {
+				return userFilter.data.map((user) => (
+					<UserCard user={user} key={user.id} />
+				));
+			}
+		} else {
+			if (getUsersData.data.data && Array.isArray(getUsersData.data.data)) {
+				console.log('4');
+
+				return getUsersData.data.data.map((user) => (
+					<UserCard user={user} page={page} key={user.id}/>
+				));
+			}
+		}
+		return <NothingToSee />;
+	};
 
 	return (
 		<section className={styles.section} role='main'>
@@ -107,45 +136,33 @@ export const UsersList = () => {
 					</button> */}
 				</form>
 			</div>
-			{/* {(users.data === 204) && (
-				<div role='status'>
-					<NothingToSee />
-				</div>
-			)} */}
-			{(userFilter.isLoading || getUsersData.isLoading) && (
-				<div className={styles.section__loader} role='progressbar'>
-					<ClipLoader
-						color='#0A84F4'
-						size={40}
-						cssOverride={{ alignSelf: 'center' }}
-					/>
+			<div role='article' className={styles.section__cardContainer}>
+				{renderData()}
+			</div>
+			{getUsersData.data && (
+				<div className={styles.section__filter}>
+					<button type='button' onClick={() => setPage(pages.first)}>
+						Primera
+					</button>
+					<button
+						type='button'
+						onClick={() => setPage(pages.prev)}
+						disabled={pages.prev === null ? true : false}
+					>
+						Previa
+					</button>
+					<button
+						type='button'
+						onClick={() => setPage(pages.next)}
+						disabled={pages.next === null ? true : false}
+					>
+						Siguiente
+					</button>
+					<button type='button' onClick={() => setPage(pages.last)}>
+						Ultima
+					</button>
 				</div>
 			)}
-			<div role='article' className={styles.section__cardContainer}>
-				{(filter.input === '' ||
-					filter.role === '' ||
-					filter.userState === '') &&
-					getUsersData.data !== undefined &&
-					userFilter.data === undefined &&
-					getUsersData.data.data.map((user) => <UserCard user={user} key={user.id} />)}
-				{userFilter.data !== undefined &&
-					userFilter.data !== 204 &&
-					userFilter.data.map((user) => <UserCard user={user} key={user.id} />)}
-			</div>
-			<div className={styles.section__filter}>
-				<button type='button' onClick={() => setPage(pages.first)}>
-					Primera
-				</button>
-				<button type='button' onClick={() => setPage(pages.prev)}>
-					Previa
-				</button>
-				<button type='button' onClick={() => setPage(pages.next)}>
-					Siguiente
-				</button>
-				<button type='button' onClick={() => setPage(pages.last)}>
-					Ultima
-				</button>
-			</div>
 			{userFilter.data === 204 && <NothingToSee />}
 		</section>
 	);

@@ -18,13 +18,18 @@ axios.interceptors.request.use(
 const getUsers = async (page) => {
 	console.log(page);
 	try {
-		const response = await axios.get(`${baseUrl}user`, {
+		console.log(`${baseUrl}user${page}&perPage=4`);
+		const response = await axios.get(`${baseUrl}user${page}&perPage=4`, {
 			headers: {
 				'ngrok-skip-browser-warning': true,
+				'Content-Type': 'application/json',
 			},
 		});
 		if (response.status === 204) return 204;
-		const data = {data: response.data.data, pages: response.data.links}
+		const users = Array.isArray(response.data.data)
+			? response.data.data
+			: Object.values(response.data.data);
+		const data = { data: users, pages: response.data.links };
 		return data;
 	} catch (error) {
 		console.error('Ha ocurrido un error', error);
@@ -63,7 +68,7 @@ const filterUsers = async (condition) => {
 			console.log(response.status);
 			if (response.status === 204) return 204;
 			return response.data.data;
-		} else if (role !== '' && (userState !== '') && (input === '')) {
+		} else if (role !== '' && userState !== '' && input === '') {
 			const response = await axios.get(
 				`${baseUrl}user?filter[state]=${state}&filter[role_id]=${userRole}`,
 				{
@@ -91,22 +96,16 @@ const filterUsers = async (condition) => {
 	}
 };
 
-const deactivateUser = async (userId) => {
+const changeUserStateRequest = async (id) => {
 	try {
-		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 0 });
+		const response = await axios.get(`${baseUrl}user/admin/user-state/${id}`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+		});
+		console.log(response);
 		return response;
 	} catch (error) {
 		throw error;
 	}
 };
 
-const activateUser = async (userId) => {
-	try {
-		const response = await axios.put(`${baseUrl}users/${userId}`, { state: 1 });
-		return response;
-	} catch (error) {
-		throw error;
-	}
-};
-
-export { getUsers, filterUsers, activateUser, deactivateUser };
+export { getUsers, filterUsers, changeUserStateRequest };
