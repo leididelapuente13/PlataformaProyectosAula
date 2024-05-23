@@ -69,7 +69,7 @@ class UserService
         return  $user->state != $oldState;
     }
 
-    public function filter($filter)
+    public function filter($request, $filter)
     {
         $merge = [];
         $usersApi = Controller::apiUsersFilter($filter)->json();
@@ -86,7 +86,11 @@ class UserService
                 $merge[] = array_merge($matchesFound ? $userData : $this->getByApiCode($user->code), $user->toArray());
             }
         }
-        return $merge;
+        if(empty($merge)){
+            return $merge;
+        }
+        $perPage = ($request->has('perPage') ? $request->get('perPage') : 20);
+        return $this->paginate(collect($merge), $perPage);
     }
 
     public function getByCode($code)

@@ -42,7 +42,8 @@ class UserRepository
         $query = $this->user::query();
         $query->where('user_name', 'LIKE', '%' . $filter . '%')
             ->orWhere('state', 'LIKE', ($filter == "Activo" || $filter == "activo") ? 1 : (($filter == "Inactivo" || $filter == "inactivo") ? 0 : 3))
-            ->orWhere('role_id', 'LIKE', ($filter == "Estudiante") ? 2 : ($filter == "Profesor" ? 3 : 0));
+            ->orWhere('role_id', 'LIKE', ($filter == "Estudiante") ? 2 : ($filter == "Profesor" ? 3 : 0))
+            ->orWhere('code' , 'LIKE' , $filter . '%');
         $query->where('role_id', '!=', 1);
         return $query->get();
     }
