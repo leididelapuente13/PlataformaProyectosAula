@@ -1,7 +1,5 @@
 // Styles
 import styles from './UsersList.module.scss';
-// Icons
-import { FaMagnifyingGlass } from 'react-icons/fa6';
 // Dependencies
 import { useQuery } from 'react-query';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -18,7 +16,7 @@ export const UsersList = () => {
 	const { setVisible, visible } = useContext(WarningContext);
 	const [filter, setFilter] = useState({ input: '', userState: '', role: '' });
 	const [pages, setPages] = useState({
-		first: '/?page=1',
+		first: '',
 		last: '',
 		next: '',
 		prev: '',
@@ -32,7 +30,22 @@ export const UsersList = () => {
 
 	const userFilter = useQuery(
 		['filter', filter.input, filter.userState, filter.role],
-		() => filterUsers(filter),
+		() => filterUsers(filter, page),
+		{
+			onSuccess: (filterData) => {
+				if (filterData && filterData.pages) {
+					console.log(filterData.pages);
+					setPages((prevPages) => ({
+						...prevPages,
+						first: filterData.pages.first,
+						last: filterData.pages.last,
+						next: filterData.pages.next,
+						prev: filterData.pages.prev,
+					}));
+				}
+				console.log(filterData.pages);
+			},
+		},
 		{ refetchOnWindowFocus: false },
 		{ refetchInterval: 10000, staleTime: 30000 },
 	);
@@ -42,12 +55,14 @@ export const UsersList = () => {
 			if (data && data.pages) {
 				setPages((prevPages) => ({
 					...prevPages,
+					first: data.pages.first,
 					last: data.pages.last,
 					next: data.pages.next,
 					prev: data.pages.prev,
 				}));
 			}
 		},
+		onError: () => setVisible((prev) => ({ ...prev, listUsersError: true })),
 	});
 
 	useEffect(() => {
@@ -79,16 +94,14 @@ export const UsersList = () => {
 
 		if (filter.input !== '' || filter.role !== '' || filter.userState !== '') {
 			if (userFilter.data !== undefined && userFilter.data !== 204) {
-				return userFilter.data.map((user) => (
+				return userFilter.data.data.map((user) => (
 					<UserCard user={user} key={user.id} />
 				));
 			}
 		} else {
 			if (getUsersData.data.data && Array.isArray(getUsersData.data.data)) {
-				console.log('4');
-
 				return getUsersData.data.data.map((user) => (
-					<UserCard user={user} page={page} key={user.id}/>
+					<UserCard user={user} page={page} key={user.id} />
 				));
 			}
 		}
@@ -139,7 +152,7 @@ export const UsersList = () => {
 			<div role='article' className={styles.section__cardContainer}>
 				{renderData()}
 			</div>
-			{getUsersData.data && (
+			{getUsersData.isLoading === false && userFilter.isLoading === false && (
 				<div className={styles.section__filter}>
 					<button type='button' onClick={() => setPage(pages.first)}>
 						Primera
@@ -163,7 +176,6 @@ export const UsersList = () => {
 					</button>
 				</div>
 			)}
-			{userFilter.data === 204 && <NothingToSee />}
 		</section>
 	);
 };

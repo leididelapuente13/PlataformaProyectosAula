@@ -47,7 +47,7 @@ export const Profile = () => {
 						)}
 						<div className={styles.section__img__container}>
 							<img
-								src={icon}
+								src={`https://i.pravatar.cc/150?u=${userProfile?.id}`}
 								alt='profile picture'
 								className={styles.profile__img}
 							/>
@@ -68,7 +68,7 @@ export const Profile = () => {
 								{userProfile?.carrera}
 							</div>
 							<div className={styles.profile__rectangle}>
-								{userProfile?.semestre}
+								Semestre:{' '}{userProfile?.semestre}
 							</div>
 						</div>
 					</section>

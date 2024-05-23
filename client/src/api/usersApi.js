@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
-// const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
 axios.interceptors.request.use(
 	(config) => {
@@ -16,9 +15,7 @@ axios.interceptors.request.use(
 );
 
 const getUsers = async (page) => {
-	console.log(page);
 	try {
-		console.log(`${baseUrl}user${page}&perPage=4`);
 		const response = await axios.get(`${baseUrl}user${page}&perPage=4`, {
 			headers: {
 				'ngrok-skip-browser-warning': true,
@@ -36,59 +33,74 @@ const getUsers = async (page) => {
 	}
 };
 
-const filterUsers = async (condition) => {
+const filterUsers = async (condition, page) => {
+	page = page.substring(1);
+	console.log('fiter refrence page; ', page);
 	const { input, userState, role } = condition;
 	const state = userState === '*' ? '' : userState;
 	const userRole = role === '*' ? '' : role;
 	if (condition !== null) {
-		console.log('Request: ', condition);
 		if (userState !== '' && role === '' && input === '') {
+			console.log('primera:', `${baseUrl}user${page}&perPage=4&filter[state]=${state}`);
 			try {
 				const response = await axios.get(
-					`${baseUrl}user?filter[state]=${state}`,
+					`${baseUrl}user${page}&perPage=4&filter[state]=${state}`,
 					{
 						headers: { 'ngrok-skip-browser-warning': true },
 					},
 				);
-				console.log('mixed filter: ', response.data.data);
-				console.log(response.status);
 				if (response.status === 204) return 204;
-				return response.data.data;
+				const users = Array.isArray(response.data.data)
+					? response.data.data
+					: Object.values(response.data.data);
+				const data = { data: users, pages: response.data.links };
+				return data;
 			} catch (error) {
 				console.error(error);
 			}
 		} else if (role !== '' && userState === '' && input === '') {
+			console.log('segunda: ', `${baseUrl}user${page}&perPage=4&userfilter[role_id]=${userRole}`);
 			const response = await axios.get(
-				`${baseUrl}user?filter[role_id]=${userRole}`,
+				`${baseUrl}user${page}&perPage=4&userfilter[role_id]=${userRole}`,
 				{
 					headers: { 'ngrok-skip-browser-warning': true },
 				},
 			);
-			console.log('mixed filter: ', response.data.data);
-			console.log(response.status);
 			if (response.status === 204) return 204;
-			return response.data.data;
+			const users = Array.isArray(response.data.data)
+				? response.data.data
+				: Object.values(response.data.data);
+			const data = { data: users, pages: response.data.links };
+			console.log(data);
+			return data;
 		} else if (role !== '' && userState !== '' && input === '') {
+			console.log('tercera: ', `${baseUrl}${page}&perPage=4&userfilter[state]=${state}&filter[role_id]=${userRole}`);
 			const response = await axios.get(
-				`${baseUrl}user?filter[state]=${state}&filter[role_id]=${userRole}`,
+				`${baseUrl}user?filter[state]=${state}&filter[role_id]=${userRole}&${page}&perPage=4`,
 				{
 					headers: { 'ngrok-skip-browser-warning': true },
 				},
 			);
-			console.log('mixed filter: ', response.data.data);
-			console.log(response.status);
 			if (response.status === 204) return 204;
-			return response.data.data;
+			const users = Array.isArray(response.data.data)
+				? response.data.data
+				: Object.values(response.data.data);
+			const data = { data: users, pages: response.data.links };
+			console.log(data);
+			return data;
 		} else if (input !== '') {
-			console.log('by coincidence');
+			console.log('cuarta: ', `${baseUrl}user/filter/${input}&${page}&perPage=4`);
 			try {
-				const response = await axios.get(`${baseUrl}user/filter/${input}`, {
+				const response = await axios.get(`${baseUrl}user/filter/${input}${page}&perPage=4`, {
 					headers: { 'ngrok-skip-browser-warning': true },
 				});
-				console.log('coincidence: ', response.data.data);
-				console.log(response.status === 204 && response.status);
 				if (response.status === 204) return 204;
-				return response.data.data;
+				const users = Array.isArray(response.data.data)
+					? response.data.data
+					: Object.values(response.data.data);
+				const data = { data: users, pages: response.data.links };
+				console.log(data);
+				return data;
 			} catch (error) {
 				console.error(error);
 			}
@@ -101,7 +113,6 @@ const changeUserStateRequest = async (id) => {
 		const response = await axios.get(`${baseUrl}user/admin/user-state/${id}`, {
 			headers: { 'ngrok-skip-browser-warning': true },
 		});
-		console.log(response);
 		return response;
 	} catch (error) {
 		throw error;

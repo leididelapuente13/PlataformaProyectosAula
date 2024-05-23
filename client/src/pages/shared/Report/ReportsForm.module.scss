@@ -11,13 +11,13 @@
 	gap: 1.5rem;
     width: 90%;
     max-width: 450px;
-	padding: 3rem 1rem;
+	padding: 3.5rem 1rem;
     margin: auto;
 	&__title {
         color: $secondary-red;
 		text-align: center;
 		font-size: 1.7rem;
-		margin-bottom: 0.5rem;
+		margin-block: 3rem 0.5rem;
 	}
 	&__label {
         color: $primary-purple;

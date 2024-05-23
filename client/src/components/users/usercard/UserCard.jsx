@@ -6,10 +6,9 @@ import { changeUserStateRequest } from '../../../api/usersApi';
 // Dependencies
 import { PropTypes } from 'prop-types';
 import { QueryClient } from 'react-query';
-import { useEffect } from 'react';
+import { useState } from 'react';
 export const UserCard = ({ user, page }) => {
-	console.log(page);
-	const userData = {
+	const [userData, setUserData] = useState({
 		id: user.id,
 		user_name: user.attributes && user.attributes.user_name,
 		code: user.attributes && user.attributes.code,
@@ -20,21 +19,24 @@ export const UserCard = ({ user, page }) => {
 		carrera: user.attributes.carrera,
 		departamento: user.attributes.departamento,
 		semestre: user.attributes.semestre,
-	};
+	});
 
 	const queryClient = new QueryClient();
 
 	const changeStateMutation = useMutation((id) => changeUserStateRequest(id), {
 		onSuccess: () => {
+			setUserData((prevUserData) => ({
+				...prevUserData,
+				state: prevUserData.state === '1' ? '0' : '1',
+			}));
 			queryClient.invalidateQueries(['users', page]);
 		},
 	});
 
 	const changeUserState = async (id) => {
-		console.log(userData.id);
 		await changeStateMutation.mutateAsync(id);
-		console.log(userData.state);
 	};
+
 	return (
 		<>
 			<div data-testid='user-card' className={styles.card}>
@@ -46,7 +48,7 @@ export const UserCard = ({ user, page }) => {
 				/>
 				<div className={styles.card__container}>
 					<p className={styles.card__textBold}>{userData.user_name}</p>
-					<p className={styles.card__textBold}>
+					<p className={styles.card__textRegular}>
 						{userData.role === 2
 							? 'Estudiante de ' +
 								userData.carrera +

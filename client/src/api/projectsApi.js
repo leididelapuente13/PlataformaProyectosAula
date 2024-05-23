@@ -3,8 +3,6 @@ import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_REACT_APP_API_URL;
 const apiUrl = import.meta.env.VITE_REACT_APP_API_BASE_URL;
-// const baseUrl = 'https://9360-181-143-211-148.ngrok-free.app';
-// const apiUrl = 'https://9360-181-143-211-148.ngrok-free.app';
 
 axios.interceptors.request.use(
 	(config) => {
@@ -98,6 +96,7 @@ const getAllProjectsRequest = async () => {
 };
 
 const getFile = async (fileLink) => {
+	console.log('link: ', fileLink);
 	try {
 		const response = await axios.get(fileLink, {
 			headers: {
@@ -106,7 +105,8 @@ const getFile = async (fileLink) => {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		const files = {cover: `${apiUrl}${response.data.data[0].links.file}`, file: `${apiUrl}/${response.data.data[1].links.file}`}
+		const files = {cover: `${apiUrl}${response.data.data[0].links.file}`, file: `${apiUrl}${response.data.data[1].links.file}`}
+		console.log('files: ', `cover: ${apiUrl}${response.data.data[0].links.file} file: ${apiUrl}${response.data.data[1]}.links.file`)
 		return files;
 	} catch (error) {
 		throw error;
