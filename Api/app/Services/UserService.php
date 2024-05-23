@@ -61,8 +61,9 @@ class UserService
             return null;
         }
         $oldState = $user->state;
+
         //Change user state
-        $user->state = ($user->state == 1) ? 0 : 1;
+        $user->state = ($user->state == "1") ? "0" : "1";
         $user->save();
         //Verify if it was changed
         return  $user->state != $oldState;
