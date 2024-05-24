@@ -28,4 +28,12 @@ class CommentService{
         }
         return $comment;
     }
+
+    public function delete($comment){
+        $comment = $this->commentRepository->delete($comment);
+        if(!$comment){
+            return null;
+        }
+        return $comment;
+    }
 }

@@ -24,4 +24,8 @@ class CommentRepository
             'content' => $content
         ]);
     }
+
+    public function delete($comment){
+        return $this->comment::where('id', $comment)->delete();
+    }
 }

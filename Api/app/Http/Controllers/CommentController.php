@@ -31,4 +31,12 @@ class CommentController extends Controller
         }
         return response()->json(201);
     }
+
+    public function destroy($comment)
+    {
+        if($this->commentService->delete($comment)){
+            return response()->json([], 204);
+        }
+        return response()->json([], 500);
+    }
 }
