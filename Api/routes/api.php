@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\sessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -58,6 +59,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('like/{post}', 'like')->name('api.like.post')->middleware(['ability:admin,student,teacher']);
         Route::get('like/{post}/unlike', 'unlike')->name('api.unlike.post')->middleware(['ability:admin,student,teacher']);
     });
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function (){
+   Route::controller(ReportController::class)->group(function (){
+    Route::get('report' , 'index')->name('api.report.index')->middleware(['ability:admin']);
+   });
 });
 
 Route::post('user', [UserController::class, 'create'])->name('api.user.create');
