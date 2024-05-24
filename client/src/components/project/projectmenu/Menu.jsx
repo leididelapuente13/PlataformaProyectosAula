@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from 'react-query';
 import { useContext } from 'react';
 import { WarningContext } from '../../../context/WarningContext';
+import { Link } from 'react-router-dom';
 
 export const Menu = ({ closeMenu, projectId, authorId }) => {
 	const role = localStorage.getItem('role');
@@ -65,7 +66,7 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 				{(role === '2' || role === '3') && (
 					<button type='button' className={styles.menu__button}>
 						<MdReport />
-						<p>Reportar</p>
+						<Link to='/report-form'>Reportar</Link>
 					</button>
 				)}
 			</div>
