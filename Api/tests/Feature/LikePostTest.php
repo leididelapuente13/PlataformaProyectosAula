@@ -58,7 +58,7 @@ class LikePostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken', ['student'])->plainTextToken
-        )->getJson(Route('api.unlike.post', $this->post->first()->getRouteKey()));
+        )->deleteJson(Route('api.unlike.post', $this->post->first()->getRouteKey()));
         $response->assertStatus(204);
         $like = Like::where('post_id', $this->post->first()->getRouteKey())
         ->where('user_id', $this->user->getRouteKey())->first();

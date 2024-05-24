@@ -52,7 +52,7 @@ class DeletePostTest extends TestCase
         $response = $this->withHeader(
             'Authorization',
             'Bearer ' . $this->user->createToken('TestToken')->plainTextToken
-        )->getJson(route('api.post.destroy', $this->posts->first()->getRouteKey()));
+        )->deleteJson(route('api.post.destroy', $this->posts->first()->getRouteKey()));
         $response->assertStatus(204);
     }
 }

@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('post/filter/{post}', 'filterPosts')->name('api.post.filter');
         Route::get('post/files/{post}', 'filesPost')->name('api.post.files');
         Route::get('post/user/posts/{user}', 'postsOfUser')->name('api.user.posts')->middleware(['ability:admin,student,teacher']);
-        Route::get('post/destroy/{post}', 'destroy')->name('api.post.destroy')->middleware(['ability:student']);
+        Route::delete('post/{post}', 'destroy')->name('api.post.destroy')->middleware(['ability:student']);
         Route::get('post/trending/likes', 'trending')->name('api.post.trending')->middleware(['ability:student,teacher,admin']);
     });
 });
@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(LikeController::class)->group(function (){
         Route::get('like/{post}', 'like')->name('api.like.post')->middleware(['ability:admin,student,teacher']);
-        Route::get('like/{post}/unlike', 'unlike')->name('api.unlike.post')->middleware(['ability:admin,student,teacher']);
+        Route::delete('like/{post}', 'unlike')->name('api.unlike.post')->middleware(['ability:admin,student,teacher']);
     });
 });
 
@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::controller(CommentController::class)->group(function (){
      Route::get('comment/{post}' , 'index')->name('api.comment.index')->middleware(['ability:admin,student,teacher']);
      Route::post('comment/{post}' , 'store')->name('api.comment.store')->middleware(['ability:admin,teacher']);
-     Route::get('comment/{comment}' , 'destroy')->name('api.comment.destroy')->middleware(['ability:admin,teacher']);
+     Route::delete('comment/{comment}' , 'destroy')->name('api.comment.destroy')->middleware(['ability:admin,teacher']);
     });
  });
 
