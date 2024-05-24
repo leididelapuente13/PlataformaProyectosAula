@@ -21,6 +21,7 @@ class CommentResource extends JsonResource
             'attributes' =>  [
                 'content' => $this->resource->content,
                 'created_at' => Carbon::parse($this->resource->createdAt)->format('Y-m-d H:i:s'),
+                'auth_commented' => $this->resource->auth_commented
             ],
             'relationships' => [
                 'user' => [

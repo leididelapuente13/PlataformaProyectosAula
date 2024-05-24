@@ -12,11 +12,14 @@ class CommentRepository
 
     public function select($perPage, $post)
     {
-        return $this->comment::where('post_id' , $post)
+        return $this->comment::where('post_id', $post)
+            ->with(['user:id', 'post:id'])
+            ->selectRaw('comments.* , EXISTS (SELECT * FROM comments WHERE comments.user_id = ? AND comments.post_id = ?) AS auth_commented', [auth()->id(), $post])
+            ->orderBy('created_at', 'DESC')
             ->paginate($perPage);
     }
 
-    public function insert($content , $post_id, $user_id )
+    public function insert($content, $post_id, $user_id)
     {
         return $this->comment::create([
             'post_id' => $post_id,
@@ -25,7 +28,8 @@ class CommentRepository
         ]);
     }
 
-    public function delete($comment){
+    public function delete($comment)
+    {
         return $this->comment::where('id', $comment)->delete();
     }
 }
