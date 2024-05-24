@@ -29,11 +29,11 @@ class PostService
             $coverImagePath = $this->storeFile($coverImage, 'public/cover_image');
         }
 
-        if ($request->hasFile('data.attributes.file')) {
-            $file = $request->file('data.attributes.file');
+        if ($request->hasFile('data.attributes.pdf')) {
+            $file = $request->file('data.attributes.pdf');
             $fileName = $file->getClientOriginalName();
             //$filePath = $file->storeAs('public/file', $fileName);
-            $filePath = $this->storeFile($file, 'public/file');
+            $filePath = $this->storeFile($file, 'public/pdf');
         }
 
         $post =  $this->postRepository->insert($title, $description, $user_id);
@@ -50,47 +50,32 @@ class PostService
             $post->files()->create([
                 'name' => $fileName,
                 'path' => $filePath,
-                'type' => 'file'
+                'type' => 'pdf'
             ]);
         }
 
         return $post;
     }
 
-    private function storeFile(UploadedFile $file, $path)
-    {
-        if (app()->environment('testing')) {
-            return 'fake_path';
-        } else {
-            return $file->store($path);
-        }
-    }
-
     function getAll($request)
     {
-        $posts = collect();
+        $query = $this->postRepository->query();
         if ($request->has('filter')) {
             foreach ($request->get('filter') as $key => $value) {
                 if ($key == 'career') {
-                    $posts = $posts->merge($this->getPostsByCareer($value));
+                    $query = $this->applyFilterPostByCareer($query, $value);
                 } else if ($key == 'semester') {
                 } else {
-                    $posts = $posts->merge($this->postRepository->getByQuery($key, $value)->get());
+                    $query = $this->postRepository->getByQuery($query, $key, $value);
                 }
             }
-        } else {
-            $posts = $this->postRepository->getAll();
         }
-
+        $posts = $query->get();
         if (!$posts) {
             return null;
         }
-
-        $perPage = ($request->has('perPage')) ? $request->get('perPage') : 10;//Check perPage value
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentPageItems = $posts->forPage($currentPage, $perPage); //only elements from the current page
-        $paginatedPosts = new LengthAwarePaginator($currentPageItems, $posts->count(), $perPage, $currentPage); //Create instance of pagination
-        return $paginatedPosts;
+        $perPage = ($request->has('perPage')) ? $request->get('perPage') : 10; //Check perPage value
+        return $this->paginate($perPage, $posts);
     }
 
     function getById($id)
@@ -106,7 +91,12 @@ class PostService
     function getRelevant($user)
     {
         $usersApi = $this->userService->getByApiCode($user->code); // Get the current user
-        return $this->getPostsByCareer($usersApi['carrera']);
+        $codigos = $this->getUsersByCareer($usersApi['carrera']);
+        $posts = $this->postRepository->getByUsersCodes($codigos);
+        if(!$posts){
+            return null;
+        }
+        return $posts;
     }
 
     function getByDate($year, $month, $day)
@@ -117,19 +107,6 @@ class PostService
     function getByFilter($filter)
     {
         return $this->postRepository->getByFilter($filter);
-    }
-
-    function getPostsByCareer($value)
-    {
-        $users = $this->userService->getUsersApiByCareer($value); //Get all users by career
-        $ids = collect($users)->pluck('id')->toArray(); // Get users's ids
-        return $this->postRepository->getByUsersIds($ids);
-    }
-
-    function getFilesPost($id)
-    {
-        $post = $this->postRepository->getById($id);
-        return $post->files;
     }
 
     function delete($post)
@@ -144,7 +121,17 @@ class PostService
         return false;
     }
 
-    function deleteFile($path)
+    function getTrending()
+    {
+        $posts = $this->postRepository->getTrending();
+        if (!$posts) {
+            return null;
+        }
+        return $posts;
+    }
+
+    //Methods
+    public function deleteFile($path)
     {
         if (Storage::delete($path)) {
             return true;
@@ -152,11 +139,39 @@ class PostService
         return false;
     }
 
-    function getTrending(){
-        $posts = $this->postRepository->getTrending();
-        if(!$posts){
-            return null;
+    public function getFilesPost($id)
+    {
+        $post = $this->postRepository->getById($id);
+        return $post->files;
+    }
+
+    private function paginate($perPage, $posts)
+    {
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $posts->forPage($currentPage, $perPage); //only elements from the current page
+        return  new LengthAwarePaginator($currentPageItems, $posts->count(), $perPage, $currentPage); //Create instance of pagination
+
+    }
+
+    private function storeFile(UploadedFile $file, $path)
+    {
+        if (app()->environment('testing')) {
+            return 'fake_path';
+        } else {
+            return $file->store($path);
         }
-        return $posts;
+    }
+
+    //User service functions
+    private function applyFilterPostByCareer($query, $value)
+    {
+        $codigos = $this->getUsersByCareer($value);
+        return $this->postRepository->getByUsersIds($query, $codigos);
+    }
+
+    private function getUsersByCareer($value)
+    {
+        $users = $this->userService->getUsersApiByCareer($value); //Get all users by career
+        return collect($users)->pluck('codigo')->toArray(); // Get users's ids
     }
 }
