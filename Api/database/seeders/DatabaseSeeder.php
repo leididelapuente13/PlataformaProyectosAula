@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             FileSeed::class,
             LikeSeed::class,
             ReportSeed::class,
+            CommentSeed::class,
         ]);
     }
 }
