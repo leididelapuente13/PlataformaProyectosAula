@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
+use App\Mail\MailableClass;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserService
 {
@@ -62,12 +64,22 @@ class UserService
         }
         $oldState = $user->state;
 
-        //Change user state
+        // Change user state
         $user->state = ($user->state == "1") ? "0" : "1";
         $user->save();
-        //Verify if it was changed
-        return  $user->state != $oldState;
+
+        // Verify if it was changed
+        if ($user->state != $oldState) {
+            $subject = ($oldState == "1") ? 'Tu cuenta ha sido suspendida' : 'Tu cuenta ha sido reactivada';
+            $htmlContent = ($oldState == "1") ?
+                'Tu cuenta ha sido suspendida.' :
+                'Tu cuenta ha sido reactivada.';
+            Mail::to($user->email)->queue(new MailableClass($subject, $htmlContent));
+            return true;
+        }
+        return false;
     }
+
 
     public function filter($request, $filter)
     {
@@ -86,7 +98,7 @@ class UserService
                 $merge[] = array_merge($matchesFound ? $userData : $this->getByApiCode($user->code), $user->toArray());
             }
         }
-        if(empty($merge)){
+        if (empty($merge)) {
             return $merge;
         }
         $perPage = ($request->has('perPage') ? $request->get('perPage') : 20);
