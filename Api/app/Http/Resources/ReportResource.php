@@ -17,7 +17,7 @@ class ReportResource extends JsonResource
     public function toArray(Request $request): array
     {
 
-        $fileUrl = Storage::url($this->path);
+        $fileUrl = Storage::url($this->path_file);
         return [
             'type' => 'report',
             'id' => (string) $this->resource->getRouteKey(),
