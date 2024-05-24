@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReportController;
@@ -68,6 +69,12 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::post('report/{post}' , 'store')->name('api.report.store')->middleware(['ability:admin,student,teacher']);
    });
 });
+
+Route::middleware(['auth:sanctum'])->group(function (){
+    Route::controller(CommentController::class)->group(function (){
+     Route::get('comment/{post}' , 'index')->name('api.comment.index')->middleware(['ability:admin,student,teacher']);
+    });
+ });
 
 Route::post('user', [UserController::class, 'create'])->name('api.user.create');
 Route::post('login', [SessionController::class, 'login'])->name('api.user.login');
