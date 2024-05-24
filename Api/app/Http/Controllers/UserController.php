@@ -67,9 +67,9 @@ class UserController extends Controller
         return UserResource::make($user);
     }
 
-    public function filterUser($filter)
+    public function filterUser(Request $request, $filter)
     {
-        $users = $this->userService->filter($filter);
+        $users = $this->userService->filter($request, $filter);
         if (empty($users)) {
             return response()->json([], 204);
         }
