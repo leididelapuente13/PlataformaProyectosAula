@@ -12,4 +12,14 @@ class ReportRepository{
     public function select($perPage){
         return $this->report::paginate($perPage);
     }
+
+    public function insert($title, $description, $file_path, $post_id, $user_id){
+        return $this->report::create([
+            'title' => $title,
+            'description' => $description,
+            'path_file' => $file_path,
+            'post_id' => $post_id,
+            'user_id' => $user_id
+        ]);
+    }
 }

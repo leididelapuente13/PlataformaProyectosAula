@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function (){
    Route::controller(ReportController::class)->group(function (){
     Route::get('report' , 'index')->name('api.report.index')->middleware(['ability:admin']);
+    Route::post('report/{post}' , 'store')->name('api.report.store')->middleware(['ability:admin,student,teacher']);
    });
 });
 
