@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
+            $table->string('description', 300);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();

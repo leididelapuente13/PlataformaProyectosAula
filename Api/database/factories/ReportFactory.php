@@ -38,11 +38,9 @@ class ReportFactory extends Factory
         if (!app()->environment('testing')) {
             Storage::disk('public')->put($path, $contents);
         }
-
-        $user = User::factory()->create(['state' => '1']);
         return [
             'title' => $title,
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraph(2),
             'path_file' => 'public/' . $path,
         ];
     }

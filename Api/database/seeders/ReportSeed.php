@@ -15,16 +15,16 @@ class ReportSeed extends Seeder
      */
     public function run(): void
     {
-        // $posts = Post::all();
-        // $users = User::all();
-        // $posts->each(function ($post) use ($users) {
-        //     //Iterate over users
-        //     $users->each(function ($user) use ($post) {
-        //         if ($user->role_id != 1) {
-        //             $like = new Like(['user_id' => $user->id]);
-        //             $post->likes()->save($like);
-        //         }
-        //     });
-        // });Report::factory(5)->create();
+        $posts = Post::all();
+        $users = User::paginate(8);
+        $posts->each(function ($post) use ($users) {
+            //Iterate over users
+            $users->each(function ($user) use ($post) {
+                if ($user->role_id != 1) {
+                    $report = Report::factory()->make([ 'user_id' => $user->id]);
+                    $post->reports()->save($report);
+                }
+            });
+        });
     }
 }

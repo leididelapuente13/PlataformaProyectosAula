@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             PostSeed::class,
             FileSeed::class,
             LikeSeed::class,
-            //ReportSeed::class,
+            ReportSeed::class,
         ]);
     }
 }
