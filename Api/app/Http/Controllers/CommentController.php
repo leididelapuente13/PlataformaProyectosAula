@@ -23,4 +23,12 @@ class CommentController extends Controller
 
         return CommentCollection::make($comments);
     }
+
+    public function store(Request $request, $post){
+        $comment = $this->commentService->create($request, $post);
+        if($comment == null){
+            return response()->json([], 500);
+        }
+        return response()->json(201);
+    }
 }

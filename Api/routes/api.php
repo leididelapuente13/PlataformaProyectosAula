@@ -73,6 +73,7 @@ Route::middleware(['auth:sanctum'])->group(function (){
 Route::middleware(['auth:sanctum'])->group(function (){
     Route::controller(CommentController::class)->group(function (){
      Route::get('comment/{post}' , 'index')->name('api.comment.index')->middleware(['ability:admin,student,teacher']);
+     Route::post('comment/{post}' , 'store')->name('api.comment.store')->middleware(['ability:admin,teacher']);
     });
  });
 
