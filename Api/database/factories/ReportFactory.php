@@ -43,8 +43,6 @@ class ReportFactory extends Factory
         return [
             'title' => $title,
             'description' => $this->faker->paragraph(),
-            // 'user_id' => $user->id,
-            // 'post_id' => Post::factory()->create(['user_id' => $user->id])->id,
             'path_file' => 'public/' . $path,
         ];
     }

@@ -28,39 +28,17 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
+        //Usuarios de prueba
+        User::factory()
+        ->createFromApi(1)
+        ->create(['state' => '1']);
+        User::factory()
+        ->createFromApi(120)
+        ->create(['state' => '1']);
+
 
         User::factory()
-            ->count(30)
+            ->count(38)
             ->create();
-
-        // $users = User::all();
-        // $users->each(function ($user) {
-        //     //create and associate the users with the post
-        //     if ($user->role_id == 2 && $user->state == '1') {
-        //         $user->posts()->saveMany([
-        //             Post::factory()->make(),
-        //             Post::factory()->make()
-        //         ]);
-        //     }
-        // });
-
-
-        // $posts = Post::all();
-
-        // $posts->each(function ($post) use ($users) {
-        //     //Create and associate the files with the post
-        //     $post->files()->saveMany([
-        //         File::factory()->type('cover_image')->make(),
-        //         File::factory()->type('file')->make(),
-        //     ]);
-
-        //     //Iterate over users
-        //     $users->each(function ($user) use ($post) {
-        //         if ($user->role_id != 1) {
-        //             $like = new Like(['user_id' => $user->id]);
-        //             $post->likes()->save($like);
-        //         }
-        //     });
-        // });
     }
 }

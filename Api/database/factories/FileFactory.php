@@ -31,8 +31,8 @@ class FileFactory extends Factory
         // Generate the file based on its type
         if (!app()->environment('testing')) {
             if ($type === 'pdf') {
-                $fileName .= '.pdf';
-                $this->generatePdf($fileName);
+                $path.= '.pdf';
+                $this->generatePdf($path);
             } elseif ($type === 'cover_image') {
                 $path .= '.jpg';
                 $this->img($path);
@@ -43,7 +43,6 @@ class FileFactory extends Factory
                 'name' => $title,
                 'path' => 'public/' . $path,
                 'type' => $type,
-                //'post_id' => Post::factory()->create()->id
             ];
         });
     }
@@ -60,7 +59,7 @@ class FileFactory extends Factory
         Storage::disk('public')->put($path, $content);
     }
 
-    private function generatePdf($title)
+    private function generatePdf($path)
     {
         // Generate content for the PDF
         $title = $this->faker->sentence();
@@ -96,6 +95,6 @@ class FileFactory extends Factory
         $dompdf->render();
         $output = $dompdf->output();
         // Save the PDF to storage
-        file_put_contents('public/storage/pdf/' . $title . '.pdf', $output);
+        file_put_contents('public/storage/' . $path, $output);
     }
 }
