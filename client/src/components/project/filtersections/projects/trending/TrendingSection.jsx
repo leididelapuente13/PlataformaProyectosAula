@@ -8,26 +8,28 @@ import Number from '../../../trendnumber/Number';
 import { useQuery } from 'react-query';
 
 export const TrendingSection = () => {
-
-	const { isLoading, data } = useQuery({
-		queryKey: ['trending-projects'],
-		queryFn: getTrendingProjectsRequest,
-	});
+	const { isLoading, data } = useQuery(
+		['trending-projects'],
+		getTrendingProjectsRequest,
+		{
+			onSuccess: (userData)=>console.log(userData)
+		}
+	);
 
 	return (
 		<div style={sectionStyles}>
-			{/* {isLoading ? (
+			{isLoading && (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
 					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
 				</div>
-			) : (
-				projects.map((project) => (
+			)}
+			{data !== undefined &&
+				data.map((project) => (
 					<div>
-						<Number trendNumber={projects.indexOf(project) + 1} />
+						<Number trendNumber={data.indexOf(project) + 1} />
 						<ProjectCard project={project} key={project.id} />
 					</div>
-				))
-			)} */}
+				))}
 		</div>
 	);
 };

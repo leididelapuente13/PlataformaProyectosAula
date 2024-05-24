@@ -29,13 +29,13 @@ function App() {
 					<Routes>
 						<Route path='/' element={<LogIn />} />
 						<Route path='/register' element={<Register />} />
-						{/* <Route path='/indexStudent' element={<IndexStudent />} /> */}
-						{/* <Route element={<ProtectedRoute role='1' />}>
+						<Route path='/indexStudent' element={<IndexStudent />} />
+						<Route element={<ProtectedRoute role='1' />}>
 							<Route path='/user-management' element={<UserManagement />} />
 							<Route path='/reports' element={<Reports/>} />
 							<Route path='/report-details' element={<h1>Admin</h1>} />
 							<Route path='/announcements' element={<h1>Admin</h1>} />
-						</Route> */}
+						</Route>
 						<Route element={<ProtectedRoute role='2' />}>
 							<Route path='/indexStudent' element={<IndexStudent />} />
 							<Route path='/project-form' element={<ProjectManagementForm />} />

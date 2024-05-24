@@ -10,14 +10,16 @@ import PacmanLoader from 'react-spinners/PacmanLoader';
 import { useQuery } from 'react-query';
 // Request
 import { getCareerProjectsRequest } from '../../../api/careersApi';
+import { useParams } from 'react-router-dom';
 
 export const ProjectsCareer = () => {
 	const role = localStorage.getItem('role');
+	const { id } = useParams();
 
-	const { isLoading, isError, error, data } = useQuery({
-		queryKey: ['projects-career'],
-		queryFn: getCareerProjectsRequest(),
-	});
+	const { isLoading, isError, error, data } = useQuery(
+		['projects-career'],
+		() => getCareerProjectsRequest(id),
+	);
 
 	return (
 		<>
@@ -37,28 +39,17 @@ export const ProjectsCareer = () => {
 					<StudentNav />
 				)}
 				<section style={sectionStyles}>
+					<h1 style={{ textAlign: 'justify', color: '#271231', fontSize: '1.9rem'}}>{id}</h1>
 					{isLoading && (
-						<div
-							style={{ display: 'flex', justifyContent: 'center' }}
-							role='progressbar'
-						>
-							<PacmanLoader
-								color='#004D95'
-								cssOverride={{ alignSelf: 'center' }}
-							/>
+						<div>
+							<PacmanLoader color='#004D95' />
 						</div>
 					)}
-
-					<div role='status'>
-						{data && data.length === 0 && <NothingToSee />}
-					</div>
-					{data && data > 0 && (
-						<div role='article'>
-							{data.data.data.map((project) => (
-								<ProjectCard project={project} key={project.id} />
-							))}
-						</div>
-					)}
+					<div role='status'>{data === 204 && <NothingToSee />}</div>
+					{data !== undefined &&
+						data.map((project) => (
+							<ProjectCard project={project} key={project.id} />
+						))}
 				</section>
 			</main>
 		</>
@@ -69,7 +60,7 @@ const sectionStyles = {
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
-	gap: '2rem',
+	gap: '1.5rem',
 	width: '80%',
 	margin: '2rem auto',
 };

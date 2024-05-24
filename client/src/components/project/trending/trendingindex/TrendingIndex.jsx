@@ -12,27 +12,26 @@ import Number from '../../../../components/project/trendnumber/Number';
 import { NothingToSee } from '../../../utils/NothingToSee/NothingToSee';
 
 export const TrendingIndex = () => {
-	const { isLoading, data } = useQuery({
-		queryKey: ['trending-projects'],
-		queryFn: getTrendingProjectsRequest,
-	});
+	const { isLoading, data } = useQuery(['trending-projects'],
+		getTrendingProjectsRequest
+	);
 
-	const trends = data ? data.slice(0, 3) : [];
+	const trends = data !== undefined ? data.slice(0, 5) : [];
 
 	return (
 		<section className={styles.section}>
 			<h3 className={styles.section__title}>Top Tendencias</h3>
-			{trends.length === 0 && <NothingToSee />}
+			{data === 204 && <NothingToSee />}
 			{isLoading && (
 				<div className={styles.section__loaderContainer} role='progressbar'>
 					<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
 				</div>
 			)}
-			{trends.length > 0 && (
+			{data !== undefined && trends.length > 0 && (
 				<div className='trending-project'>
 					{trends.map((project) => (
 						<div>
-							<Number trendNumber={trend.indexOf(project) + 1} />
+							<Number trendNumber={trends.indexOf(project) + 1} />
 							<ProjectCard project={project} key={project.id} />
 						</div>
 					))}

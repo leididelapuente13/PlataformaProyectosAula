@@ -9,36 +9,46 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Menu } from '../projectmenu/Menu';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { getFile, getProjectAuthor } from '../../../api/projectsApi';
 import GridLoader from 'react-spinners/GridLoader';
+import { giveLike, removeLike } from '../../../api/likesApi';
 
 export const ProjectCard = ({ project }) => {
-	const projectData = {
+	const [projectData, setProjectData] = useState({
 		id: project.id,
 		title: project.attributes && project.attributes.title,
 		description: project.attributes && project.attributes.description,
 		files: project.attributes && project.relationships.file.links.related,
-		authorUrl: project.attributes && project.relationships.user.links.related, 
-	};
-
+		authorUrl: project.attributes && project.relationships.user.links.related,
+		likes: project.attributes && project.attributes.likes_count,
+		likeState: project.attributes && project.attributes.dio_like,
+	});
 	const [menu, setMenu] = useState();
 	const [projectAuthorId, setProjectAuthorId] = useState('');
-
-	const { isLoading, data } = useQuery(
-		['projectFile', projectData.id],
-		() => getFile(projectData.files),
-		{
-			onSuccess: async ()=>{
-				const ownerData = await getProjectAuthor(projectData.authorUrl);
-				setProjectAuthorId(ownerData.id);
-			}
-		}
-	);
+	const [likeState, setLikeState] = useState(projectData.likeState);
 
 	const closeMenu = () => {
 		setMenu(false);
 	};
+
+    const { isLoading, data } = useQuery(['projectFile', projectData.id], () => getFile(projectData.files), {
+        onSuccess: async () => {
+            const ownerData = await getProjectAuthor(projectData.authorUrl);
+            setProjectAuthorId(ownerData.id);
+        },
+    });
+
+	const toggleLike = async () => {
+        if (likeState === 0) {
+            await giveLike(projectData.id);
+            setLikeState(1);
+        } else if (likeState === 1) {
+            await removeLike(projectData.id);
+            setLikeState(0);
+        }
+    };
+
 	return (
 		<article className={styles.card}>
 			<div className={styles.card__imgContainer}>
@@ -85,16 +95,21 @@ export const ProjectCard = ({ project }) => {
 			</div>
 			<div className={styles.card__buttonContainer}>
 				<div className={styles.card__wrapper}>
-					<button type='button' className={styles.card__buttonLike}>
+					<button
+						type='button'
+						className={
+							likeState === 1 ? styles.card__buttonLike__active : styles.card__buttonLike
+						}
+						onClick={toggleLike}
+					>
 						<FaHeart />
 					</button>
-					{/* <p className={styles.card__text__light}>{project.likes}</p> */}
+					<p className={styles.card__text__light}>{projectData.likes}</p>
 				</div>
 				<div className={styles.card__wrapper}>
 					<button type='button' className={styles.card__buttonComment}>
 						<FaCommentAlt />
 					</button>
-					{/* <p className={styles.card__text__light}>{project.comments}</p> */}
 				</div>
 			</div>
 		</article>

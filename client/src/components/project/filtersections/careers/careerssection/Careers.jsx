@@ -2,44 +2,33 @@
 import { useQuery } from 'react-query';
 // Component
 import CareerCard from '../../../../careers/careercard/CareerCard';
-import {NothingToSee}  from '../../../../utils/NothingToSee/NothingToSee';
+import { NothingToSee } from '../../../../utils/NothingToSee/NothingToSee';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 // Request
-import { getCareersRequest } from '../../../../../api/careersApi';
 
 export const Careers = () => {
 	const careers = [
-		{
-			id: 1,
-			name: 'carrera 1',
-		},
-		{
-			id: 2,
-			name: 'carrera 1',
-		},
-		{
-			id: 3,
-			name: 'carrera 1',
-		},
-		{
-			id: 4,
-			name: 'carrera 1',
-		},
+		{ id: 1, name: 'Ingeniería de Sistemas' },
+		{ id: 2, name: 'Ingeniería Industrial' },
+		{ id: 3, name: 'Derecho' },
+		{ id: 4, name: 'Administración de Empresas' },
+		{ id: 5, name: 'Medicina' },
+		{ id: 6, name: 'Arquitectura' },
+		{ id: 7, name: 'Psicología' },
+		{ id: 8, name: 'Comunicación Social' },
+		{ id: 9, name: 'Diseño Gráfico' },
+		{ id: 10, name: 'Economía' },
+		{ id: 11, name: 'Educación' },
+		{ id: 12, name: 'Ingeniería Civil' },
+		{ id: 13, name: 'Marketing' },
+		{ id: 14, name: 'Biología' },
+		{ id: 15, name: 'Departamento de Artes' },
+		{ id: 16, name: 'Contabilidad' },
 	];
 
-	const { isLoading, data } = useQuery({
-		queryKey: ['careers'],
-		queryFn: getCareersRequest(),
-	});
-
 	return (
-		<section style={sectionStyle} alt="section">
-			<div style={{ display: 'flex', justifyContent: 'center' }}>
-				<PacmanLoader color='#004D95' cssOverride={{ alignSelf: 'center' }} />
-			</div>
-			{data.length === 0 && <NothingToSee />}
-			{data.length > 0 &&
-				data.map((career) => <CareerCard career={career} key={career.id} />)}
+		<section style={sectionStyle} alt='section'>
+			{careers.length === 0 && <NothingToSee />}
 			{careers.map((career) => (
 				<CareerCard career={career} key={career.id} />
 			))}
@@ -53,5 +42,5 @@ const sectionStyle = {
 	flexDirection: 'column',
 	alignItems: 'center',
 	gap: '2rem',
-	margin: '2rem auto',
+	margin: '3rem auto',
 };

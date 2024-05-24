@@ -25,9 +25,9 @@ export const IndexStudent = () => {
 			{isError && <ErrorPopUp message={error.message}/>}
 			<main className={styles.main}>
 				<Nav />
-				<section className={styles.section}>
+				{/* <section className={styles.section}>
 					<h3 className={styles.section__title}>Anuncios</h3>
-				</section>
+				</section> */}
 
 				<TrendingIndex />
 

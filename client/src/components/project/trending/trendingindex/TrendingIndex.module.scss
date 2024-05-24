@@ -13,7 +13,8 @@
 		color: $primary-purple;
 	}
     &__link{
-        align-self: flex-end;
+        display: block;
+        float: right;
         margin-block: 2rem;
         color: $primary-blue;
         text-decoration: underline;

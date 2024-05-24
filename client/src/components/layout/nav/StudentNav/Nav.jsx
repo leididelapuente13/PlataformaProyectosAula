@@ -15,7 +15,7 @@ export const Nav = () => {
 	return (
 		<nav className={styles.nav} role='navigation'>
 			<div className={styles.nav__imgContainer}>
-				<img src={`https://i.pravatar.cc/150?u=${localStorage.getItem('id')}`} alt='user icon' className={styles.nav__img} />
+				<img src={`https://i.pravatar.cc/150?u=${localStorage.getItem('userId')}`} alt='user icon' className={styles.nav__img} />
 			</div>
 			<div className={styles.nav__buttonContainer}>
 				<button type='button' role='button' className={styles.nav__button}>

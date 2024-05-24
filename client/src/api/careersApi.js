@@ -16,28 +16,18 @@ axios.interceptors.request.use(
 	},
 );
 
-const getCareersRequest = async () => {
+const getCareerProjectsRequest = async (career) => {
+	console.log('Career in request', career)
 	try {
-		const response = await axios.get(`${baseUrl}careers`, {
-			headers: { 'ngrok-skip-browser-warning': true },
-		});
-		return response;
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getCareerProjectsRequest = (careerId) => {
-	try {
-		const response = axios.get(
-			`${baseUrl}`,
+		const response = await axios.get(
+			`${baseUrl}post?filter[career]=${career}`,
 			{ headers: { 'ngrok-skip-browser-warning': true } },
-			{ params: { careerId } },
 		);
-		return response;
+		console.log(response.data.data)
+		return response.data.data;
 	} catch (error) {
 		throw error;
 	}
 };
 
-export { getCareersRequest, getCareerProjectsRequest };
+export { getCareerProjectsRequest };

@@ -21,6 +21,7 @@ import { Nav as ProfessorNav } from '../../../../components/layout/nav/Professor
 import { ErrorPopUp } from '../../../../components/utils/error/ErrorPopUp';
 import PacmanLoader from 'react-spinners/PacmanLoader';
 import GridLoader from 'react-spinners/GridLoader';
+import { CommentSection } from '../../../../components/comments/commentsection/CommentSection';
 
 export const ProjectDetails = () => {
 	const [postData, setPostData] = useState({});
@@ -143,7 +144,8 @@ export const ProjectDetails = () => {
 								</div>
 							</div>
 							<div className={styles.wrapper}>
-								<h3 className={styles.wrapper__title}>Comentarios</h3>
+								{/* <h3 className={styles.wrapper__title}>Comentarios</h3> */}
+								<CommentSection projectId={projectId}/>
 							</div>
 						</>
 					)}

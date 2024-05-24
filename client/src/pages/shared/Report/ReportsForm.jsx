@@ -23,19 +23,9 @@ export const ReportsForm = () => {
 	const createReportMutation = useMutation(createReport);
 
 	const handleSubmitReport = async (data) => {
-		const reportData = {
-			data: {
-				type: 'report',
-				attributes: {
-					description: data.description,
-					project: data.project,
-					plagio: data.plagio,
-				},
-			},
-		};
-
+		console.log(data);
 		try {
-			await createReportMutation.mutateAsync(reportData, {
+			await createReportMutation.mutateAsync(data, {
 				onSuccess: () => {
 					reset();
 				},
@@ -58,6 +48,25 @@ export const ReportsForm = () => {
 				<form className={styles.form}>
 					<h1 className={styles.form__title}>Haz tu reporte</h1>
 					<div>
+						<label htmlFor='title' className={styles.form__label}>
+							Titulo del reporte:
+						</label>
+						<input
+							id='title'
+							rows='10'
+							className={styles.form__input}
+							{...register('title', {
+								required: {
+									value: true,
+									message: 'El titulo es requerido',
+								},
+							})}
+						/>
+						{errors.description && (
+							<ValidationError message={errors.description.message} />
+						)}
+					</div>
+					<div>
 						<label htmlFor='description' className={styles.form__label}>
 							Descrpción del reporte:
 						</label>
@@ -77,39 +86,19 @@ export const ReportsForm = () => {
 						)}
 					</div>
 					<div>
-						<label
-							htmlFor='original'
-							className={styles.form__label}
-							{...register('project', {
-								required: {
-									value: true,
-									message: 'El Proyecto es requerido',
-								},
-							})}
-						>
-							Proyecto Original
+						<label htmlFor='evidence' className={styles.form__label}>
+							Evidencias del plagio
 						</label>
-						<input type='file' name='' id='' className={styles.form__input} />
-						{errors.project && (
-							<ValidationError message={errors.project.message} />
-						)}
-					</div>
-					<div>
-						<label
-							htmlFor=''
-							className={styles.form__label}
-							{...register('plagio', {
-								required: {
-									value: true,
-									message: 'El Proyecto Plagiado es requerido',
-								},
+						<input
+							type='file'
+							id='evidence'
+							{...register('file', {
+								required: { value: true, message: 'El archivo es requerido' },
 							})}
-						>
-							Plagio
-						</label>
-						<input type='file' name='' id='' className={styles.form__input} />
-						{errors.plagio && (
-							<ValidationError message={errors.plagio.message} />
+							className={styles.form__input}
+						/>
+						{errors.file && (
+							<ValidationError message={errors.file.message} />
 						)}
 					</div>
 					<button type='submit' className={styles.form__button}>

@@ -1,8 +1,8 @@
-@import '../../assets/styles/partials/variables';
+@import '../../../assets/styles/partials/variables';
 
 .card {
 	width: 90%;
-	max-width: 330px;
+	max-width: 430px;
 	box-shadow:
 		rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
 		rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
@@ -36,5 +36,13 @@
 			background-color: $light-grey;
 			transition: 0.3s 0.3s ease-in;
 		}
+	}
+
+	&__link{
+		display: block;
+		margin-top: 1rem;
+		font-size: 0.9rem;
+		color: $primary-blue;
+		font-weight: 400;
 	}
 }

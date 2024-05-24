@@ -10,6 +10,7 @@
 	align-items: center;
 	border-radius: 0.4rem;
 	box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+	background-color: $primary-white;
 	&__textarea {
 		@include textarea;
 		border: none;
