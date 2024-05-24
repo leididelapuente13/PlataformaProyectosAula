@@ -6,7 +6,7 @@ export const DropZone = ({ onDrop, accept }) => {
 
 	return (
 		<div {...getRootProps()} style={DropZoneStyles}>
-			<input {...getInputProps()} style={inputStyles} />
+			<input type='file' {...getInputProps()} style={inputStyles} />
 			<p>
 				Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
 			</p>

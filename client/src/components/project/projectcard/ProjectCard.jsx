@@ -23,6 +23,7 @@ export const ProjectCard = ({ project }) => {
 		authorUrl: project.attributes && project.relationships.user.links.related,
 		likes: project.attributes && project.attributes.likes_count,
 		likeState: project.attributes && project.attributes.dio_like,
+		user_id: project.attributes && project.attributes.user_id,
 	});
 	const [menu, setMenu] = useState();
 	const [projectAuthorId, setProjectAuthorId] = useState('');
@@ -77,7 +78,7 @@ export const ProjectCard = ({ project }) => {
 					<Menu
 						closeMenu={closeMenu}
 						projectId={project.id}
-						authorId={projectAuthorId !== '' ? projectAuthorId : null}
+						authorId={JSON.stringify(projectData.user_id)}
 					/>
 				)}
 			</div>

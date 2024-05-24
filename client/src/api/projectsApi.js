@@ -17,17 +17,16 @@ axios.interceptors.request.use(
 
 const createProjectRequest = async (data) => {
 	try {
-		const response = await axios.post(
-			`${baseUrl}post`,
-			{ headers: { 'ngrok-skip-browser-warning': true } },
-			{ params: data },
-		);
-		return response;
+		const response = await axios.post(`${baseUrl}post`, data, {
+			headers: { 'ngrok-skip-browser-warning': true },
+		});
+		console.log(response);
+
+		return response.data;
 	} catch (error) {
 		throw error;
 	}
 };
-
 const getProjectRequest = async (projectId) => {
 	try {
 		const response = await axios.get(`${baseUrl}post/${projectId}`, {
@@ -42,8 +41,8 @@ const getProjectRequest = async (projectId) => {
 
 const deleteProjectRequest = async (projectId) => {
 	try {
-		const response = await axios.delete(`${baseUrl}post`, {
-			params: { projectId },
+		const response = await axios.delete(`${baseUrl}post/${projectId}`, {
+			headers: { 'ngrok-skip-browser-warning': true },
 		});
 		return response;
 	} catch (error) {
@@ -56,7 +55,6 @@ const getTrendingProjectsRequest = async () => {
 		const response = await axios.get(`${baseUrl}post/trending/likes`, {
 			headers: { 'ngrok-skip-browser-warning': true },
 		});
-		console.log(response.data.data)
 		return response.data.data;
 	} catch (error) {
 		throw error;
@@ -65,15 +63,12 @@ const getTrendingProjectsRequest = async () => {
 
 const getProjectsForStudent = async () => {
 	try {
-		const response = await axios.get(
-			`${baseUrl}post/relevant/students`,
-			{
-				headers: { 'ngrok-skip-browser-warning': true },
-				Accept: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-			},
-		);
-		if(response.status === 204){
+		const response = await axios.get(`${baseUrl}post/relevant/students`, {
+			headers: { 'ngrok-skip-browser-warning': true },
+			Accept: 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('token')}`,
+		});
+		if (response.status === 204) {
 			return response.status;
 		}
 		return response.data.data;
@@ -97,7 +92,6 @@ const getAllProjectsRequest = async () => {
 };
 
 const getFile = async (fileLink) => {
-	console.log('link: ', fileLink);
 	try {
 		const response = await axios.get(fileLink, {
 			headers: {
@@ -106,8 +100,10 @@ const getFile = async (fileLink) => {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		const files = {cover: `${apiUrl}${response.data.data[0].links.file}`, file: `${apiUrl}${response.data.data[1].links.file}`}
-		console.log('files: ', `cover: ${apiUrl}${response.data.data[0].links.file} file: ${apiUrl}${response.data.data[1]}.links.file`)
+		const files = {
+			cover: `${apiUrl}${response.data.data[0].links.file}`,
+			file: `${apiUrl}${response.data.data[1].links.file}`,
+		};
 		return files;
 	} catch (error) {
 		throw error;
@@ -123,10 +119,34 @@ const getProjectAuthor = async (url) => {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		const ownerData={id: response.data.data.id, user_name: response.data.data.attributes.user_name, carrera: response.data.data.attributes.carrera, semestre: response.data.data.attributes.semestre}
+		const ownerData = {
+			id: response.data.data.id,
+			user_name: response.data.data.attributes.user_name,
+			carrera: response.data.data.attributes.carrera,
+			semestre: response.data.data.attributes.semestre,
+		};
 		return ownerData;
 	} catch (error) {
 		throw error;
+	}
+};
+
+const filterProjects = async (condition) => {
+	console.log(condition);
+	if (condition !== '' || condition !== undefined) {
+		try {
+			const response = await axios.get(`${baseUrl}post/filter/${condition}`, {
+				headers: {
+					'ngrok-skip-browser-warning': true,
+					Accept: 'application/json',
+				},
+			});
+			console.log(response.data);
+			if (response.status === 204) return 'NotFound';
+			return response.data.data;
+		} catch (error) {
+			throw error;
+		}
 	}
 };
 
@@ -139,4 +159,5 @@ export {
 	getAllProjectsRequest,
 	getFile,
 	getProjectAuthor,
+	filterProjects,
 };

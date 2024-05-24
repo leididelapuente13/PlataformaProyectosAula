@@ -72,3 +72,9 @@
        @include sectionNavButtonActive;
 	}
 }
+
+.link{
+	display: block;
+	color: $primary-blue;
+	margin: 2rem 2rem 0 2rem;
+}

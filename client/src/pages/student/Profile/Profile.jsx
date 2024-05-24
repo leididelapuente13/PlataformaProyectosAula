@@ -6,7 +6,7 @@ import icon from '../../../assets/img/default/profile-picture.jpg';
 // Dependencies
 import { useQuery } from 'react-query';
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 // Request
 import { getProfile } from '../../../api/profileApi';
 // Components
@@ -108,6 +108,7 @@ export const Profile = () => {
 							Mis Grupos
 						</button>
 					</div>
+					<Link to='/project-form' className={styles.link}>Crear Proyecto</Link>
 					{section.projects && <MyProjects userId={userId} />}
 					{section.groups && <h4>Grupos</h4>}
 				</section>

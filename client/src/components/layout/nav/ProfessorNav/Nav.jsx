@@ -12,9 +12,6 @@ export const Nav = () => {
 
 	return (
 		<nav role='navigation' className={styles.nav}>
-			<div className={styles.nav__imgContainer}>
-				<img src='' alt='user icon' className={styles.nav__img} />
-			</div>
 			<div className={styles.nav__buttonContainer}>
 				<button
 					type='button'
@@ -42,7 +39,7 @@ export const Nav = () => {
 					</Link>
 				</li>
 				<li>
-					<LogOutButon className={styles.nav__buttonLogOut}/>
+					<LogOutButon componentClass={styles.nav__buttonLogOut}/>
 				</li>
 			</ul>
 		</nav>

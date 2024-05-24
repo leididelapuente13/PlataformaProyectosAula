@@ -3,7 +3,9 @@ import styles from './ReportsForm.module.scss';
 // Request
 import { createReport } from '../../../api/reportsApi';
 // Components
-import { Nav } from '../../../components/layout/nav/AdminNav/Nav';
+import { Nav as AdminNav } from '../../../components/layout/nav/AdminNav/Nav';
+import { Nav as StudentNav } from '../../../components/layout/nav/StudentNav/Nav';
+import { Nav as ProfessorNav } from '../../../components/layout/nav/ProfessorNav/Nav';
 import { SuccessPopUp } from '../../../components/utils/success/SuccessPopUp';
 import { ErrorPopUp } from '../../../components/utils/error/ErrorPopUp';
 import { ValidationError } from '../../../components/utils/validation/ValidationError';
@@ -13,6 +15,7 @@ import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 
 export const ReportsForm = () => {
+	const role = localStorage.getItem('role');
 	const {
 		register,
 		handleSubmit,
@@ -44,7 +47,9 @@ export const ReportsForm = () => {
 				<SuccessPopUp message='El Reporte Fue Enviado' />
 			)}
 			<main className={styles.main} onSubmit={handleSubmit(handleSubmitReport)}>
-				<Nav />
+				{role === '1' && <AdminNav />}
+				{role === '2' && <StudentNav />}
+				{role === '3' && <ProfessorNav />}
 				<form className={styles.form}>
 					<h1 className={styles.form__title}>Haz tu reporte</h1>
 					<div>
@@ -97,9 +102,7 @@ export const ReportsForm = () => {
 							})}
 							className={styles.form__input}
 						/>
-						{errors.file && (
-							<ValidationError message={errors.file.message} />
-						)}
+						{errors.file && <ValidationError message={errors.file.message} />}
 					</div>
 					<button type='submit' className={styles.form__button}>
 						Enviar

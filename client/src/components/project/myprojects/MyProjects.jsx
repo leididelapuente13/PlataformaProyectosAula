@@ -12,7 +12,7 @@ import { NothingToSee } from '../../utils/NothingToSee/NothingToSee';
 
 export const MyProjects = ({ userId }) => {
 	const { isLoading, data: projects } = useQuery(
-		['projects', { userId }],
+		['projects', userId ],
 		() => getMyProjects(userId),
 		{ onSuccess: (data) => console.log(data) },
 	);

@@ -2,7 +2,8 @@
 import styles from './ProjectManagementForm.module.scss';
 // Dependencies
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
+import axios from 'axios';
 // Request
 import { createProjectRequest } from '../../../../api/projectsApi';
 // Components
@@ -13,6 +14,16 @@ import { DropZone } from '../../../../components/utils/dropzone/DropZone';
 import { useState } from 'react';
 import { ErrorPopUp } from '../../../../components/utils/error/ErrorPopUp';
 import { SuccessPopUp } from '../../../../components/utils/success/SuccessPopUp';
+
+const useCreateProjectMutation = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation(createProjectRequest, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(['projects', localStorage.getItem('userId')]);
+		},
+	});
+};
 
 export const ProjectManagementForm = () => {
 	const {
@@ -26,14 +37,16 @@ export const ProjectManagementForm = () => {
 	const [projectCover, setProjectCover] = useState(null);
 
 	const onDropProjectFile = (acceptedFiles) => {
+		console.log(acceptedFiles[0]);
 		setProjectFile(acceptedFiles[0]);
 	};
 
 	const onDropProjectCover = (acceptedFiles) => {
+		console.log(acceptedFiles);
 		setProjectCover(acceptedFiles[0]);
 	};
 
-	const createProjectMutation = useMutation(createProjectRequest);
+	const createProjectMutation = useCreateProjectMutation();
 
 	const handleSubmitProject = async (data) => {
 		const projectData = {
@@ -42,8 +55,8 @@ export const ProjectManagementForm = () => {
 				attributes: {
 					title: data.title,
 					description: data.description,
-					cover: projectCover,
-					file: projectFile,
+					cover_image: projectCover,
+					pdf: projectFile,
 				},
 			},
 		};
@@ -126,6 +139,7 @@ export const ProjectManagementForm = () => {
 						<DropZone onDrop={onDropProjectCover} accept='image/*' />
 						{projectCover && (
 							<img
+								style={{display: 'block', margin: '1rem auto', width: '90%', maxWidth: '450px'}}
 								src={URL.createObjectURL(projectCover)}
 								alt='Portada del proyecto'
 							/>

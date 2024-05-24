@@ -23,14 +23,14 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 
 	const deleteProject = useMutation(deleteProjectRequest, {
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['post', { authorId }] }),
+			queryClient.invalidateQueries(['projects', localStorage.getItem('userId')]),
 				setVisible((prev) => ({ ...prev, deleteMyProjectSuccess: true }));
 		},
 	});
 
 	const handleDelete = async () => {
 		try {
-			await deleteProject(projectId);
+			await deleteProject.mutate(projectId);
 		} catch (error) {
 			console.error(error);
 			setVisible((prev) => ({ ...prev, deleteMyProjectError: true }));
@@ -63,7 +63,7 @@ export const Menu = ({ closeMenu, projectId, authorId }) => {
 						<p>Editar</p>
 					</button>
 				)}
-				{(role === '2' || role === '3') && (
+				{(role === '2' || role === '3')&&(authorId !== userId) && (
 					<button type='button' className={styles.menu__button}>
 						<MdReport />
 						<Link to='/report-form'>Reportar</Link>

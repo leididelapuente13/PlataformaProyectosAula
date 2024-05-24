@@ -13,6 +13,10 @@ import { MainProjectsSection } from '../../../../components/project/filtersectio
 // Dependencies
 import { useState } from 'react';
 import { Careers } from '../../../../components/project/filtersections/careers/careerssection/Careers';
+import { useQuery } from 'react-query';
+import { filterProjects } from '../../../../api/projectsApi';
+import { ProjectCard } from '../../../../components/project/projectcard/ProjectCard';
+import { NothingToSee } from '../../../../components/utils/NothingToSee/NothingToSee';
 
 export const Filter = () => {
 	const role = parseInt(localStorage.getItem('role'));
@@ -21,6 +25,8 @@ export const Filter = () => {
 		groups: false,
 		careers: false,
 	});
+
+	const [input, setInput] = useState('');
 
 	const handleSetSection = (toUpdateSection) => {
 		const sectionsNewState = {
@@ -33,6 +39,13 @@ export const Filter = () => {
 
 		setSection(sectionsNewState);
 	};
+
+	const { isLoading, data } = useQuery(
+		['filter'],
+		() => filterProjects(input),
+		{ onSuccess: (filterData) => console.log(filterData) },
+	);
+
 	return (
 		<>
 			<main>
@@ -48,10 +61,8 @@ export const Filter = () => {
 								name='buscar'
 								placeholder='Buscar Proyecto'
 								className={styles.form__input}
+								onChange={(e) => setInput(e.target.value)}
 							/>
-							<button type='submit' className={styles.form__button}>
-								<PiMagnifyingGlassFill />
-							</button>
 						</div>
 					</form>
 					<div className={styles.section__wrapper}>
@@ -85,11 +96,31 @@ export const Filter = () => {
 						/>
 					</div>
 				</section>
-				<>
-					{section.projects && <MainProjectsSection />}
-					{section.groups && <h3>Groups</h3>}
-					{section.careers && <Careers />}
-				</>
+				{data !== undefined && (
+					<div
+						style={{
+							margin: '2rem auto',
+							width: '70%',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '1.5rem',
+						}}
+					>
+						{/* {(data !== undefined && data === 'NotFound') && <NothingToSee />} */}
+						{data !== undefined &&
+							Array.isArray(data) &&
+							data.map((project) => (
+								<ProjectCard project={project} key={project.id} />
+							))}
+					</div>
+				)}
+				{input === '' && (
+					<>
+						{section.projects && <MainProjectsSection />}
+						{section.groups && <h3>Groups</h3>}
+						{section.careers && <Careers />}
+					</>
+				)}
 			</main>
 		</>
 	);

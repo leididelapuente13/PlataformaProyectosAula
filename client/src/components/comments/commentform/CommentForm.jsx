@@ -1,5 +1,6 @@
 // Styles
 import styles from './CommentForm.module.scss'
+import { createComment } from '../../../api/commentsApi'
 export const CommentForm = () => {
   return (
     <form className={styles.form}>

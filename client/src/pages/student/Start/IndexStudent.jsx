@@ -30,7 +30,6 @@ export const IndexStudent = () => {
 				</section> */}
 
 				<TrendingIndex />
-
 				<section className={styles.section}>
 					<h3 className={styles.section__title}>Para ti</h3>
 					{isLoading ? (
@@ -41,14 +40,14 @@ export const IndexStudent = () => {
 							/>
 						</div>
 					) : (
-						<>
+						<div className={styles.wrapper}>
 							{projectsinterest.map((project) => (
-								<div className={styles.section}>
+								
 									<ProjectCard project={project} key={project.id} />
-								</div>
+						
 							))}
 							<Link className={styles.section__link} to="../filter">Ver mas...</Link>
-						</>
+						</div>
 					)}
 				</section>
 			</main>

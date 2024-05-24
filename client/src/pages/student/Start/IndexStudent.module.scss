@@ -10,14 +10,15 @@ body{
 	align-items: center;
 	width: 80%;
 	margin: 2rem auto;
+    gap: 1rem;
 	&__title {
 		align-self: flex-start;
 		font-size: 1.9rem;
 		color: $primary-purple;
 	}
     &__link{
-        align-self: flex-end;
-        margin-block: 2rem;
+        display: block;
+        margin-block: 2rem 2rem;
         color: $primary-blue;
         text-decoration: underline;
         &:hover{
@@ -28,4 +29,10 @@ body{
     &__loaderContainer{
         margin: 3rem;
     }
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
