@@ -25,6 +25,8 @@ class SessionTest extends TestCase
     use RefreshDatabase;
     public function test_can_to_do_login(): void
     {
+
+        $this->withoutExceptionHandling();
         //Send a request
         $response = $this->post(
             route('api.user.login'),
@@ -39,7 +41,7 @@ class SessionTest extends TestCase
             ]
         );
         // Assert the user resource structure
-        $response->assertJsonApiUserResource($this->user);
+        $response->assertJsonApiAuthResource($this->user);
     }
 
     public function test_incorrect_password()
@@ -137,9 +139,10 @@ class SessionTest extends TestCase
 
     public function test_can_to_do_logout()
     {
-        $this->actingAs($this->user);
         // Request to log out
-        $response = $this->postJson(route('api.user.logout'))->dump();
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->user->createToken('TestToken' , ['user'])->plainTextToken
+        ])->postJson(route('api.user.logout'))->dump();
         $response->assertStatus(204);
     }
 }

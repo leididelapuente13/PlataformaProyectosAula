@@ -3,23 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Resources\AuthResource;
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+
+    //Inject UserService
+    public function __construct(protected UserService $userService)
+    {
+    }
+
+    function index(Request $request)
+    {
+        $users = $this->userService->getAll($request);
+        if(!$users){
+            return response()->json([], 204);
+        }
+        return UserCollection::make($users);
+    }
+
+
+
     function create(CreateUserRequest $request)
     {
         //Request  extern api
-        $codeUserApi = $request->input('data.attributes.code');
-        $response = Controller::apiUser($codeUserApi);
-
+        $code = $request->input('data.attributes.code');
 
         // Check if user is already created
-        if (User::where('code', $codeUserApi)->first()) {
+        if ($this->userService->getByCode($code)) {
             $exception = ValidationException::withMessages([
                 "data.attributes.code" => "The user has already been created"
             ]);
@@ -27,26 +43,13 @@ class UserController extends Controller
             throw $exception;
         }
 
-        // Code was found in extern api
-        if ($response->successful()) {
-            $userApi = $response->json();
-            $user = new User();
-            $user->user_name = $userApi['nombre'] . '_' . $userApi['apellidos'];
-            $user->code = $userApi['codigo'];
-            $user->email = $userApi['email'];
-            $user->password = Hash::make($request->input('password'));
-
-            // Check rol
-            $userTipo = $userApi['tipo'];
-            ($userTipo == 'Estudiante') ? $user->role_id = 2 : ($userTipo == 'Profesor' ? $user->role_id = 3 : $user->role_id = 1);
-            //Create in data base using request's data
-            $user->save();
-            //Return a resource with user created
-            return UserResource::make($user);
+        $user = $this->userService->insert($request);
+        if($user){
+            return AuthResource::make($user);
         }
 
         //Response extern api - code not found
-        if ($response->status() == 404) {
+        if ($user == null) {
             $exception = ValidationException::withMessages([
                 "data.attributes.code" => "The user code provided is not valid"
             ]);
@@ -55,7 +58,21 @@ class UserController extends Controller
         }
     }
 
-    function show(User $user) {
-        return response()->json([] , 200);
+    function show($id)
+    {
+        $user = $this->userService->getById($id);
+        if(!$user){
+            return response()->json([] , 204);
+        }
+        return UserResource::make($user);
+    }
+
+    public function filterUser(Request $request, $filter)
+    {
+        $users = $this->userService->filter($request, $filter);
+        if (empty($users)) {
+            return response()->json([], 204);
+        }
+        return UserCollection::make($users);
     }
 }

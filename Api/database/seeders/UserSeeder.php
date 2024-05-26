@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\Controller;
+use App\Models\File;
+use App\Models\Like;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,7 +18,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //Creamos el usuario administrador
+        //Create admin user
         User::create([
             'user_name' => 'Administrador',
             'email' => 'jimmisitho450@gmail.com',
@@ -25,7 +28,17 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        //Generate 50 users
-        User::factory(50)->create();
+        //Usuarios de prueba
+        User::factory()
+        ->createFromApi(1)
+        ->create(['state' => '1']);
+        User::factory()
+        ->createFromApi(120)
+        ->create(['state' => '1']);
+
+
+        User::factory()
+            ->count(30)
+            ->create();
     }
 }

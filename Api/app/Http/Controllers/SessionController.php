@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SessionRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Exception;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 
 class sessionController extends Controller
@@ -43,7 +41,7 @@ class sessionController extends Controller
             throw $exception;
         }
 
-        return UserResource::make($user);
+        return AuthResource::make($user);
     }
 
     function logout(Request $request)
